@@ -1,0 +1,12 @@
+#message:hover{
+    color: green;
+    cursor: pointer;
+}
+
+#costumText {
+    text-align: justify;
+  }
+
+  p{
+    font-size: 12px;
+}

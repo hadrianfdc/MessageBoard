@@ -1,0 +1,59 @@
+#message:hover{
+    color: green;
+    cursor: pointer;
+}
+
+#costumText {
+    text-align: justify;
+  }
+
+
+
+  /* Style for the compose message container */
+  .compose-message-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f2f5; /* Light gray background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Style for the message recipient */
+.message-recipient{
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+/* Style for the message input */
+.message-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* Style for the send button */
+.send-button {
+    background-color: #0084ff; /* Facebook blue */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for the send button */
+.send-button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+}

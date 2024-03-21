@@ -1,0 +1,162 @@
+#message:hover{
+    color: green;
+    cursor: pointer;
+}
+
+#costumText {
+    text-align: justify;
+  }
+
+
+  .conversation-container {
+    overflow-y: auto; /* Enable vertical scroll if content overflows */
+    height: 450px; /* Set a fixed height for the conversation container */
+}
+.conversation-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.message {
+    list-style-type: none;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    width: 60%; /* Set the width to 50% */
+    max-width: 60%; /* Limit message width to 50% of the container */
+}
+
+.sent {
+    color: #fff; /* White text color for sent messages */
+    text-align: right;
+}
+
+
+
+.received {
+    font-size: 13px;
+    background-color: #f2f2f2; /* Light gray background color for received messages */
+    text-align: justify;
+}
+
+.delete-message {
+    color: black; /* White text color */
+    border: none; /* No border */
+    padding: 5px 10px; /* Padding for button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor style on hover */
+    outline: none; /* Remove outline */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+    font-size: 9px;
+}
+
+.delete-message:hover {
+    color: #f44336;
+}
+
+/* Send Message Text Box */
+
+.send-message-container {
+    left: 20%;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+    width: 60%;
+    box-sizing: border-box;
+}
+
+.message-input {
+    width: calc(100% - 80px); /* Adjust the width as needed */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+.send-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+/* Pagination */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.page-item{
+    font-size: 14px;
+}
+.pagination .page-link  {
+    padding: 8px 16px;
+    border: 1px solid #007bff;
+    color: #007bff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.pagination .page-link:hover {
+    cursor: pointer;
+    color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+    pointer-events: none;
+    background-color: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    font-size: 12px;
+}
+
+
+/* modal hover */
+
+/* Customize modal styles */
+
+.modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeInSlideLeft 0.4s ease; /* Changed animation to fadeInSlideLeft */
+}
+
+.modal-header {
+    background-color: #86B6F6;
+    color: #fff;
+    border-bottom: none;
+}
+
+.modal-body {
+    padding: 20px;
+    font-size: 12px;
+}
+
+/* Fade in and slide in from left animation */
+@keyframes fadeInSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+

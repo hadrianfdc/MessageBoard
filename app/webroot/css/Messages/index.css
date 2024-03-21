@@ -1,0 +1,114 @@
+/* CSS for messenger-like message list */
+.message-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.received-messages, .sent-messages {
+    flex: 1;
+    margin: 0 10px;
+    background-color: #B4D4FF;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.message-list {
+    list-style: none;
+    padding: 0;
+}
+
+.received-message, .sent-message {
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.received-message:hover, .sent-message:hover {
+    background-color: #f2f2f2;
+}
+
+.received-message .message-content, .sent-message .message-content {
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.5;
+}
+
+.received-message .message-metadata, .sent-message .message-metadata {
+    font-size: 14px;
+    color: #666666;
+}
+
+.received-message .message-from, .sent-message .message-to {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-primary, .btn-secondary {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+
+.scrollable {
+    max-height: 600px;
+    /* Set the maximum height for the scrollable area */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    /* Light grey background */
+    border: 1px solid #ced4da;
+    /* Grey border */
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.search-input {
+    flex: 1;
+    /* Take remaining space */
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.search-button {
+    background-color: #007bff;
+    /* Blue button background */
+    color: #fff;
+    /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin-left: 10px;
+    /* Add spacing between input and button */
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}

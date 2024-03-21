@@ -1,0 +1,116 @@
+.messenger-search {
+    margin: 20px auto;
+    width: 50%;
+    text-align: center;
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    animation: slideInDown 0.7s ease-in-out;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.initial-results {
+    display: none;
+}
+
+.noUserFoundMessage{
+    display: none;
+    animation: slideInUp 0.5s ease-in-out;
+}
+
+.search-results {
+    list-style-type: none;
+    padding: 0;
+    animation: slideInUp 0.5s ease-in-out;
+}
+
+.search-result {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.user-info {
+    margin-top: -15mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#user-pic {
+    width: 80px;
+    height: 80px;
+    transition: width 0.6s, height 0.6s; /* Added transitions for width and height */
+}
+
+#user-pic:hover {
+    width: 90px;
+    height: 90px;
+}
+
+
+.user-name {
+    font-weight: bold;
+}
+
+.send-message-button {
+    margin-top: 5px;
+}
+
+.send-message-button a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.send-message-button a:hover {
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
