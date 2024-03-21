@@ -23,3 +23,26 @@ Click the Edit Profile Details button to display a Modal Forms for editing the u
 ](url)
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Click the Update profile picture button to be redirected to Uploading the Profile picture
+
+<img width="1440" alt="Screenshot 2024-03-21 at 5 38 37 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/c49b6bac-e795-4c79-bfc0-2552ee25df90">
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Then Choose File 
+
+<img width="1438" alt="Screenshot 2024-03-21 at 5 40 18 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/f14df663-54aa-4d79-bf7b-480062e81294">
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Then the preview of the selected picture will be displayed automatically
+
+<img width="1435" alt="Screenshot 2024-03-21 at 5 41 45 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/c82a597b-a989-4149-bad6-9659ac5c0e74">
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Then when upload file t will save the selected image then after a successful update of an image it will be redirected back to home which is user profile page
+
+<img width="734" alt="Screenshot 2024-03-21 at 5 42 51 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/49a438e9-6dfd-472d-9a36-7cd16594b1cf">
+
