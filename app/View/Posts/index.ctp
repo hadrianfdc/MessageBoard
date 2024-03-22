@@ -13,10 +13,10 @@
     <div class="users-form-container">
         <div class="image-upload-container">
             <div class="image-preview">
-                <?php if (!empty($imageRecord)) : ?>
+                <?php if (!empty($imageRecord) && !empty($imageRecord['Posts']['path'])) : ?>
                     <img id="previewImage" src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['path']); ?>" alt="Uploaded Image">
                 <?php else : ?>
-                    <div class="no-image">No image uploaded</div>
+                    <img id="previewImage" src="" alt="Preview Image">
                 <?php endif; ?>
             </div>
             <h1>Upload your profile picture here!</h1>
@@ -52,6 +52,25 @@
             }
         }
     </script>
+
+
+</body>
+
+<script>
+    function validateForm() {
+        var fileInput = document.getElementById('fileUpload');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.gif|\.png)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload files having extensions .jpg, .jpeg, .gif, .png only.');
+            fileInput.value = '';
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 </body>
 
