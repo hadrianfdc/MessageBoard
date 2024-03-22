@@ -120,7 +120,7 @@ $this->loadHelper('Url');
                 <div class="flex-shrink-0">
                   <div class="rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
                     <?php if (!empty($imageRecord)) : ?>
-                      <img src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['path']); ?>" alt="Uploaded Image" class="w-100 h-100">
+                      <img src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['path']); ?>" alt="Uploaded Image" class="w-100 h-100" id="uploadedImage">
                     <?php else : ?>
                       <div class="d-flex justify-content-center align-items-center w-100 h-100 bg-secondary text-white">No image uploaded</div>
                     <?php endif; ?>
@@ -203,9 +203,48 @@ $this->loadHelper('Url');
     </div>
   </div>
 
+  <!--------------------- Modal for hovering Profile Photo -------------------------------------------------------->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body p-0">
+          <img src="" alt="Uploaded Image" class="img-fluid rounded" id="modalImage" style="width: 80%; height: 80%;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // JavaScript to handle image hover and modal display
+    document.addEventListener("DOMContentLoaded", function() {
+      const uploadedImage = document.getElementById('uploadedImage');
+      const modalImage = document.getElementById('modalImage');
+
+      uploadedImage.addEventListener('mouseenter', function() {
+        const imagePath = this.getAttribute('src');
+        modalImage.setAttribute('src', imagePath);
+        $('#imageModal').modal('show');
+      });
+
+      uploadedImage.addEventListener('mouseleave', function() {
+        $('#imageModal').modal('hide');
+      });
+    });
+  </script>
 
 
   <style>
+    /* Zoom animation */
+    .modal.fade .modal-dialog {
+      transform: scale(0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.fade.show .modal-dialog {
+      transform: scale(1);
+    }
+
     /* <<<<------------------- Custom styles for modal ------------------->>>> */
     .modal-content {
       background-color: #f8f9fa;
