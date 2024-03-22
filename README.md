@@ -46,3 +46,11 @@ Then when upload file t will save the selected image then after a successful upd
 
 <img width="734" alt="Screenshot 2024-03-21 at 5 42 51 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/49a438e9-6dfd-472d-9a36-7cd16594b1cf">
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Then Messages, in messages you can do dm another and in Find you can search or look for the user you wanted to find and when found you can visit the profile of the user 
+and also you can send a message to that specific user
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
