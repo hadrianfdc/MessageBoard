@@ -2,7 +2,7 @@
 class MessagesController extends AppController
 {
 
-    public $uses = array('User', 'Message'); // Add User model here
+    public $uses = array('User', 'Message'); 
 
     public function index()
     {
@@ -85,7 +85,7 @@ class MessagesController extends AppController
         $searchTerm = $this->request->data['searchTerm'];
 
         // Perform the search query to fetch messages matching the search term
-        // Adjust your search query according to your database schema and requirements
+ 
         $searchResults = $this->Message->find('all', array(
             'conditions' => array(
                 'OR' => array(
@@ -112,7 +112,7 @@ class MessagesController extends AppController
         $user_id = $this->Session->read('Auth.User.user_id');
         $this->layout = null;
         if ($this->request->is('post')) {
-            // Assuming form fields are named conversation_id, sender_id, receiver_id, and message_content
+      
             $this->Message->create();
             $data = array(
                 'Message' => array(
@@ -134,7 +134,7 @@ class MessagesController extends AppController
         $user_id = $this->Session->read('Auth.User.user_id');
         $this->layout = null;
         if ($this->request->is('post')) {
-            // Assuming form fields are named conversation_id, sender_id, receiver_id, and message_content
+
             $this->Message->create();
             $data = array(
                 'Message' => array(
