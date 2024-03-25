@@ -60,45 +60,35 @@
         document.getElementById('new-password').addEventListener('input', function() {
             var password = this.value;
             var changePasswordButton = document.getElementById('change-password-button');
-
-            var mediumThreshold = 10;
-
-            if (password.length < mediumThreshold) {
-                changePasswordButton.setAttribute('disabled', 'disabled');
-            } else {
-                changePasswordButton.removeAttribute('disabled');
-            }
-        });
-
-
-        document.getElementById('new-password').addEventListener('input', function() {
-            var password = this.value;
             var strengthMeter = document.querySelector('.password-strength-meter');
-            var weak = document.getElementById('weak');
-            var medium = document.getElementById('medium');
-            var strong = document.getElementById('strong');
 
             var weakThreshold = 6;
             var mediumThreshold = 11;
 
             if (password.length < weakThreshold) {
-                weak.style.backgroundColor = '#dc3545';
-                medium.style.backgroundColor = '';
-                strong.style.backgroundColor = '';
+                changePasswordButton.setAttribute('disabled', 'disabled');
+                setStrengthMeterColor('weak');
             } else if (password.length < mediumThreshold) {
-                weak.style.backgroundColor = '#ffc107';
-                medium.style.backgroundColor = '#ffc107';
-                strong.style.backgroundColor = '';
+                changePasswordButton.removeAttribute('disabled');
+                setStrengthMeterColor('medium');
             } else {
-                weak.style.backgroundColor = '#28a745';
-                medium.style.backgroundColor = '#28a745';
-                strong.style.backgroundColor = '#28a745';
+                changePasswordButton.removeAttribute('disabled');
+                setStrengthMeterColor('strong');
             }
         });
+
+        function setStrengthMeterColor(strength) {
+            var strengthMeter = document.querySelector('.password-strength-meter');
+            var colors = {
+                weak: '#dc3545',
+                medium: '#ffc107',
+                strong: '#28a745'
+            };
+            strengthMeter.style.backgroundColor = colors[strength];
+        }
     </script>
 
     <script>
-        console.log("Script executed");
         <?php
         if (isset($success)) {
             if ($success === true) {
