@@ -59,7 +59,7 @@
                         <?php echo $this->Session->read('Auth.User.full_name'); ?>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="http://localhost/MessageBoard/Userprofiles/user_profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/MessageBoard/user-profile">Profile</a></li>
                         <li><a class="dropdown-item" href="http://localhost/MessageBoard/logins/change_password">Change Password</a></li>
                         <li><a class="dropdown-item" href="#" onclick="confirmLogout()">Logout!</a> </li>
                     </ul>
@@ -218,7 +218,10 @@
                         <div class="message-metadata">
                              <span style="font-weight:bold ;color:black; font-size: 9px;" class="message-sender"> Send by:<?php echo ($message['Message']['sender_id'] == $this->Session->read('Auth.User.user_id')) ? '( You )' : $message['Sender']['full_name']; ?></span>
                             <span style="color:black; font-size: 9px;" class="message-timestamp">
-                                Time: <?php echo date("F j, Y g:i A", strtotime($message['Message']['timestamp'])); ?>
+                                Time: <?php echo date("F j, Y g:i A", strtotime($message['Message']['created'])); ?>
+                                <?php if ($message['Message']['is_seen'] == 1) : ?>
+                                    <span style="color: green;">Seen</span>
+                                <?php endif; ?>
                             </span>
                             <?php if ($message['Message']['sender_id'] == $this->Session->read('Auth.User.user_id')) : ?>
                                 <button class="delete-message" data-message_id="<?php echo $message['Message']['message_id']; ?>">Delete</button> 

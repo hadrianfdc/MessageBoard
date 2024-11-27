@@ -38,7 +38,7 @@ class AppController extends Controller
         'DebugKit.Toolbar',
         'Session'
     );
-
+    public $uses = array('User', 'Posts');
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -51,6 +51,16 @@ class AppController extends Controller
                 $this->redirect(array('controller' => 'Logins', 'action' => 'login'));
             }
         }
+        if ($this->Session->read('Auth.User.user_id')) {
+            $user_id = $this->Session->read('Auth.User.user_id');
+            $user = $this->User->find('first', [
+                'conditions' => ['User.user_id' => $user_id]
+            ]);
+            $findMyPic = $this->Posts->find('first', [
+                'conditions' => ['Posts.id' => $user_id]
+            ]);
+            $this->set(compact('user', 'findMyPic'));
+        }
     }
 
     protected function isUserLoggedIn(){
@@ -60,4 +70,19 @@ class AppController extends Controller
     protected function isLoginPage(){
         return $this->request->params['controller'] === 'Logins' && $this->request->params['actions'] === 'login';
     }
+
+    public function Myprofile() {
+        $this->layout = null;
+        $user_id = $this->Session->read('Auth.User.user_id');
+        $findUser = $this->User->find('all', [
+            'conditions' => ['User.user_id' => $user_id]
+        ]);
+        $findMyPic = $this->Posts->find('all', [
+            'conditions' => ['Posts.user_id' => $user_id]
+        ]);
+        $this->set('findMyPic', $findMyPic);
+        $this->set('user', $findUser);
+        
+    }
+    
 }

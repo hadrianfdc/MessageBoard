@@ -32,10 +32,20 @@
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	// app/Config/routes.php
 	Router::connect('/login', array('controller' => 'logins', 'action' => 'login'));
+	Router::connect('/register', array('controller' => 'registers', 'action' => 'new_user'));
+	Router::connect('/logout', array('controller' => 'logins', 'action' => 'logout'));
+	Router::connect('/user-profile', array('controller' => 'Userprofiles', 'action' => 'user_profile'));
+	Router::connect('/newsfeed', array('controller' => 'Userprofiles', 'action' => 'newsfeed'));
+	Router::connect('/update_background_img', array('controller' => 'Posts', 'action' => 'background_img'));
+	Router::connect('/upload_profile_picture', array('controller' => 'Posts', 'action' => 'index'));
+	Router::connect('/togglePin', ['controller' => 'UserProfiles', 'action' => 'togglePin']);
+	Router::connect('/toggleArchieve', ['controller' => 'UserProfiles', 'action' => 'toggleArchieve']);
+	Router::connect('/toggleTrash', ['controller' => 'UserProfiles', 'action' => 'toggleTrash']);	
+
 	// Router::connect('/Registers/new_user', array('controller' => 'Registers', 'action' => 'new_user'));
 	// Load the HtmlHelper
 	// Router::connect('/posts', array('controller' => 'posts', 'action' => 'index'));
-	Router::connect('/messages/viewConversation/:user_id', array('controller' => 'messages', 'action' => 'viewConversation'), array('pass' => array('user_id')));
+	Router::connect('/messages/view_conversation/:user_id', array('controller' => 'messages', 'action' => 'viewConversation'), array('pass' => array('user_id')));
 
 	
 /**

@@ -49,7 +49,7 @@
 
         <div class="form-group">
             <?php echo $this->Form->submit('Change Password', array('class' => 'btn btn-primary', 'id' => 'change-password-button', 'disabled' => 'disabled')); ?>
-            <a class="btn btn-sm btn-secondary" href="http://localhost/MessageBoard/Userprofiles/user_profile">Back</a>
+            <a class="btn btn-sm btn-secondary" href="/MessageBoard/user-profile">Back</a>
         </div>
 
         <?php echo $this->Form->end(); ?>
@@ -60,35 +60,45 @@
         document.getElementById('new-password').addEventListener('input', function() {
             var password = this.value;
             var changePasswordButton = document.getElementById('change-password-button');
+
+            var mediumThreshold = 10;
+
+            if (password.length < mediumThreshold) {
+                changePasswordButton.setAttribute('disabled', 'disabled');
+            } else {
+                changePasswordButton.removeAttribute('disabled');
+            }
+        });
+
+
+        document.getElementById('new-password').addEventListener('input', function() {
+            var password = this.value;
             var strengthMeter = document.querySelector('.password-strength-meter');
+            var weak = document.getElementById('weak');
+            var medium = document.getElementById('medium');
+            var strong = document.getElementById('strong');
 
             var weakThreshold = 6;
             var mediumThreshold = 11;
 
             if (password.length < weakThreshold) {
-                changePasswordButton.setAttribute('disabled', 'disabled');
-                setStrengthMeterColor('weak');
+                weak.style.backgroundColor = '#dc3545';
+                medium.style.backgroundColor = '';
+                strong.style.backgroundColor = '';
             } else if (password.length < mediumThreshold) {
-                changePasswordButton.removeAttribute('disabled');
-                setStrengthMeterColor('medium');
+                weak.style.backgroundColor = '#ffc107';
+                medium.style.backgroundColor = '#ffc107';
+                strong.style.backgroundColor = '';
             } else {
-                changePasswordButton.removeAttribute('disabled');
-                setStrengthMeterColor('strong');
+                weak.style.backgroundColor = '#28a745';
+                medium.style.backgroundColor = '#28a745';
+                strong.style.backgroundColor = '#28a745';
             }
         });
-
-        function setStrengthMeterColor(strength) {
-            var strengthMeter = document.querySelector('.password-strength-meter');
-            var colors = {
-                weak: '#dc3545',
-                medium: '#ffc107',
-                strong: '#28a745'
-            };
-            strengthMeter.style.backgroundColor = colors[strength];
-        }
     </script>
 
     <script>
+        console.log("Script executed");
         <?php
         if (isset($success)) {
             if ($success === true) {

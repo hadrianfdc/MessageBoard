@@ -1,56 +1,48 @@
-Login
-<img width="728" alt="Screenshot 2024-03-21 at 5 30 50 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/5aa0b458-6c5f-4598-8160-9b977f2a94a3">
+# CakePHP
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
+[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
+[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](https://travis-ci.org/cakephp/cakephp)
+[![Code consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/grade.svg)](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/)
 
-Email : hadrian.fdc@gmail.com
-Password : admin12345
-
-<img width="764" alt="Screenshot 2024-03-21 at 5 32 59 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/673128f2-bfcf-4796-ace2-f4ca38acdb3b">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-After successful logging in it will be redirected to User Profile as my Home 
-
-<img width="733" alt="Screenshot 2024-03-21 at 5 35 08 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/54f3ceef-634d-47fa-be8c-9e5ed4a9e7a1">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Click the Edit Profile Details button to display a Modal Forms for editing the user details
-
-[
-<img width="722" alt="Screenshot 2024-03-21 at 5 36 35 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/4fefc6f8-2378-48a9-9e63-73dc4c650c50">
-](url)
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Click the Update profile picture button to be redirected to Uploading the Profile picture
-
-<img width="1440" alt="Screenshot 2024-03-21 at 5 38 37 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/c49b6bac-e795-4c79-bfc0-2552ee25df90">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Then Choose File 
-
-<img width="1438" alt="Screenshot 2024-03-21 at 5 40 18 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/f14df663-54aa-4d79-bf7b-480062e81294">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Then the preview of the selected picture will be displayed automatically
-
-<img width="1435" alt="Screenshot 2024-03-21 at 5 41 45 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/c82a597b-a989-4149-bad6-9659ac5c0e74">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Then when upload file t will save the selected image then after a successful update of an image it will be redirected back to home which is user profile page
-
-<img width="734" alt="Screenshot 2024-03-21 at 5 42 51 PM" src="https://github.com/hadrianfdc/MessageBoard/assets/162952181/49a438e9-6dfd-472d-9a36-7cd16594b1cf">
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Then Messages, in messages you can do dm another and in Find you can search or look for the user you wanted to find and when found you can visit the profile of the user 
-and also you can send a message to that specific user
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
+Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
 
 
+## Some Handy Links
+
+[CakePHP](https://cakephp.org) - The rapid development PHP framework
+
+[CookBook](https://book.cakephp.org) - THE CakePHP user documentation; start learning here!
+
+[API](https://api.cakephp.org) - A reference to CakePHP's classes
+
+[Plugins](https://plugins.cakephp.org) - A repository of extensions to the framework
+
+[The Bakery](https://bakery.cakephp.org) - Tips, tutorials and articles
+
+[Community Center](https://community.cakephp.org) - A source for everything community related
+
+[Training](https://training.cakephp.org) - Join a live session and get skilled with the framework
+
+[CakeFest](https://cakefest.org) - Don't miss our annual CakePHP conference
+
+[Cake Software Foundation](https://cakefoundation.org) - Promoting development related to CakePHP
+
+
+## Get Support!
+
+[#cakephp](https://webchat.freenode.net/?channels=#cakephp) on irc.freenode.net - Come chat with us, we have cake
+
+[Google Group](https://groups.google.com/group/cake-php) - Community mailing list and forum
+
+[GitHub Issues](https://github.com/cakephp/cakephp/issues) - Got issues? Please tell us!
+
+[Roadmaps](https://github.com/cakephp/cakephp/wiki#roadmaps) - Want to contribute? Get involved!
+
+
+## Contributing
+
+[CONTRIBUTING.md](CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project
+
+[CookBook "Contributing" Section (2.x)](https://book.cakephp.org/2.0/en/contributing.html) [(3.x)](https://book.cakephp.org/3.0/en/contributing.html) - Version-specific details about contributing to the project

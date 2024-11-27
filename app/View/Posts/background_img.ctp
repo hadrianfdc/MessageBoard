@@ -14,9 +14,9 @@
         <div class="image-upload-container">
             <div class="image-preview">
                 <?php if (!empty($imageRecord) && !empty($imageRecord['Posts']['path'])) : ?>
-                    <img id="previewImage" src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['path']); ?>" alt="Uploaded Image">
+                    <img id="previewImage" src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['background_img']); ?>" alt="Uploaded Image" width="300" height="200">
                 <?php else : ?>
-                    <img id="previewImage" src="" alt="Preview Image">
+                    <img id="previewImage" src="" alt="Preview Image" width="300" height="200">
                 <?php endif; ?>
             </div>
             <h1>Upload your profile picture here!</h1>
@@ -25,7 +25,7 @@
             <div class="flash-message">
                 <?php echo $this->Flash->render(); ?>
             </div>
-            <form class="upload-form" method="post" action="<?php echo $this->Html->url(array('controller' => 'posts', 'action' => 'index')); ?>" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <form class="upload-form" method="post" action="<?php echo $this->Html->url(array('controller' => 'posts', 'action' => 'background_img')); ?>" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <input type="file" name="data[Posts][file]" id="fileUpload" accept=".jpg, .jpeg, .gif, .png" onchange="previewFile()" />
                 <div class="button-container">
                     <input type="submit" class="btn btn-upload" value="Upload File" />

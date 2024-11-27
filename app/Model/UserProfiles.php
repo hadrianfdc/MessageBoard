@@ -7,5 +7,3 @@ class UserProfiles extends AppModel {
 
 }
 ?>
-
-

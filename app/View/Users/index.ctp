@@ -47,7 +47,7 @@
                         <?php echo $this->Session->read('Auth.User.full_name'); ?>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="http://localhost/MessageBoard/Userprofiles/user_profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/MessageBoard/user-profile">Profile</a></li>
                         <li><a class="dropdown-item" href="#">Change Password</a></li>
                         <li><a class="dropdown-item" href="#" onclick="confirmLogout()">Logout!</a> </li>
                     </ul>

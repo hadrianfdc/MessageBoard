@@ -1,364 +1,763 @@
-<?php
-$this->Html = $this->loadHelper('Html');
-$this->loadHelper('Url');
-?>
-
-
-
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php echo $this->Html->css('UserProfiles/user_profiles');  
+echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
+?>
 
-  <?php echo $this->Html->css('Navbar/navbar');  ?>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-
-  <?php
-
-  echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
-  echo $this->fetch('script');
-
-  echo $this->Html->css('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css');
-  echo $this->Html->css('https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css');
-  echo $this->Html->css('https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css');
-
-  echo $this->fetch('https://code.jquery.com/jquery-3.2.1.slim.min.js');
-  echo $this->fetch('https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js');
-  echo $this->fetch('https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js');
-
-  echo $this->Html->script('https://cdn.jsdelivr.net/npm/sweetalert2@11');
-
-  ?>
-
-  <title>User Profile</title>
 </head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"><!-- For Icons CDN Link -->
 
-<body>
-
-  <nav class="navbar navbar-expand-lg bg-body-white">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true"></a>
-          </li>
-        </ul>
-        <ul class="d-flex navbar-nav ">
-          <li class="nav-item">
-            <a class="nav-link" id="message" href="http://localhost/MessageBoard/Messages/index">Messages</a>
-          </li>
-        </ul>
-        <ul class="d-flex navbar-nav ">
-          <li class="nav-item">
-            <a class="nav-link" id="message" href="http://localhost/MessageBoard/Users/search">Find</a>
-          </li>
-        </ul>
-        <div class="dropdown-center">
-          <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <?php echo $this->Session->read('Auth.User.full_name'); ?>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="http://localhost/MessageBoard/Userprofiles/user_profile">Profile</a></li>
-            <li><a class="dropdown-item" href="http://localhost/MessageBoard/logins/change_password">Change Password</a></li>
-            <li><a class="dropdown-item" href="#" onclick="confirmLogout()">Logout!</a> </li>
-          </ul>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script> <!--Facebook CDN Link -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+<button class="icon-button e-dark-mode-button u-animation-click" id="darkMode" aria-label="Dark Mode"><span class="icon" aria-hidden="true">🌜</span></button>
+<div id="profile-upper">
+    <div id="profile-banner-image">
+      <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['background_img']); ?>" alt="Banner image">
+    </div>
+    <div id="profile-d">
+      <div id="profile-pic">
+        <?php if (!empty($findMyPic['Posts']['path'])): ?>
+          <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>">
+        <?php endif; ?>
+        <a href="/MessageBoard/upload_profile_picture"><i class="fa fa-camera" style="font-size:24px; color: white"></i></a>
+      </div>
+      <div id="u-name"><?php echo $user['User']['full_name']; ?></div>
+      <div class="tb" id="m-btns">
+        <div class="td">
+          <div class="m-btn"><i>📋</i><span>Activity log</span></div>
+        </div>
+        <div class="td">
+            <div class="m-btn"><i>🔒</i><span>Privacy</span></div>
         </div>
       </div>
+      <div id="edit-profile"><a href="/MessageBoard/update_background_img"><i class="fa fa-camera" style="font-size:24px"></i></a></div>
     </div>
+    <div id="black-grd"></div>
+  </div>
+<div class="common-structure">
+  <?php echo $this->element('Nav/navbar'); ?>
+  <aside class="side-a">
 
-    <script>
-      function confirmLogout() {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: 'You will be logged out!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, logout!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              type: 'POST',
-              url: '<?php echo $this->Html->url(array("controller" => "logins", "action" => "logout")); ?>',
-              success: function(data) {
-                window.location.href = '<?php echo $this->Html->url(array("controller" => "logins", "action" => "login")); ?>';
-              }
-            });
-          }
-        });
-      }
-    </script>
-  </nav>
+  <div class="l-cnt">
+    <div class="cnt-label">
+      <i class="l-i" id="l-i-i"></i>
+      <span>Intro</span>
+      <div class="lb-action"><i id="editProfileBtn" class="material-icons">✏️</i></div>
+    </div>
+    <div id="i-box">
+      <div id="intro-line" style="color: black;">
+          <?php echo htmlspecialchars($userProfileData[0]['UserProfiles']['hobby'], ENT_QUOTES, 'UTF-8'); ?>
+      </div>
+        <div id="u-occ"></div>
+        <?php if (!empty($userProfileData[0]['UserProfiles']['links'])): ?>
+            <p class="mb-0"><b><i class="fas fa-link"></i></b> <a style="color: black;" href="<?php echo $userProfileData[0]['UserProfiles']['links']; ?>" >Link</a></p><br>
+          <?php endif; ?>
 
-  <section style="background-color: #B4D4FF; height: 93vh;">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col col-md-9 col-lg-7 col-xl-5">
-          <div class="card" style="border-radius: 15px;">
-            <div class="card-body p-4">
-              <div class="d-flex text-black">
-                <div class="flex-shrink-0">
-                  <div class="rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
-                    <?php if (!empty($imageRecord)) : ?>
-                      <img src="<?php echo $this->Html->url('/' . $imageRecord['Posts']['path']); ?>" alt="Uploaded Image" class="w-100 h-100" id="uploadedImage">
-                    <?php else : ?>
-                      <div class="d-flex justify-content-center align-items-center w-100 h-100 bg-secondary text-white">No image uploaded</div>
-                    <?php endif; ?>
-                  </div>
-                </div>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['work'])): ?>
+            <p class="mb-0"><b><i class="fas fa-briefcase"></i></b> <?php echo $userProfileData[0]['UserProfiles']['work']; ?></p><br>
+          <?php endif; ?>
 
+          <?php if (!empty($userProfileData[0]['UserProfiles']['education'])): ?>
+            <p class="mb-0"><b><i class="fas fa-graduation-cap"></i></b> <?php echo $userProfileData[0]['UserProfiles']['education']; ?></p><br>
+          <?php endif; ?>
 
-                <div class="flex-grow-1 ms-1">
-                  <?php foreach ($userProfileData as $key => $profile) : ?>
-                    <h5 class="mb-1">Name: <?php echo h($profile['UserProfiles']['full_name']); ?></h5>
-                    <p class="mb-0"><b>Birthday:</b> <?php echo date('F j, Y', strtotime($profile['UserProfiles']['birthdate'])); ?></p>
-                    <p class="mb-0"><b> Gender: </b> <?php echo h($profile['UserProfiles']['gender']); ?></p>
-                    <p class="mb-0"><b>Joined:</b> <?php echo date('F j, Y h:i A', strtotime($profile['UserProfiles']['date_created'])); ?></p>
-                    <p class="mb-0"><b> Last time login: </b> <?php echo date('F j, Y h:i A', strtotime($profile['UserProfiles']['last_login_time'])); ?></p>
-                    <div class="d-flex flex-column pt-1">
-                      <button style="font-size: 12px;" type="button" class="btn btn-outline-primary mb-1" data-bs-toggle="modal" data-bs-target="#editProfileDetailsModal">Edit Profile Details</button>
-                      <a style="font-size: 12px;" href="http://localhost/MessageBoard/Posts/index" class="btn btn-primary">Update profile picture</a>
-                    </div>
-                  <?php endforeach; ?>
-                </div>
-              </div>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['gender'])): ?>
+            <p class="mb-0"><b><i class="fas fa-venus-mars"></i></b> <?php echo $userProfileData[0]['UserProfiles']['gender']; ?></p><br>
+          <?php endif; ?>
 
-              <div class="flex-grow-1 ms-1">
-                <?php foreach ($userProfileData as $key => $profile) : ?>
-                  <h5 class="mb-1">Hobby</h5>
-                  <p class="mb-0" id="costumText"><?php echo h($profile['UserProfiles']['hobby']); ?></p>
-                <?php endforeach; ?>
-              </div>
-            </div>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['location'])): ?>
+            <p class="mb-0"><b><i class="fas fa-map-marker-alt"></i></b> From <b style="color: black;"><?php echo $userProfileData[0]['UserProfiles']['location']; ?></b></p><br>
+          <?php endif; ?>
+
+          <?php if (!empty($userProfileData[0]['UserProfiles']['relationship'])): ?>
+            <p class="mb-0"><b><i class="fas fa-heart"></i></b> In a relationship with <b style="color:black;"><?php echo $userProfileData[0]['UserProfiles']['relationship']; ?></b></p><br>
+          <?php endif; ?>
+
+          <?php if (!empty($userProfileData[0]['UserProfiles']['birthdate'])): ?>
+            <p class="mb-0"><b><i class="fas fa-birthday-cake"></i></b> <?php echo $userProfileData[0]['UserProfiles']['birthdate']; ?></p><br>
+          <?php endif; ?>
+
+          <?php if (!empty($userProfileData[0]['UserProfiles']['date_created'])): ?>
+            <p class="mb-0"><b><i class="fas fa-calendar-plus"></i></b> <?php echo date('F j, Y h:i A', strtotime($userProfileData[0]['UserProfiles']['date_created'])); ?></p><br>
+          <?php endif; ?>
+
+          <?php if (!empty($userProfileData[0]['UserProfiles']['last_login_time'])): ?>
+            <p class="mb-0"><b><i class="fas fa-sign-in-alt"></i></b> <?php echo date('F j, Y h:i A', strtotime($userProfileData[0]['UserProfiles']['last_login_time'])); ?></p><br>
+          <?php endif; ?>
+
+        <div class="d-flex flex-column pt-1">
+      </div>
+    </div>
+  </div>
+   
+  <div class="l-cnt l-mrg">
+      <div class="cnt-label">
+          <i class="l-i" id="l-i-p"></i>
+          <span>Photos</span>
+          <div class="lb-action" id="b-i"><i class="material-icons"></i></div>
+      </div>
+      <div id="photos">
+          <div class="tb">
+              <?php 
+                  $counter = 0;
+                  $columns = 2; 
+                  foreach ($photoList as $index => $photo): 
+                      if ($index % $columns == 0): ?>
+                          <div class="row">
+                      <?php endif; ?>
+                              <div class="column">
+                                  <img style="border: solid 3px black; height: 50%:" src="<?php echo $this->Html->url('/' . $photo ); ?>" alt="Photo <?= $index + 1 ?>" />
+                              </div>
+                      <?php 
+                            if (($index + 1) % $columns == 0 || $index + 1 == count($photoList)): ?>
+                          </div> 
+                       <?php endif; 
+                  endforeach;
+              ?>
           </div>
-        </div>
       </div>
-    </div>
-  </section>
-
-
-  <!--------------------------------------- Modal for editing profile details ----------------------------------------->
-  <div class="modal fade" id="editProfileDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editProfileDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editProfileDetailsModalLabel">Edit Profile Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-----------------------------------------Form for editing profile details ----------------------------------------->
-          <form method="post" action="<?php echo $this->Html->url(array('controller' => 'UserProfiles', 'action' => 'editDetails')); ?>" enctype="multipart/form-data">
-
-            <div class="mb-3">
-              <label for="full_name" class="form-label">Full Name:</label>
-              <input style="font-size: 12px;" type="text" class="form-control" id="full_name" name="full_name" value="<?php echo isset($profile['UserProfiles']['full_name']) ? h($profile['UserProfiles']['full_name']) : ''; ?>">
-            </div>
-
-            <div class="mb-3">
-              <label for="birthdate" class="form-label">Birthday:</label>
-              <input style="font-size: 12px;" type="text" class="form-control" id="birthdate" name="birthdate" value="<?php echo date('Y-m-d', strtotime($profile['UserProfiles']['birthdate'])); ?>">
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Gender:</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="male" value="Male" <?php echo ($profile['UserProfiles']['gender'] == 'Male') ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="male">Male</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="female" value="Female" <?php echo ($profile['UserProfiles']['gender'] == 'Female') ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="female">Female</label>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="hobby" class="form-label">Hobby:</label>
-              <textarea style="font-size: 12px;" class="form-control" id="hobby" name="hobby" rows="5" maxlength="500"><?php echo isset($profile['UserProfiles']['hobby']) ? h($profile['UserProfiles']['hobby']) : ''; ?></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--------------------- Modal for hovering Profile Photo -------------------------------------------------------->
-  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-      <div class="modal-content bg-transparent border-0">
-        <div class="modal-body p-0">
-          <img src="" alt="Uploaded Image" class="img-fluid rounded" id="modalImage" style="width: 80%; height: 80%;">
-        </div>
-      </div>
-    </div>
   </div>
 
 
-  <script>
-    // JavaScript to handle image hover and modal display
-    document.addEventListener("DOMContentLoaded", function() {
-      const uploadedImage = document.getElementById('uploadedImage');
-      const modalImage = document.getElementById('modalImage');
 
-      uploadedImage.addEventListener('mouseenter', function() {
-        const imagePath = this.getAttribute('src');
-        modalImage.setAttribute('src', imagePath);
-        $('#imageModal').modal('show');
-      });
+  </aside>
+  <main class="main-feed">
+    <ul class="main-feed-list">
+    <?php if (!empty($findPost)): ?>
+        <?php foreach ($findPost as $post): ?>
+            <div class="main-feed-item">
+                <article class="common-post">
+                    <?php if ($post['is_pinned'] == 1): ?>
+                      <div><span class="icon">📌</span> <b> Pinned Post </b></div>
+                    <?php endif; ?>
+                    <header class="common-post-header u-flex">
+                        <!-- Display the user's avatar using the dynamic image path -->
+                        <?php 
+                            $avatarUrl = !empty($post['images']) ? $post['images'][0] : 'https://assets.codepen.io/65740/internal/avatars/users/default.png';
+                        ?>
+                        <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
+                        <div class="common-post-info">
+                            <div class="user-and-group u-flex">
+                                <a href="#" target="_blank"><?php echo h($post['fullname']); ?></a>
+                            </div>
+                            <div class="time-and-privacy">
+                                <!-- Display the created date -->
+                                <time datetime="<?php echo h($post['created_date']); ?>">
+                                    <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                </time>
+                                <span class="icon icon-privacy">
+                                    <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Only Me';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Public';
+                                        }elseif ($post['privacy'] == 3) {
+                                          echo '👥 Friends';
+                                      }
+                                    ?>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Dropdown Menu of Post -->
+                        <button class="icon-button-2 u-margin-inline-start" aria-label="more options" aria-label="more options" onclick="toggleCustomDropdown(event, '<?php echo $post['id']; ?>')">
+                            <span class="icon-menu"></span>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="custom-dropdown-menu-<?php echo $post['id']; ?>" class="custom-dropdown-menu">
+                            <ul>
+                                <li 
+                                    class="toggle-pin-post" 
+                                    data-post-id="<?php echo $post['id']; ?>" 
+                                    data-is-pinned="<?php echo $post['is_pinned']; ?>">
+                                    <span class="icon">📌</span>
+                                    <?php if ($post['is_pinned'] == 1): ?> Unpin Post
+                                    <?php else: ?> Pin Post
+                                    <?php endif; ?>
+                                </li>
+                                <li><span class="icon">🔖</span>
+                                  <?php if ($post['is_saved'] == 1): ?> Unsave Post
+                                  <?php else: ?> Save Post
+                                  <?php endif; ?>
+                                </li>
+                                <li class="edit-post" data-post-id="<?php echo $post['id']; ?>">
+                                  <span class="icon">✏️</span> Edit Post
+                                </li>
+                                <li class="edit-privacy" data-post-id="<?php echo $post['id']; ?>"><span class="icon"></span> 
+                                     <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Change Audience (Only Me)';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Change Audience (Public)';
+                                        }elseif ($post['privacy'] == 3) {
+                                          echo '👥 Change Audience (Friends)';
+                                      }
+                                    ?>
+                                </li>
+                                <li><span class="icon">💬</span> Who can comment on this post?</li>
+                                <li
+                                    class="toggle-archieve-post" 
+                                    data-post-id="<?php echo $post['id']; ?>" 
+                                    data-is-archieve="<?php echo $post['is_archieve']; ?>"
+                                    ><span class="icon">📦</span> Move to Archive
+                                </li>
+                                <li class="toggle-trash-post" 
+                                    data-post-id="<?php echo $post['id']; ?>">
+                                    <span class="icon">🗑️</span> Move to Trash
+                                </li>
+                                <li><span class="icon">🔔</span> Get Notified about this Post</li>
+                                <li><span class="icon">📸</span> Add to Album</li>
+                            </ul>
+                        </div>
+                        <!-- End Of Dropdown Menu of Post -->
+                    </header>
+                    <div class="common-post-content common-content">
+                        <!-- Display the caption -->
+                        <p><?php echo h($post['captions']); ?></p>
+                    </div>
+                    <?php if (!empty($post['file_paths'])): ?>
+                        <div class="image-grid">
+                            <?php foreach ($post['file_paths'] as $index => $image): ?>
+                                <div class="image-item">
+                                    <img src="<?php echo $this->Html->url('/' . $image); ?>" alt="Post Image" class="image">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="summary u-flex">
+                        <div class="reactions">❤️</div>
+                        <div class="reactions-total"><?php echo $post['react']; ?></div>
+                    </div>
+                    <section class="actions-buttons">
+                      <ul class="actions-buttons-list u-flex">
+                          <button class="actions-buttons-button"><span class="icon">👍</span><span class="text">Like</span></button>
+                      </ul>
+                    </section>
+                </article>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
-      uploadedImage.addEventListener('mouseleave', function() {
-        $('#imageModal').modal('hide');
-      });
-    });
-  </script>
+    </ul>
+  </main>
+  <aside class="side-b">
+    <section class="common-section">
+      <h2 class="section-title">Sponsored</h2>
+      <ul class="common-list">
+        <li class="common-list-item">
+          <a href="http://bit.ly/2Nd05lW" target="_blank" class="common-list-button is-ads">
+            <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
+            <div class="text">
+              <h4 class="ads-title">Export Sketch to HTML with a click</h4>
+              <p class="ads-url">animaapp.com</p>
+            </div>
+          </a>
+        </li>
+        <li class="common-list-item">
+          <a href="http://bit.ly/2Nd05lW" target="_blank" class="common-list-button is-ads">
+            <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
+            <div class="text">
+              <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>
+              <p class="ads-url">animaapp.com</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <button class="common-more">
+        <span class="text">See More</span>
+        <span class="icon">🔻</span>
+      </button>
+    </section>
+  </aside>
+</div>
+<?php echo $this->element('modal_edit_profile'); ?>
 
+<script>
 
-  <style>
-    /* Zoom animation */
-    .modal.fade .modal-dialog {
-      transform: scale(0.1);
-      transition: transform 0.3s ease;
+ // <!-- Dropdown Menu of Post -->
+ function toggleCustomDropdown(event, postId) {
+        var dropdown = document.getElementById('custom-dropdown-menu-' + postId);
+        event.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
 
-    .modal.fade.show .modal-dialog {
-      transform: scale(1);
-    }
-
-    /* <<<<------------------- Custom styles for modal ------------------->>>> */
-    .modal-content {
-      background-color: #f8f9fa;
-      border-radius: 10px;
-      font-size: 12px;
-    }
-
-    .modal-header {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .modal-title {
-      color: #007bff;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .modal-body {
-      padding: 20px;
-      font-size: 12px;
-    }
-
-    .form-label {
-      font-weight: bold;
-      color: #495057;
-    }
-
-    .form-control {
-      border-radius: 5px;
-    }
-
-    .form-check-label {
-      font-weight: normal;
-      font-size: 12px;
-    }
-
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-      border-radius: 5px;
-      font-size: 12px;
-    }
-
-    .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #0056b3;
-    }
-  </style>
-
-
-  <script>
-    $(function() {
-      $('#birthdate').datepicker({
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        beforeShow: function(input, inst) {
-          var datepicker = inst.dpDiv;
-          setTimeout(function() {
-            var header = datepicker.find('.ui-datepicker-title'),
-              year = header.find('.ui-datepicker-year'),
-              month = header.find('.ui-datepicker-month');
-            year.attr('size', '5').css('overflow', 'auto');
-            month.attr('size', '5').css('overflow', 'auto');
-          }, 0);
-        }
-      });
-    });
-  </script>
-
-  <script>
-    $(document).ready(function() {
-      // Check if success flag is set
-      <?php if ($success) : ?>
-        swal("Success", "User profile updated successfully.", "success");
-      <?php endif; ?>
-
-      // Check if error flag is set
-      <?php if ($error) : ?>
-        swal("Error", "Error updating user profile.", "error");
-      <?php endif; ?>
-    });
-  </script>
-
-
-  <script>
-    $(document).ready(function() {
-      $('.edit-profile-btn').on('click', function() {
-        var fullName = $('#full_name').val();
-        $('#editProfileForm #full_name').val(fullName);
-      });
-
-      $('#editProfileForm').submit(function(e) {
-        e.preventDefault();
-
-        $.ajax({
-          type: "PUT",
-          url: "<?php echo $this->Html->url(array('controller' => 'UserProfiles', 'action' => 'editDetails')); ?>",
-          data: $('#editProfileForm').serialize(),
-          success: function(response) {
-
-            $('#editProfileModal').modal('hide');
-
-          },
-          error: function(xhr, status, error) {
-
-          }
+    // Close dropdown if clicked outside
+    document.addEventListener('click', function(event) {
+        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
+        dropdowns.forEach(function(dropdown) {
+            if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
         });
-      });
     });
-  </script>
+
+    // Close dropdowns on scroll
+    window.addEventListener('scroll', function() {
+        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
+        dropdowns.forEach(function(dropdown) {
+            dropdown.style.display = 'none';
+        });
+    });
+    // <!-- END OF Dropdown Menu of Post -->
+
+    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const uploadImages = document.getElementById('uploadImages');
+    const uploadIcon = document.getElementById('click_icon');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const form = uploadImages.closest('form');
+
+    if (!uploadImages || !imagePreviewContainer) {
+        console.error('Required elements not found in the DOM.');
+        return;
+    }
+
+    const maxImages = 5;
+    let selectedFiles = [];
+
+    uploadIcon.addEventListener('click', function () {
+        uploadImages.click();
+    })
+
+    uploadImages.addEventListener('change', function () {
+
+          const files = Array.from(this.files);
+          console.log(selectedFiles);
+          if (selectedFiles.length + files.length > maxImages) {
+              alert(`You can only upload up to ${maxImages} images.`);
+              this.value = '';
+              return;
+          }
+
+          files.forEach((file) => {
+              if (file.type.startsWith('image/')) {
+                  const reader = new FileReader();
+
+                  reader.onload = function (e) {
+                      const imageWrapper = document.createElement('div');
+                      imageWrapper.classList.add('image-preview');
+
+                      const image = document.createElement('img');
+                      image.src = e.target.result;
+                      image.alt = `Preview`;
+                      image.style.width = '100%';
+                      image.style.height = '100%';
+                      image.style.objectFit = 'cover';
+
+                      const removeBtn = document.createElement('span');
+                      removeBtn.textContent = '×';
+                      removeBtn.classList.add('remove-btn');
+
+                      // Remove image on click
+                      removeBtn.addEventListener('click', function () {
+                          const index = selectedFiles.indexOf(file);
+                          if (index !== -1) selectedFiles.splice(index, 1); 
+                          imageWrapper.remove();
+                      });
+
+                      imageWrapper.appendChild(image);
+                      imageWrapper.appendChild(removeBtn);
+                      imagePreviewContainer.appendChild(imageWrapper);
+
+                      selectedFiles.push(file);
+                  };
+
+                  reader.readAsDataURL(file);
+              }
+          });
+
+          this.value = '';
+      });
+      form.addEventListener('submit', function (event) {
+          const postText = document.getElementById('postText').value;
+          const fileInput = uploadImages;
+          const dataTransfer = new DataTransfer();
+          if (postText.trim() === '' && selectedFiles.length === 0) {
+              event.preventDefault();
+              alert('Please write something before posting.');
+          }
+          selectedFiles.forEach(file => {
+              dataTransfer.items.add(file);
+          });
+          fileInput.files = dataTransfer.files;
+      });
+  });
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  // Modal functionality Creating Post
+  const openModalBtn = document.getElementById('openModalBtn');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const createPostModal = document.getElementById('createPostModal');
+  const cancelPostBtn = document.getElementById('cancelPostBtn');
+
+  // Open Modal
+  openModalBtn.addEventListener('click', () => {
+      createPostModal.style.display = 'flex';
+  });
+
+  // Close Modal
+  closeModalBtn.addEventListener('click', () => {
+      createPostModal.style.display = 'none';
+  });
+
+  cancelPostBtn.addEventListener('click', () => {
+      createPostModal.style.display = 'none';
+  });
+
+  //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+   // JavaScript to handle modal User Details
+   document.getElementById('editProfileBtn').addEventListener('click', function () {
+    document.getElementById('editProfileModal').style.display = 'block';
+  });
+
+  document.getElementById('close-ModalBtn').addEventListener('click', function () {
+    document.getElementById('editProfileModal').style.display = 'none';
+  });
+  window.addEventListener('click', function (event) {
+    const modal = document.getElementById('editProfileModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  //Pin and Unpin Post
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-pin-post').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const postId = this.getAttribute('data-post-id');
+            const isPinned = this.getAttribute('data-is-pinned');
+
+            // Toggle isPinned value
+            const newPinnedStatus = isPinned === '1' ? 0 : 1;
+
+            // Send the data to the controller
+            fetch('/MessageBoard/togglePin', {
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id: postId,
+                    is_pinned: newPinnedStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to toggle pin status.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  //ARCHIEVE Post
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-archieve-post').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const postId = this.getAttribute('data-post-id');
+            const isArchieve = this.getAttribute('data-is-archieve');
+
+            // Toggle isArchieve value
+            const newArchieveStatus = isArchieve === '1' ? 0 : 1;
+
+            // Send the data to the controller
+            fetch('/MessageBoard/toggleArchieve', {
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id: postId,
+                    is_archieve: newArchieveStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to toggle pin status.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  //Move to trash Post
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-trash-post').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const postId = this.getAttribute('data-post-id');
+
+            // Send the data to the controller
+            fetch('/MessageBoard/toggleTrash', {
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id: postId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to move to trash.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+// Get references to the modal and its components
+const editPostModal = document.getElementById('editPostModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const cancelEditPostBtn = document.getElementById('cancelEditPostBtn');
+const postTextArea = document.getElementById('postEditText'); 
+const postID = document.getElementById('postEditID'); 
+const privacySelector = document.getElementById('privacyEditSelector'); 
+const imagePreviewContainer = document.getElementById('imageEditPreviewContainer'); 
+
+// Open Edit Modal for a specific post
+document.querySelectorAll('.edit-post').forEach((button) => {
+    button.addEventListener('click', async function () {
+        const postId = this.getAttribute('data-post-id');
+        
+        try {
+            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
+            const postDetails = await response.json();
+
+            if (response.ok && postDetails.success) {
+
+                postTextArea.value = postDetails.data.captions;
+                privacySelector.value = postDetails.data.privacy;
+                postID.value = postDetails.data.id;
+
+                // Clear previous image previews
+                imagePreviewContainer.innerHTML = '';
+
+                // Parse file_paths into an array
+                const filePaths = JSON.parse(postDetails.data.file_paths);
+
+                // Add new image previews
+                    if (Array.isArray(filePaths)) {
+                        filePaths.forEach((filePath, index) => {
+                          const imageWrapper = document.createElement('div');
+                          imageWrapper.classList.add('image-preview');
+                          console.log('filePath:', filePath);
+                          const img = document.createElement('img');
+                          img.src = filePath;
+                          img.alt = 'Existing Image';
+                          img.style.width = '100px';
+                          img.style.height = '100px';
+                          img.style.objectFit = 'cover';
+                          img.style.borderRadius = '8px';
+
+                          const removeBtn = document.createElement('span');
+                          removeBtn.textContent = '×';
+                          removeBtn.classList.add('remove-btn');
+
+                          // Remove existing image on click
+                          removeBtn.addEventListener('click', function () {
+                              filePaths.splice(index, 1); // Remove from filePaths array
+                              imageWrapper.remove(); // Remove from UI
+                          });
+
+                          imageWrapper.appendChild(img);
+                          imageWrapper.appendChild(removeBtn);
+                          imagePreviewContainer.appendChild(imageWrapper);
+                      });
+                  }
+
+                // Display the modal
+                editPostModal.style.display = 'flex';
+            } else {
+                alert('Failed to load post details. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+            alert('An error occurred while fetching the post details.');
+        }
+    });
+});
+
+// Close Edit Modal
+closeEditModalBtn.addEventListener('click', () => {
+    editPostModal.style.display = 'none';
+});
+
+cancelEditPostBtn.addEventListener('click', () => {
+    editPostModal.style.display = 'none';
+});
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// [EDIT] Image upload and preview logic
+document.addEventListener('DOMContentLoaded', function () {
+    const uploadImages = document.getElementById('uploadEditImages');
+    const uploadIcon = document.getElementById('click_edit_icon');
+    const imagePreviewContainer = document.getElementById('imageEditPreviewContainer');
+    const form = uploadImages.closest('form');
+
+    const maxImages = 5;
+    let selectedFiles = [];
+
+    // Simulate clicking the hidden file input
+    uploadIcon.addEventListener('click', function () {
+        uploadImages.click();
+    });
+
+    // Handle file input changes
+    uploadImages.addEventListener('change', function () {
+        const files = Array.from(this.files);
+
+        if (selectedFiles.length + files.length > maxImages) {
+            alert(`You can only upload up to ${maxImages} images.`);
+            this.value = '';
+            return;
+        }
+
+        files.forEach((file) => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.classList.add('image-preview');
+
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.alt = 'Preview';
+                    image.style.width = '100px';
+                    image.style.height = '100px';
+                    image.style.objectFit = 'cover';
+                    image.style.borderRadius = '8px';
+
+                    const removeBtn = document.createElement('span');
+                    removeBtn.textContent = '×';
+                    removeBtn.classList.add('remove-btn');
+
+                    // Remove image on click
+                    removeBtn.addEventListener('click', function () {
+                        const index = selectedFiles.indexOf(file);
+                        if (index !== -1) selectedFiles.splice(index, 1);
+                        imageWrapper.remove();
+                    });
+
+                    imageWrapper.appendChild(image);
+                    imageWrapper.appendChild(removeBtn);
+                    imagePreviewContainer.appendChild(imageWrapper);
+
+                    selectedFiles.push(file);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        this.value = '';
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function (event) {
+            const postText = postTextArea.value.trim();
+            const dataTransfer = new DataTransfer();
+
+            if (postText === '' && selectedFiles.length === 0) {
+                event.preventDefault();
+                alert('Please write something before posting.');
+                return;
+            }
+
+            selectedFiles.forEach((file) => {
+                dataTransfer.items.add(file);
+            });
+
+            uploadImages.files = dataTransfer.files;
+        });
+    });
+
+    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+document.querySelectorAll('.edit-privacy').forEach((button) => {
+    button.addEventListener('click', async function () {
+        const postId = this.getAttribute('data-post-id');
+
+        try {
+            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
+            const postDetails = await response.json();
+
+            if (response.ok && postDetails.success) {
+                // Set the privacy option in the modal based on current privacy
+                const privacyValue = postDetails.data.privacy;
+
+                // Set the radio buttons based on the current privacy
+                document.querySelector(`#public`).checked = privacyValue == 2;
+                document.querySelector(`#friends`).checked = privacyValue == 3;
+                document.querySelector(`#onlyMe`).checked = privacyValue == 1;
+
+                // Show the modal
+                document.getElementById('changePrivacyModal').style.display = 'flex';
+
+                // Close the modal when clicking on the close button
+                document.getElementById('closePrivacyModal').addEventListener('click', function () {
+                    document.getElementById('changePrivacyModal').style.display = 'none';
+                });
+
+                // Handle the form submission
+                document.getElementById('privacyForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const selectedPrivacy = document.querySelector('input[name="privacy"]:checked').value;
+
+                    const updateResponse = await fetch(`/MessageBoard/UserProfiles/updatePostPrivacy`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            post_id: postId,
+                            privacy: selectedPrivacy
+                        })
+                    });
+
+                    const updateResult = await updateResponse.json();
+                    if (updateResult.success) {
+                        window.location.reload();
+                        document.getElementById('changePrivacyModal').style.display = 'none';
+                    } else {
+                        alert('Failed to update privacy');
+                    }
+                });
+            } else {
+                alert('Failed to load post details.');
+            }
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+            alert('An error occurred while fetching the post details.');
+        }
+    });
+});
 
 
-</body>
 
-</html>
+
+</script>

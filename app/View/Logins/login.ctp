@@ -58,7 +58,7 @@
                             }
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '" . $this->Html->url(array('controller' => 'Userprofiles', 'action' => 'user_profile')) . "';
+                                window.location.href = '/MessageBoard/newsfeed';
                             }
                         });";
                     } elseif ($success === false) {

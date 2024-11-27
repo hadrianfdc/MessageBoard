@@ -2,7 +2,7 @@
 class MessagesController extends AppController
 {
 
-    public $uses = array('User', 'Message'); 
+    public $uses = array('User', 'Message'); // Add User model here
 
     public function index()
     {
@@ -12,12 +12,12 @@ class MessagesController extends AppController
         $receivedMessages = $this->Message->find('all', array(
             'conditions' => array('Message.receiver_id' => $user_id),
             'contain' => array('Sender'),
-            'order' => array('Message.timestamp' => 'DESC') // Order by timestamp in descending order
+            'order' => array('Message.created' => 'DESC') // Order by timestamp in descending order
         ));
         $sentMessages = $this->Message->find('all', array(
             'conditions' => array('Message.sender_id' => $user_id),
             'contain' => array('Receiver'),
-            'order' => array('Message.timestamp' => 'DESC') // Order by timestamp in descending order
+            'order' => array('Message.created' => 'DESC') // Order by timestamp in descending order
         ));
 
         $this->set(compact('receivedMessages', 'sentMessages'));
@@ -38,7 +38,31 @@ class MessagesController extends AppController
     }
 
 
+    private function isOpen($messages, $userid){
 
+        $user_id = $this->Session->read('Auth.User.user_id');
+        foreach ($messages as $message) {
+            $message_id = $message['Message']['message_id'];
+
+            // Check if a 'Seen' record already exists for this message
+            $isSeen = $this->Message->find('list', array(
+                'fields' => array('Message.message_id'),
+                'conditions' => array(
+                    'Message.message_id' => $message_id,
+                    'Message.sender_id' => $userid,
+                    'Message.is_seen' => 0,
+                )
+            ));
+
+            if ($isSeen) {
+                $this->Message->updateAll(
+                    array('Message.is_seen' => 1), 
+                    array('Message.message_id' => $message_id),
+                    array('Message.receiver_id' => $userid)
+                );
+            }
+        }
+    }
 
 
     public function viewConversation($userid = null)
@@ -67,13 +91,16 @@ class MessagesController extends AppController
 
         $this->paginate = array(
             'conditions' => $conditions,
-            'order' => array('Message.timestamp' => 'DESC'), 
+            'order' => array('Message.created' => 'DESC'), 
             'limit' => 10 
         );
 
 
         $conversation = $this->paginate('Message');
+        // echo "<pre>"; print_r($conversation); "</pre>"; die();
 
+        $this->isOpen($conversation, $userid);
+        // $this->isSeen($conversation);
         $this->set('conversation', $conversation);
         $this->set('userid', $userid);
     }
@@ -85,7 +112,7 @@ class MessagesController extends AppController
         $searchTerm = $this->request->data['searchTerm'];
 
         // Perform the search query to fetch messages matching the search term
- 
+        // Adjust your search query according to your database schema and requirements
         $searchResults = $this->Message->find('all', array(
             'conditions' => array(
                 'OR' => array(
@@ -112,13 +139,14 @@ class MessagesController extends AppController
         $user_id = $this->Session->read('Auth.User.user_id');
         $this->layout = null;
         if ($this->request->is('post')) {
-      
+            // Assuming form fields are named conversation_id, sender_id, receiver_id, and message_content
             $this->Message->create();
             $data = array(
                 'Message' => array(
                     'sender_id' => $user_id,
                     'receiver_id' => $this->request->data['Message']['receiver_id'],
-                    'message_content' => $this->request->data['Message']['message_content']
+                    'message_content' => $this->request->data['Message']['message_content'],
+                    'created' => date('Y-m-d H:i:s')
                 )
             );
             if ($this->Message->save($data)) {
@@ -134,13 +162,14 @@ class MessagesController extends AppController
         $user_id = $this->Session->read('Auth.User.user_id');
         $this->layout = null;
         if ($this->request->is('post')) {
-
+            // Assuming form fields are named conversation_id, sender_id, receiver_id, and message_content
             $this->Message->create();
             $data = array(
                 'Message' => array(
                     'sender_id' => $user_id,
                     'receiver_id' => $this->request->data['Message']['receiver_id'],
-                    'message_content' => $this->request->data['Message']['message_content']
+                    'message_content' => $this->request->data['Message']['message_content'],
+                    'created' => date('Y-m-d H:i:s')
                 )
             );
             if ($this->Message->save($data)) {

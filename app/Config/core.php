@@ -351,16 +351,16 @@
  *	));
  */
 
-/**
- * Configure the cache handlers that CakePHP will use for internal
- * metadata like class maps, and model schema.
- *
- * By default File is used, but for improved performance you should use APC.
- *
- * Note: 'default' and other application caches should be configured in app/Config/bootstrap.php.
- *       Please check the comments in bootstrap.php for more info on the cache engines available
- *       and their settings.
- */
+// /**
+//  * Configure the cache handlers that CakePHP will use for internal
+//  * metadata like class maps, and model schema.
+//  *
+//  * By default File is used, but for improved performance you should use APC.
+//  *
+//  * Note: 'default' and other application caches should be configured in app/Config/bootstrap.php.
+//  *       Please check the comments in bootstrap.php for more info on the cache engines available
+//  *       and their settings.
+//  */
 $engine = 'File';
 
 // In development mode, caches should expire quickly.
