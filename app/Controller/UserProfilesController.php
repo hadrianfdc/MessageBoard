@@ -33,7 +33,7 @@ class UserProfilesController extends AppController
                     ),
                     'ProfilePost.is_archieve !=' => 1
             ),
-            'order' => array('ProfilePost.created_date' => 'DESC'),
+            'order' => array('ProfilePost.created_date' => 'DESC','ProfilePost.date_shared' => 'DESC'),
         ));
 
         $organizedPosts = $this->getPost($findPost);
@@ -140,6 +140,11 @@ class UserProfilesController extends AppController
                         'is_archieve' => $post['ProfilePost']['is_archieve'],
                         'privacy' => $post['ProfilePost']['privacy'],
                         'file_paths' => json_decode($post['ProfilePost']['file_paths']),
+                        'is_shared' => $post['ProfilePost']['is_shared'],
+                        'shared_id' => $post['ProfilePost']['shared_id'],
+                        'sharer_id' => $post['ProfilePost']['sharer_id'],
+                        'sharer_full_name' => isset($post['ProfilePost']['sharer_full_name']) ? $post['ProfilePost']['sharer_full_name'] : '',
+                        'date_shared' => $post['ProfilePost']['date_shared'],
                         'created_date' => $post['ProfilePost']['created_date'],
                         'updated_date' => $post['ProfilePost']['updated_date'],
                         'images' => [] 
@@ -149,17 +154,26 @@ class UserProfilesController extends AppController
                         'fields' => ['Posts.id', 'Posts.path'],
                         'conditions' => ['Posts.id' => $post['ProfilePost']['user_id']]
                     ]);
+                    $findSharerImage = $this->Posts->find('all', [
+                        'fields' => ['Posts.id', 'Posts.path'],
+                        'conditions' => ['Posts.id' => $post['ProfilePost']['sharer_id']]
+                    ]);
     
                     if (!empty($findImage)) {
                         foreach ($findImage as $image) {
                             $organizedPost['images'][] = $image['Posts']['path'];
                         }
                     }
+                    if (!empty($findSharerImage)) {
+                        foreach ($findSharerImage as $image) {
+                            $organizedPost['sharer_images'][] = $image['Posts']['path'];
+                        }
+                    }
                     $organizedPosts[] = $organizedPost;
                 }
             }
         }
-        $this->log(print_r($organizedPosts, true), 'error');
+        // $this->log(print_r($organizedPosts, true), 'error');
         return $organizedPosts;
     }
 
@@ -362,6 +376,7 @@ class UserProfilesController extends AppController
                 $this->Session->setFlash(__('User details updated successfully.'), 'flash', array('class' => 'success'));
                 $this->ProfilePost->updateAll(
                     array('ProfilePost.fullname' => "'" . $this->request->data['full_name'] . "'"),
+                    array('ProfilePost.sharer_full_name' => "'" . $this->request->data['full_name'] . "'"),
                     array('ProfilePost.user_id' => $userId)
                 );
             } else {
@@ -420,6 +435,7 @@ class UserProfilesController extends AppController
             $post = $this->ProfilePost->findById($postId);
             if ($post) {
                 $post['ProfilePost']['is_pinned'] = $isPinned;
+                $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
                     return $this->response->body(json_encode(['success' => true]));
                     $this->log($this->response->body(json_encode(['success' => true]), 'error'));
@@ -445,6 +461,7 @@ class UserProfilesController extends AppController
             $post = $this->ProfilePost->findById($postId);
             if ($post) {
                 $post['ProfilePost']['is_archieve'] = $isPinned;
+                $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
                     return $this->response->body(json_encode(['success' => true]));
                     $this->log($this->response->body(json_encode(['success' => true]), 'error'));
@@ -542,6 +559,7 @@ class UserProfilesController extends AppController
             // Update the captions and privacy fields
             $post['ProfilePost']['captions'] = $captions;
             $post['ProfilePost']['privacy'] = $privacy;
+            $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
 
             // If files were uploaded, process them
             if (!empty($files)) {
@@ -597,6 +615,7 @@ class UserProfilesController extends AppController
             if ($post) {
                 // Update the privacy field
                 $post['ProfilePost']['privacy'] = $privacy;
+                $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
                     $this->log("Post ID {$postId} privacy updated to {$privacy}.", 'error'); 
                     return $this->response->body(json_encode(['success' => true]));
@@ -610,6 +629,55 @@ class UserProfilesController extends AppController
     
         return $this->response->body(json_encode(['success' => false]));
     }
+
+    public function sharedPost() {
+        $this->autoRender = false;
+        $this->response->type('json');
+        
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode', true);
+            $postId = $data['post_id']; 
+            $reactor = $this->Session->read('Auth.User.user_id');
+            $findSharerName = $this->User->find('first', array(
+                'fields' => array('User.full_name'),
+                'conditions' => array('User.user_id' => $reactor)
+            ));
+
+            $post = $this->ProfilePost->findById($postId);
+            if ($post) {
+                $shareNow = [
+                    'ProfilePost' => [
+                        'user_id' => $post['ProfilePost']['user_id'],
+                        'fullname' => $post['ProfilePost']['fullname'],
+                        'captions' => $post['ProfilePost']['captions'],
+                        'file_paths' => $post['ProfilePost']['file_paths'],
+                        'privacy' => $post['ProfilePost']['privacy'],
+                        'is_pinned' => 0,
+                        'is_archieve' => 0,
+                        'shared_id' => $post['ProfilePost']['id'],
+                        'react' => NULL,
+                        'is_shared' => 1,
+                        'sharer_id' => $reactor,
+                        'sharer_full_name' => $findSharerName['User']['full_name'],
+                        'date_shared' => date('Y-m-d H:i:s'),
+                        'created_date' => $post['ProfilePost']['created_date']
+                    ]
+                ];
+
+                $this->ProfilePost->create();
+                if ($this->ProfilePost->save($shareNow)) {
+                    $this->response->body(json_encode(['success' => true]));
+                } else {
+                    $this->log("Failed to share Post ID {$postId}.", 'error');
+                    $this->response->body(json_encode(['success' => false]));
+                }
+            } else {
+                $this->log("Post ID {$postId} not found.", 'error');
+                $this->response->body(json_encode(['success' => false]));
+            }
+        }
+    }
+    
     
 
 

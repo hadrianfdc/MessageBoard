@@ -101,6 +101,152 @@
 .reaction-item:hover {
   transform: scale(1.2);
 }
+
+/* SHARE MODAL */
+/* SHARE MODAL */
+/* SHARE MODAL */
+
+/* Modal Background */
+.share-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Content */
+.share-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Close Button */
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #888;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+/* Share Options List */
+.share-options {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
+.share-option {
+    display: block;
+    background-color: #4267B2; /* Facebook Blue */
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.share-option i {
+    margin-right: 10px;
+}
+
+.share-option:hover {
+    background-color: #365899;
+}
+
+/* Facebook Blue Button Hover */
+.share-option:active {
+    background-color: #2a4d79;
+}
+
+
+/* Success Modal Styling*/
+/* Success Modal Styling*/
+/* Success Modal Styling*/
+
+/* Success Modal Styling */
+.success-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.success-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1877f2;
+    color: white;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    width: 300px;
+}
+
+.success-modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.success-modal-content p {
+    font-size: 14px;
+}
+
+.success-modal .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#close-success-btn {
+    background-color: #3b5998;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+#close-success-btn:hover {
+    background-color: #2d4373;
+}
+
+
  </style>
 
  <div class="modal" id="createPostModal" style="display: none; font-family: Arial, sans-serif; background-color: rgba(0, 0, 0, 0.6);">
@@ -383,6 +529,19 @@
     </div>
 </div>
 <!--------------------------------------- [END] Modal for Edit Privacy ----------------------------------------->
+
+<!--------------------------------------- [START] Modal for  Success----------------------------------------->
+<!-- Success Modal -->
+<div id="success-modal" class="success-modal">
+    <div class="success-modal-content">
+        <button class="close-modal" id="close-success-modal">&times;</button>
+        <h2>Post Shared to Facebook!</h2>
+        <p>Your post has been successfully shared to Facebook.</p>
+        <button id="close-success-btn">Close</button>
+    </div>
+</div>
+<!--------------------------------------- [END] Modal for  Success----------------------------------------->
+
 
 <script>
 
@@ -793,6 +952,85 @@ function toggleCaption(postId) {
             full.style.display = '';
         }
     }
+
+      //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Share Modal JS
+document.addEventListener('DOMContentLoaded', function() {
+    // Open the modal when the Share button is clicked
+    document.querySelectorAll('.share-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = button.getAttribute('data-post-id');
+            const shareModal = document.getElementById('share-modal-' + postId);
+            shareModal.style.display = 'flex';
+        });
+    });
+
+    // Close the modal when the close button is clicked
+    document.querySelectorAll('.close-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            const shareModal = button.closest('.share-modal');
+            shareModal.style.display = 'none';
+        });
+    });
+
+    // Close the modal if the user clicks outside of the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('share-modal')) {
+            event.target.style.display = 'none';
+        }
+    });
+          //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+    // When the "Share to Facebook" button is clicked
+    document.querySelectorAll('.share-option').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = button.getAttribute('data-post-id');
+            
+            $.ajax({
+                url: '/MessageBoard/UserProfiles/sharedPost',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ post_id: postId }),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        const successModal = document.getElementById('success-modal');
+                        successModal.style.display = 'flex';
+                    } else {
+                        alert('Failed to share the post.');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while sharing the post.');
+                }
+            });
+        });
+    });
+
+    // Close the success modal when the close button is clicked
+    const closeSuccessModalButton = document.getElementById('close-success-modal');
+    closeSuccessModalButton.addEventListener('click', function() {
+        const successModal = document.getElementById('success-modal');
+        successModal.style.display = 'none';
+    });
+
+    // Close the success modal when the user clicks the "Close" button inside the modal
+    const closeSuccessBtn = document.getElementById('close-success-btn');
+    closeSuccessBtn.addEventListener('click', function() {
+        const successModal = document.getElementById('success-modal');
+        successModal.style.display = 'none';
+        window.location.reload();
+    });
+
+    // Close the modal if the user clicks outside of the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('success-modal')) {
+            event.target.style.display = 'none';
+        }
+    });
+});
 
 
 </script>

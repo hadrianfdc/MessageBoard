@@ -327,7 +327,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                           </button>
                         </li>
                         <li style="list-style-type: none;" class="actions-buttons-item">
-                          <button class="actions-buttons-button">
+                          <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
                             <span class="icon">🔗</span>
                             <span class="text">Share</span>
                           </button>
@@ -336,6 +336,23 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                     </section>
                 </article>
             </div>
+            <!--------------------------------------- [START] Modal for Share Modal ----------------------------------------->
+            <!-- Share Modal for each post -->
+            <div id="share-modal-<?php echo $post['id']; ?>" class="share-modal">
+                <div class="share-modal-content">
+                    <button class="close-modal" id="close-modal-<?php echo $post['id']; ?>">&times;</button>
+                    <h2>Share this Post</h2>
+                    <ul class="share-options">
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-edit"></i> Share to Facebook</button></li>
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-camera-retro"></i> Share to your story now</button></li>
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-user-friends"></i> Share to a friend's profile</button></li>
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-users"></i> Share in a Group</button></li>
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-envelope"></i> Share as Message</button></li>
+                        <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-link"></i> Copy Link</button></li>
+                    </ul>
+                </div>
+            </div>
+            <!--------------------------------------- [END] Modal for Share Modal ----------------------------------------->
         <?php endforeach; ?>
     <?php endif; ?>
 
