@@ -9,7 +9,7 @@ class UserProfilesController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions');
 
     public function beforeFilter()
     {
@@ -17,7 +17,7 @@ class UserProfilesController extends AppController
     }
     public function newsfeed() {
         $this->layout = null;
-        
+        $this->checkReactNullOrEmpty();
         $user_id = $this->Session->read('Auth.User.user_id');
 
         $findPost = $this->ProfilePost->find('all', array(
@@ -51,17 +51,87 @@ class UserProfilesController extends AppController
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
         $this->set('findPost', $organizedPosts);
+        $this->set('user_id', $user_id);
     }
 
+    private function checkReactNullOrEmpty(){
+        $posts = $this->ProfilePost->find('all', array(
+            'conditions' => array('ProfilePost.react' => NULL),
+        ));
+    
+        foreach ($posts as $post) {
+            if (empty($post['ProfilePost']['react'])) {
+                // Default reaction counts
+                $reactionCounts = [
+                    'Like' => 0,
+                    'Love' => 0,
+                    'Care' => 0,
+                    'Haha' => 0,
+                    'Wow' => 0,
+                    'Sad' => 0,
+                    'Angry' => 0
+                ];
+    
+                // Update the 'react' field with the default reaction counts
+                $post['ProfilePost']['react'] = json_encode($reactionCounts);
+    
+                // Save the updated post
+                $this->ProfilePost->save($post);
+            }
+        }
+    }
+    
+    
     private function getPost($findPost){
         $organizedPosts = [];
-        
         if (!empty($findPost)) {
+            $reactor = $this->Session->read('Auth.User.user_id');
             foreach ($findPost as $key => $post) {
+                $myReaction = $this->Reactions->find('first', [
+                    'fields' => ['Reactions.reaction_type'],
+                    'conditions' => [
+                        'Reactions.user_id' => $this->Session->read('Auth.User.user_id'),
+                        'Reactions.profile_post_id' => $post['ProfilePost']['id']
+                    ]
+                ]);
+                $certainReaction = $this->Reactions->find('first', [
+                    'fields' => ['Reactions.reaction_type', 'Reactions.profile_post_id', 'Reactions.user_id'],
+                    'conditions' => [
+                        'Reactions.profile_post_id' => $post['ProfilePost']['id']
+                    ],
+                    'order' => ['Reactions.created' => 'DESC']
+                ]);
+                $recentReactorName = '';
+                if (!empty($certainReaction) && !empty($certainReaction['Reactions']['user_id'])) {
+                    $recentReactor = $this->User->find('first', [
+                        'fields' => ['User.full_name'],
+                        'conditions' => [
+                            'User.user_id' => $certainReaction['Reactions']['user_id']
+                        ]
+                    ]);
+
+                    if (!empty($recentReactor) && !empty($recentReactor['User']['full_name'])) {
+                        $recentReactorName = $recentReactor['User']['full_name'];
+                    }
+                }
+                $certainReaction = isset($certainReaction['Reactions']['reaction_type'])
+                        ? [
+                            1 => 'Like',
+                            2 => 'Heart',
+                            3 => 'Care',
+                            4 => 'Haha',
+                            5 => 'Wow',
+                            6 => 'Sad',
+                            7 => 'Angry'
+                        ][$certainReaction['Reactions']['reaction_type']] : '';
                 if (!empty($post['ProfilePost'])) {
                     $organizedPost = [
                         'id' => $post['ProfilePost']['id'],
                         'user_id' => $post['ProfilePost']['user_id'],
+                        'reactor' => $reactor,
+                        'my_reaction' => isset($myReaction['Reactions']['reaction_type']) ? $myReaction['Reactions']['reaction_type'] : 0,
+                        'other_reaction' => $certainReaction,
+                        'recent_reactor' => $recentReactorName,
                         'fullname' => $post['ProfilePost']['fullname'],
                         'captions' => $post['ProfilePost']['captions'],
                         'react' => $post['ProfilePost']['react'],
@@ -89,6 +159,7 @@ class UserProfilesController extends AppController
                 }
             }
         }
+        $this->log(print_r($organizedPosts, true), 'error');
         return $organizedPosts;
     }
 

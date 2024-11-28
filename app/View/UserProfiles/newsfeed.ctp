@@ -86,13 +86,86 @@
                                 </span>
                             </div>
                         </div>
-                        <button class="icon-button-2 u-margin-inline-start" aria-label="more options">
+                        <!-- Dropdown Menu of Post -->
+                        <button class="icon-button-2 u-margin-inline-start" aria-label="more options" aria-label="more options" onclick="toggleCustomDropdown(event, '<?php echo $post['id']; ?>')">
                             <span class="icon-menu"></span>
                         </button>
+                        <!-- Dropdown menu -->
+                        <div id="custom-dropdown-menu-<?php echo $post['id']; ?>" class="custom-dropdown-menu">
+                            <ul>
+                              <?php if($user_id == $post['user_id']): ?>
+                                <li><span class="icon">🔖</span>
+                                  <?php if ($post['is_saved'] == 1): ?> Unsave Post
+                                  <?php else: ?> Save Post
+                                  <?php endif; ?>
+                                </li>
+                                <li class="edit-post" data-post-id="<?php echo $post['id']; ?>">
+                                  <span class="icon">✏️</span> Edit Post
+                                </li>
+                                <li class="edit-privacy" data-post-id="<?php echo $post['id']; ?>"><span class="icon"></span> 
+                                     <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Change Audience (Only Me)';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Change Audience (Public)';
+                                        }elseif ($post['privacy'] == 3) {
+                                          echo '👥 Change Audience (Friends)';
+                                      }
+                                    ?>
+                                </li>
+                                <li><span class="icon">💬</span> Who can comment on this post?</li>
+                                <li
+                                    class="toggle-archieve-post" 
+                                    data-post-id="<?php echo $post['id']; ?>" 
+                                    data-is-archieve="<?php echo $post['is_archieve']; ?>"
+                                    ><span class="icon">📦</span> Move to Archive
+                                </li>
+                                <li class="toggle-trash-post" 
+                                    data-post-id="<?php echo $post['id']; ?>">
+                                    <span class="icon">🗑️</span> Move to Trash
+                                </li>
+                                <li><span class="icon">🔔</span> Get Notified about this Post</li>
+                                <li><span class="icon">📸</span> Add to Album</li>
+                                <?php else: ?>
+                                  <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #1877f2; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">+</span> Interested
+                                </li>
+                                <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #f02849; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">−</span> Not Interested
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <!-- End Of Dropdown Menu of Post -->
                     </header>
                     <div class="common-post-content common-content">
-                        <!-- Display the caption -->
-                        <p><?php echo h($post['captions']); ?></p>
+                        <?php 
+                        $caption = $post['captions']; 
+                        $postId = $post['id']; 
+                        if (strlen($caption) > 100) {
+                            $truncatedCaption = substr($caption, 0, 100);
+                            echo '<p id="truncated-caption-' . $postId . '">' . h($truncatedCaption) . '... 
+                                    <a href="#" class="see-more" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See more</a>
+                                  </p>';
+                            echo '<p id="full-caption-' . $postId . '" style="display: none;">' . h($caption) . ' 
+                                    <a href="#" class="see-less" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See less</a>
+                                  </p>';
+                        } else {
+                            echo '<p>' . h($caption) . '</p>';
+                        }
+                        ?>
                     </div>
                     <?php if (!empty($post['file_paths'])): ?>
                         <div class="image-grid">
@@ -102,14 +175,104 @@
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <br>
                     <?php endif; ?>
                     <div class="summary u-flex">
-                        <div class="reactions">❤️</div>
-                        <div class="reactions-total"><?php echo $post['react']; ?></div>
+                        <div class="reactions">
+                        <?php
+                            // Decode the JSON data
+                            $reactions = json_decode($post['react'], true);
+                            $totalReactions = array_sum($reactions);
+                            // Check and display icons based on the values
+                            if ($reactions['Like'] > 0) {
+                              echo '<i class="fas fa-thumbs-up" style="color: blue;"></i>';
+                            }
+                            if ($reactions['Love'] > 0) {
+                              echo '<i class="fas fa-heart" style="color: red;"></i>'; // Heart icon in red
+                            }
+                            if ($reactions['Care'] > 0) {
+                                echo '<i class="care-icon">🤗</i>'; // Care icon
+                            }
+                            if ($reactions['Haha'] > 0) {
+                                echo '<i class="fas fa-laugh" style="color: #f4d03f;"></i>'; // Haha icon in yellow
+                            }
+                            if ($reactions['Wow'] > 0) {
+                                echo '<i class="fas fa-surprise" style="color: #f39c12;"></i>'; // Wow icon in orange
+                            }
+                            if ($reactions['Sad'] > 0) {
+                                echo '<i class="fas fa-sad-tear" style="color: #3498db;"></i>'; // Sad icon in blue
+                            }
+                            if ($reactions['Angry'] > 0) {
+                                echo '<i class="fas fa-angry" style="color: #e74c3c;"></i>'; // Angry icon in red
+                            }
+                            ?>
+                        </div>
+                        <div class="reactions-total">
+                        <?php 
+                          if ($totalReactions > 1 ) { 
+                              echo '<span class="text">' . 
+                                  htmlspecialchars($post['recent_reactor']) . 
+                                  ' reacted ' . 
+                                  htmlspecialchars($post['other_reaction']) . 
+                                  ' and ' . 
+                                  ($totalReactions - 1) . 
+                                  ' others </span>';
+                          }if($totalReactions == 1){
+                              echo $totalReactions; 
+                          }
+                          ?>
+                        </div>
+                        <div class="total-comments u-margin-inline-start">
+                          <a>12 Shares</a>
+                        </div>
                     </div>
                     <section class="actions-buttons">
                       <ul class="actions-buttons-list u-flex">
-                          <button class="actions-buttons-button"><span class="icon">👍</span><span class="text">Like</span></button>
+                        <li style="list-style-type: none; position: relative;" class="actions-buttons-item">
+                          <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
+                            <?php 
+                            if ($post['my_reaction'] == 1){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-thumbs-up" style="color: blue;"></i> Like</span>';
+                            }elseif($post['my_reaction'] == 2){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-heart" style="color: red;"></i> Love </span>';
+                            }elseif($post['my_reaction'] == 3){
+                              echo '<span class="icon" style="filter: none;">🤗 Care </span>';
+                            }elseif($post['my_reaction'] == 4){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-laugh" style="color: #f4d03f;"></i> Haha </span>';
+                            }elseif($post['my_reaction'] == 5){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-surprise" style="color: #f39c12;"></i> Wow</span>';
+                            }elseif($post['my_reaction'] == 6){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-sad-tear" style="color: #3498db;"></i> Sad</span>';
+                            }elseif($post['my_reaction'] == 7){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-angry" style="color: #e74c3c;"></i> Angry</span>';
+                            }else{
+                              echo '<span class="icon"><i class="far fa-thumbs-up"></i> Like </span>';
+                            }
+                            ?>
+                          </button>
+                          <!-- Reactions Pop-up -->
+                          <div class="reactions-popup" id="reactions-popup-<?php echo $post['id']; ?>">
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="1" class="reaction-item">👍</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="2" class="reaction-item">❤️</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="3" class="reaction-item">🤗</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="4" class="reaction-item">😂</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="5" class="reaction-item">😮</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="6" class="reaction-item">😢</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="7" class="reaction-item">😡</button>
+                          </div>
+                        </li>
+                        <li style="list-style-type: none;" class="actions-buttons-item">
+                          <button class="actions-buttons-button">
+                            <span class="icon">💬</span>
+                            <span class="text">Comment</span>
+                          </button>
+                        </li>
+                        <li style="list-style-type: none;" class="actions-buttons-item">
+                          <button class="actions-buttons-button">
+                            <span class="icon">🔗</span>
+                            <span class="text">Share</span>
+                          </button>
+                        </li>
                       </ul>
                     </section>
                 </article>

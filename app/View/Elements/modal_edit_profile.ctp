@@ -2,6 +2,107 @@
  <!-- Modal for CREATING POST -->
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+ <style>
+  /* <!-- Dropdown Menu of Post --> */
+ /* Style for the dropdown menu */
+ .custom-dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  right: 70mm; 
+  width: 220px;
+  z-index: 1000;
+}
+
+.custom-dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-dropdown-menu ul li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-dropdown-menu ul li:hover {
+  background-color: #f1f1f1;
+}
+
+.custom-dropdown-menu .icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* POP UP REACTIONS*/
+/* POP UP REACTIONS*/
+/* POP UP REACTIONS*/
+/* .actions-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.actions-buttons-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+} */
+.actions-buttons-item {
+  margin: 0 10px;
+  position: relative; /* Required for the reaction popup */
+}
+.actions-buttons-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.actions-buttons-button .icon {
+  font-size: 18px;
+}
+
+/* Reactions pop-up styles */
+.reactions-popup {
+    display: none;
+    position: absolute;
+    top: 40px; /* Adjust this value to place the popup below the button */
+    left: 0;
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.reactions-popup.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reaction-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 0 5px;
+  transition: transform 0.2s ease;
+}
+.reaction-item:hover {
+  transform: scale(1.2);
+}
+ </style>
+
  <div class="modal" id="createPostModal" style="display: none; font-family: Arial, sans-serif; background-color: rgba(0, 0, 0, 0.6);">
     <div class="modal-content" style="background: #ffffff; width: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
         <form action="<?php echo $this->Html->url(['controller' => 'UserProfiles', 'action' => 'createPost']); ?>" method="post" enctype="multipart/form-data">
@@ -84,7 +185,7 @@
 </div>
 
 <!--------------------------------------- Modal for editing post ----------------------------------------->
-<div class="modal" id="editPostModal" style="display: none; font-family: Arial, sans-serif; background-color: rgba(0, 0, 0, 0.6);">
+<div class="modal" id="editPostModal" style="display: none; font-family: Arial, sans-serif; background-color: rgba(0, 0, 0, 0.6);z-index: 9999;">
     <div class="modal-content" style="background: #ffffff; width: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
         <form action="<?php echo $this->Html->url(['controller' => 'UserProfiles', 'action' => 'editPost']); ?>" method="post" enctype="multipart/form-data">
             <!-- Header -->
@@ -253,7 +354,7 @@
 <!-- Modal -->
 <div id="changePrivacyModal" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none; justify-content: center; align-items: center;">
     <div class="modal-content" style="background-color: white; width: 400px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-        <span id="closePrivacyModal" style="position: absolute; top: 10px; right: 10px; font-size: 20px; cursor: pointer; color: black;">&times;</span>
+        <span id="closePrivacyModal" style=" float:right; cursor: pointer;color: black;">×</span>
         <h2 style="text-align: center; color: black;font-size: 20px;">Change Audience</h2>
 
         <form id="privacyForm">
@@ -284,6 +385,333 @@
 <!--------------------------------------- [END] Modal for Edit Privacy ----------------------------------------->
 
 <script>
+
+  // <!-- Dropdown Menu of Post -->
+ function toggleCustomDropdown(event, postId) {
+        var dropdown = document.getElementById('custom-dropdown-menu-' + postId);
+        event.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', function(event) {
+        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
+        dropdowns.forEach(function(dropdown) {
+            if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    });
+
+    // Close dropdowns on scroll
+    window.addEventListener('scroll', function() {
+        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
+        dropdowns.forEach(function(dropdown) {
+            dropdown.style.display = 'none';
+        });
+    });
+    // <!-- END OF Dropdown Menu of Post -->
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  //ARCHIEVE Post
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-archieve-post').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const postId = this.getAttribute('data-post-id');
+            const isArchieve = this.getAttribute('data-is-archieve');
+
+            // Toggle isArchieve value
+            const newArchieveStatus = isArchieve === '1' ? 0 : 1;
+
+            // Send the data to the controller
+            fetch('/MessageBoard/toggleArchieve', {
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id: postId,
+                    is_archieve: newArchieveStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to toggle pin status.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+  //Move to trash Post
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-trash-post').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const postId = this.getAttribute('data-post-id');
+
+            // Send the data to the controller
+            fetch('/MessageBoard/toggleTrash', {
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id: postId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to move to trash.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+
+// Get references to the modal and its components
+const editPostModal = document.getElementById('editPostModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const cancelEditPostBtn = document.getElementById('cancelEditPostBtn');
+const postTextArea = document.getElementById('postEditText'); 
+const postID = document.getElementById('postEditID'); 
+const privacySelector = document.getElementById('privacyEditSelector'); 
+const imagePreviewContainer = document.getElementById('imageEditPreviewContainer'); 
+
+// Open Edit Modal for a specific post
+document.querySelectorAll('.edit-post').forEach((button) => {
+    button.addEventListener('click', async function () {
+        const postId = this.getAttribute('data-post-id');
+        
+        try {
+            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
+            const postDetails = await response.json();
+
+            if (response.ok && postDetails.success) {
+
+                postTextArea.value = postDetails.data.captions;
+                privacySelector.value = postDetails.data.privacy;
+                postID.value = postDetails.data.id;
+
+                // Clear previous image previews
+                imagePreviewContainer.innerHTML = '';
+
+                // Parse file_paths into an array
+                const filePaths = JSON.parse(postDetails.data.file_paths);
+
+                // Add new image previews
+                    if (Array.isArray(filePaths)) {
+                        filePaths.forEach((filePath, index) => {
+                          const imageWrapper = document.createElement('div');
+                          imageWrapper.classList.add('image-preview');
+                          console.log('filePath:', filePath);
+                          const img = document.createElement('img');
+                          img.src = filePath;
+                          img.alt = 'Existing Image';
+                          img.style.width = '100px';
+                          img.style.height = '100px';
+                          img.style.objectFit = 'cover';
+                          img.style.borderRadius = '8px';
+
+                          const removeBtn = document.createElement('span');
+                          removeBtn.textContent = '×';
+                          removeBtn.classList.add('remove-btn');
+
+                          // Remove existing image on click
+                          removeBtn.addEventListener('click', function () {
+                              filePaths.splice(index, 1); // Remove from filePaths array
+                              imageWrapper.remove(); // Remove from UI
+                          });
+
+                          imageWrapper.appendChild(img);
+                          imageWrapper.appendChild(removeBtn);
+                          imagePreviewContainer.appendChild(imageWrapper);
+                      });
+                  }
+
+                // Display the modal
+                editPostModal.style.display = 'flex';
+            } else {
+                alert('Failed to load post details. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+            alert('An error occurred while fetching the post details.');
+        }
+    });
+});
+
+// Close Edit Modal
+closeEditModalBtn.addEventListener('click', () => {
+    editPostModal.style.display = 'none';
+});
+
+cancelEditPostBtn.addEventListener('click', () => {
+    editPostModal.style.display = 'none';
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// [EDIT] Image upload and preview logic
+document.addEventListener('DOMContentLoaded', function () {
+    const uploadImages = document.getElementById('uploadEditImages');
+    const uploadIcon = document.getElementById('click_edit_icon');
+    const imagePreviewContainer = document.getElementById('imageEditPreviewContainer');
+    const form = uploadImages.closest('form');
+
+    const maxImages = 5;
+    let selectedFiles = [];
+
+    // Simulate clicking the hidden file input
+    uploadIcon.addEventListener('click', function () {
+        uploadImages.click();
+    });
+
+    // Handle file input changes
+    uploadImages.addEventListener('change', function () {
+        const files = Array.from(this.files);
+
+        if (selectedFiles.length + files.length > maxImages) {
+            alert(`You can only upload up to ${maxImages} images.`);
+            this.value = '';
+            return;
+        }
+
+        files.forEach((file) => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.classList.add('image-preview');
+
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.alt = 'Preview';
+                    image.style.width = '100px';
+                    image.style.height = '100px';
+                    image.style.objectFit = 'cover';
+                    image.style.borderRadius = '8px';
+
+                    const removeBtn = document.createElement('span');
+                    removeBtn.textContent = '×';
+                    removeBtn.classList.add('remove-btn');
+
+                    // Remove image on click
+                    removeBtn.addEventListener('click', function () {
+                        const index = selectedFiles.indexOf(file);
+                        if (index !== -1) selectedFiles.splice(index, 1);
+                        imageWrapper.remove();
+                    });
+
+                    imageWrapper.appendChild(image);
+                    imageWrapper.appendChild(removeBtn);
+                    imagePreviewContainer.appendChild(imageWrapper);
+
+                    selectedFiles.push(file);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        this.value = '';
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function (event) {
+            const postText = postTextArea.value.trim();
+            const dataTransfer = new DataTransfer();
+
+            if (postText === '' && selectedFiles.length === 0) {
+                event.preventDefault();
+                alert('Please write something before posting.');
+                return;
+            }
+
+            selectedFiles.forEach((file) => {
+                dataTransfer.items.add(file);
+            });
+
+            uploadImages.files = dataTransfer.files;
+        });
+    });
+
+    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+document.querySelectorAll('.edit-privacy').forEach((button) => {
+    button.addEventListener('click', async function () {
+        const postId = this.getAttribute('data-post-id');
+
+        try {
+            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
+            const postDetails = await response.json();
+
+            if (response.ok && postDetails.success) {
+                // Set the privacy option in the modal based on current privacy
+                const privacyValue = postDetails.data.privacy;
+
+                // Set the radio buttons based on the current privacy
+                document.querySelector(`#public`).checked = privacyValue == 2;
+                document.querySelector(`#friends`).checked = privacyValue == 3;
+                document.querySelector(`#onlyMe`).checked = privacyValue == 1;
+
+                // Show the modal
+                document.getElementById('changePrivacyModal').style.display = 'flex';
+
+                // Close the modal when clicking on the close button
+                document.getElementById('closePrivacyModal').addEventListener('click', function () {
+                    document.getElementById('changePrivacyModal').style.display = 'none';
+                });
+
+                // Handle the form submission
+                document.getElementById('privacyForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const selectedPrivacy = document.querySelector('input[name="privacy"]:checked').value;
+
+                    const updateResponse = await fetch(`/MessageBoard/UserProfiles/updatePostPrivacy`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            post_id: postId,
+                            privacy: selectedPrivacy
+                        })
+                    });
+
+                    const updateResult = await updateResponse.json();
+                    if (updateResult.success) {
+                        window.location.reload();
+                        document.getElementById('changePrivacyModal').style.display = 'none';
+                    } else {
+                        alert('Failed to update privacy');
+                    }
+                });
+            } else {
+                alert('Failed to load post details.');
+            }
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+            alert('An error occurred while fetching the post details.');
+        }
+    });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
 // Update the character count dynamically
 function updateCharCount() {
     const textarea = document.getElementById('hobby');
@@ -291,4 +719,80 @@ function updateCharCount() {
     const remaining = 60 - textarea.value.length;
     charCount.textContent = `${remaining} characters remaining`;
 }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//FOR REACTIONS
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Event listener for each "Like" button
+    document.querySelectorAll('.toggle-reactions').forEach((reactionButton) => {
+        reactionButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+
+            const postId = this.getAttribute('data-post-id');
+            const reactionsPopup = document.getElementById(`reactions-popup-${postId}`);
+
+            // Toggle the visibility of the reactions popup
+            reactionsPopup.classList.toggle('active');
+        });
+    });
+
+    // Event listener for each reaction button
+    document.querySelectorAll('.reaction-item').forEach((reactionButton) => {
+        reactionButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+
+            const postId = this.getAttribute('data-post-id');
+            const userId = this.getAttribute('data-user-id');
+            const reactionType = this.getAttribute('data-reaction');
+
+            // Send reaction data to server
+            fetch('/MessageBoard/Reactions/saveReaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    profile_post_id: postId,
+                    reaction_type: reactionType,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    
+                } else {
+                    alert('Failed to save reaction.');
+                }
+                const reactionsPopup = document.getElementById(`reactions-popup-${postId}`);
+                reactionsPopup.classList.remove('active'); // Close the popup after selecting a reaction
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        });
+    });
+});
+
+
+  //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//See more and see less function
+function toggleCaption(postId) {
+        const truncated = document.getElementById('truncated-caption-' + postId);
+        const full = document.getElementById('full-caption-' + postId);
+
+        if (truncated.style.display === 'none') {
+            truncated.style.display = '';
+            full.style.display = 'none';
+        } else {
+            truncated.style.display = 'none';
+            full.style.display = '';
+        }
+    }
+
+
 </script>

@@ -213,8 +213,21 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                         <!-- End Of Dropdown Menu of Post -->
                     </header>
                     <div class="common-post-content common-content">
-                        <!-- Display the caption -->
-                        <p><?php echo h($post['captions']); ?></p>
+                        <?php 
+                        $caption = $post['captions']; 
+                        $postId = $post['id']; 
+                        if (strlen($caption) > 100) {
+                            $truncatedCaption = substr($caption, 0, 100);
+                            echo '<p id="truncated-caption-' . $postId . '">' . h($truncatedCaption) . '... 
+                                    <a href="#" class="see-more" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See more</a>
+                                  </p>';
+                            echo '<p id="full-caption-' . $postId . '" style="display: none;">' . h($caption) . ' 
+                                    <a href="#" class="see-less" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See less</a>
+                                  </p>';
+                        } else {
+                            echo '<p>' . h($caption) . '</p>';
+                        }
+                        ?>
                     </div>
                     <?php if (!empty($post['file_paths'])): ?>
                         <div class="image-grid">
@@ -224,14 +237,101 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <br>
                     <?php endif; ?>
                     <div class="summary u-flex">
-                        <div class="reactions">❤️</div>
-                        <div class="reactions-total"><?php echo $post['react']; ?></div>
+                    <div class="reactions">
+                    <?php
+                            // Decode the JSON data
+                            $reactions = json_decode($post['react'], true);
+                            $totalReactions = array_sum($reactions);
+                            // Check and display icons based on the values
+                            if ($reactions['Like'] > 0) {
+                              echo '<i class="fas fa-thumbs-up" style="color: blue;"></i>';
+                            }
+                            if ($reactions['Love'] > 0) {
+                              echo '<i class="fas fa-heart" style="color: red;"></i>'; // Heart icon in red
+                            }
+                            if ($reactions['Care'] > 0) {
+                                echo '<i class="care-icon">🤗</i>'; // Care icon
+                            }
+                            if ($reactions['Haha'] > 0) {
+                                echo '<i class="fas fa-laugh" style="color: #f4d03f;"></i>'; // Haha icon in yellow
+                            }
+                            if ($reactions['Wow'] > 0) {
+                                echo '<i class="fas fa-surprise" style="color: #f39c12;"></i>'; // Wow icon in orange
+                            }
+                            if ($reactions['Sad'] > 0) {
+                                echo '<i class="fas fa-sad-tear" style="color: #3498db;"></i>'; // Sad icon in blue
+                            }
+                            if ($reactions['Angry'] > 0) {
+                                echo '<i class="fas fa-angry" style="color: #e74c3c;"></i>'; // Angry icon in red
+                            }
+                            ?>
+                        </div>
+                        <div class="reactions-total">
+                        <?php 
+                          if ($totalReactions > 1 ) { 
+                              echo '<span class="text">' . 
+                                  htmlspecialchars($post['recent_reactor']) . 
+                                  ' reacted ' . 
+                                  htmlspecialchars($post['other_reaction']) . 
+                                  ' and ' . 
+                                  ($totalReactions - 1) . 
+                                  ' others </span>';
+                          }if($totalReactions == 1){
+                              echo $totalReactions; 
+                          }
+                          ?>
+                        </div>
                     </div>
                     <section class="actions-buttons">
                       <ul class="actions-buttons-list u-flex">
-                          <button class="actions-buttons-button"><span class="icon">👍</span><span class="text">Like</span></button>
+                        <li style="list-style-type: none; position: relative;" class="actions-buttons-item">
+                          <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
+                          <?php 
+                            if ($post['my_reaction'] == 1){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-thumbs-up" style="color: blue;"></i> Like</span>';
+                            }elseif($post['my_reaction'] == 2){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-heart" style="color: red;"></i> Love </span>';
+                            }elseif($post['my_reaction'] == 3){
+                              echo '<span class="icon" style="filter: none;">🤗 Care </span>';
+                            }elseif($post['my_reaction'] == 4){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-laugh" style="color: #f4d03f;"></i> Haha </span>';
+                            }elseif($post['my_reaction'] == 5){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-surprise" style="color: #f39c12;"></i> Wow</span>';
+                            }elseif($post['my_reaction'] == 6){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-sad-tear" style="color: #3498db;"></i> Sad</span>';
+                            }elseif($post['my_reaction'] == 7){
+                              echo '<span class="icon" style="filter: none;"><i class="fas fa-angry" style="color: #e74c3c;"></i> Angry</span>';
+                            }else{
+                              echo '<span class="icon"><i class="far fa-thumbs-up"></i> Like </span>';
+                            }
+                            ?>
+                          </button>
+                          <!-- Reactions Pop-up -->
+                          <div class="reactions-popup" id="reactions-popup-<?php echo $post['id']; ?>">
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="1" class="reaction-item">👍</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="2" class="reaction-item">❤️</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="3" class="reaction-item">🤗</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="4" class="reaction-item">😂</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="5" class="reaction-item">😮</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="6" class="reaction-item">😢</button>
+                              <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="7" class="reaction-item">😡</button>
+                          </div>
+                        </li>
+                        <li style="list-style-type: none;" class="actions-buttons-item">
+                          <button class="actions-buttons-button">
+                            <span class="icon">💬</span>
+                            <span class="text">Comment</span>
+                          </button>
+                        </li>
+                        <li style="list-style-type: none;" class="actions-buttons-item">
+                          <button class="actions-buttons-button">
+                            <span class="icon">🔗</span>
+                            <span class="text">Share</span>
+                          </button>
+                        </li>
                       </ul>
                     </section>
                 </article>
@@ -275,31 +375,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
 
 <script>
 
- // <!-- Dropdown Menu of Post -->
- function toggleCustomDropdown(event, postId) {
-        var dropdown = document.getElementById('custom-dropdown-menu-' + postId);
-        event.stopPropagation();
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    }
 
-    // Close dropdown if clicked outside
-    document.addEventListener('click', function(event) {
-        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
-        dropdowns.forEach(function(dropdown) {
-            if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
-    });
-
-    // Close dropdowns on scroll
-    window.addEventListener('scroll', function() {
-        var dropdowns = document.querySelectorAll('.custom-dropdown-menu');
-        dropdowns.forEach(function(dropdown) {
-            dropdown.style.display = 'none';
-        });
-    });
-    // <!-- END OF Dropdown Menu of Post -->
 
     //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -461,303 +537,5 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
         });
     });
 });
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-
-  //ARCHIEVE Post
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.toggle-archieve-post').forEach(function (element) {
-        element.addEventListener('click', function () {
-            const postId = this.getAttribute('data-post-id');
-            const isArchieve = this.getAttribute('data-is-archieve');
-
-            // Toggle isArchieve value
-            const newArchieveStatus = isArchieve === '1' ? 0 : 1;
-
-            // Send the data to the controller
-            fetch('/MessageBoard/toggleArchieve', {
-                method: 'POST',
-                body: JSON.stringify({
-                    post_id: postId,
-                    is_archieve: newArchieveStatus
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert('Failed to toggle pin status.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    });
-});
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-
-  //Move to trash Post
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.toggle-trash-post').forEach(function (element) {
-        element.addEventListener('click', function () {
-            const postId = this.getAttribute('data-post-id');
-
-            // Send the data to the controller
-            fetch('/MessageBoard/toggleTrash', {
-                method: 'POST',
-                body: JSON.stringify({
-                    post_id: postId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert('Failed to move to trash.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    });
-});
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-
-// Get references to the modal and its components
-const editPostModal = document.getElementById('editPostModal');
-const closeEditModalBtn = document.getElementById('closeEditModalBtn');
-const cancelEditPostBtn = document.getElementById('cancelEditPostBtn');
-const postTextArea = document.getElementById('postEditText'); 
-const postID = document.getElementById('postEditID'); 
-const privacySelector = document.getElementById('privacyEditSelector'); 
-const imagePreviewContainer = document.getElementById('imageEditPreviewContainer'); 
-
-// Open Edit Modal for a specific post
-document.querySelectorAll('.edit-post').forEach((button) => {
-    button.addEventListener('click', async function () {
-        const postId = this.getAttribute('data-post-id');
-        
-        try {
-            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
-            const postDetails = await response.json();
-
-            if (response.ok && postDetails.success) {
-
-                postTextArea.value = postDetails.data.captions;
-                privacySelector.value = postDetails.data.privacy;
-                postID.value = postDetails.data.id;
-
-                // Clear previous image previews
-                imagePreviewContainer.innerHTML = '';
-
-                // Parse file_paths into an array
-                const filePaths = JSON.parse(postDetails.data.file_paths);
-
-                // Add new image previews
-                    if (Array.isArray(filePaths)) {
-                        filePaths.forEach((filePath, index) => {
-                          const imageWrapper = document.createElement('div');
-                          imageWrapper.classList.add('image-preview');
-                          console.log('filePath:', filePath);
-                          const img = document.createElement('img');
-                          img.src = filePath;
-                          img.alt = 'Existing Image';
-                          img.style.width = '100px';
-                          img.style.height = '100px';
-                          img.style.objectFit = 'cover';
-                          img.style.borderRadius = '8px';
-
-                          const removeBtn = document.createElement('span');
-                          removeBtn.textContent = '×';
-                          removeBtn.classList.add('remove-btn');
-
-                          // Remove existing image on click
-                          removeBtn.addEventListener('click', function () {
-                              filePaths.splice(index, 1); // Remove from filePaths array
-                              imageWrapper.remove(); // Remove from UI
-                          });
-
-                          imageWrapper.appendChild(img);
-                          imageWrapper.appendChild(removeBtn);
-                          imagePreviewContainer.appendChild(imageWrapper);
-                      });
-                  }
-
-                // Display the modal
-                editPostModal.style.display = 'flex';
-            } else {
-                alert('Failed to load post details. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error fetching post details:', error);
-            alert('An error occurred while fetching the post details.');
-        }
-    });
-});
-
-// Close Edit Modal
-closeEditModalBtn.addEventListener('click', () => {
-    editPostModal.style.display = 'none';
-});
-
-cancelEditPostBtn.addEventListener('click', () => {
-    editPostModal.style.display = 'none';
-});
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-// [EDIT] Image upload and preview logic
-document.addEventListener('DOMContentLoaded', function () {
-    const uploadImages = document.getElementById('uploadEditImages');
-    const uploadIcon = document.getElementById('click_edit_icon');
-    const imagePreviewContainer = document.getElementById('imageEditPreviewContainer');
-    const form = uploadImages.closest('form');
-
-    const maxImages = 5;
-    let selectedFiles = [];
-
-    // Simulate clicking the hidden file input
-    uploadIcon.addEventListener('click', function () {
-        uploadImages.click();
-    });
-
-    // Handle file input changes
-    uploadImages.addEventListener('change', function () {
-        const files = Array.from(this.files);
-
-        if (selectedFiles.length + files.length > maxImages) {
-            alert(`You can only upload up to ${maxImages} images.`);
-            this.value = '';
-            return;
-        }
-
-        files.forEach((file) => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const imageWrapper = document.createElement('div');
-                    imageWrapper.classList.add('image-preview');
-
-                    const image = document.createElement('img');
-                    image.src = e.target.result;
-                    image.alt = 'Preview';
-                    image.style.width = '100px';
-                    image.style.height = '100px';
-                    image.style.objectFit = 'cover';
-                    image.style.borderRadius = '8px';
-
-                    const removeBtn = document.createElement('span');
-                    removeBtn.textContent = '×';
-                    removeBtn.classList.add('remove-btn');
-
-                    // Remove image on click
-                    removeBtn.addEventListener('click', function () {
-                        const index = selectedFiles.indexOf(file);
-                        if (index !== -1) selectedFiles.splice(index, 1);
-                        imageWrapper.remove();
-                    });
-
-                    imageWrapper.appendChild(image);
-                    imageWrapper.appendChild(removeBtn);
-                    imagePreviewContainer.appendChild(imageWrapper);
-
-                    selectedFiles.push(file);
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        this.value = '';
-    });
-
-    // Handle form submission
-    form.addEventListener('submit', function (event) {
-            const postText = postTextArea.value.trim();
-            const dataTransfer = new DataTransfer();
-
-            if (postText === '' && selectedFiles.length === 0) {
-                event.preventDefault();
-                alert('Please write something before posting.');
-                return;
-            }
-
-            selectedFiles.forEach((file) => {
-                dataTransfer.items.add(file);
-            });
-
-            uploadImages.files = dataTransfer.files;
-        });
-    });
-
-    //--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-document.querySelectorAll('.edit-privacy').forEach((button) => {
-    button.addEventListener('click', async function () {
-        const postId = this.getAttribute('data-post-id');
-
-        try {
-            const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
-            const postDetails = await response.json();
-
-            if (response.ok && postDetails.success) {
-                // Set the privacy option in the modal based on current privacy
-                const privacyValue = postDetails.data.privacy;
-
-                // Set the radio buttons based on the current privacy
-                document.querySelector(`#public`).checked = privacyValue == 2;
-                document.querySelector(`#friends`).checked = privacyValue == 3;
-                document.querySelector(`#onlyMe`).checked = privacyValue == 1;
-
-                // Show the modal
-                document.getElementById('changePrivacyModal').style.display = 'flex';
-
-                // Close the modal when clicking on the close button
-                document.getElementById('closePrivacyModal').addEventListener('click', function () {
-                    document.getElementById('changePrivacyModal').style.display = 'none';
-                });
-
-                // Handle the form submission
-                document.getElementById('privacyForm').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-
-                    const selectedPrivacy = document.querySelector('input[name="privacy"]:checked').value;
-
-                    const updateResponse = await fetch(`/MessageBoard/UserProfiles/updatePostPrivacy`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            post_id: postId,
-                            privacy: selectedPrivacy
-                        })
-                    });
-
-                    const updateResult = await updateResponse.json();
-                    if (updateResult.success) {
-                        window.location.reload();
-                        document.getElementById('changePrivacyModal').style.display = 'none';
-                    } else {
-                        alert('Failed to update privacy');
-                    }
-                });
-            } else {
-                alert('Failed to load post details.');
-            }
-        } catch (error) {
-            console.error('Error fetching post details:', error);
-            alert('An error occurred while fetching the post details.');
-        }
-    });
-});
-
-
-
 
 </script>
