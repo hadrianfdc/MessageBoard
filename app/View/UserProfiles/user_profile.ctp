@@ -127,6 +127,248 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
     <ul class="main-feed-list">
     <?php if (!empty($findPost)): ?>
         <?php foreach ($findPost as $post): ?>
+          <?php if ($post['is_shared'] == 1 && !empty($post['shared_id']) && !empty($post['sharer_full_name'])): ?>
+            <?php echo $this->element('facebook_share'); ?>
+             <!-- If the post is shared-->
+             <div class="shared-post">
+                    <header class="common-post-header u-flex">
+                        <?php 
+                            $sharerImage = !empty($post['sharer_images']) ? $post['sharer_images'][0] : 'https://assets.codepen.io/65740/internal/avatars/users/default.png';
+                        ?>
+                        <img src="<?php echo $this->Html->url('/' . $sharerImage); ?>" class="user-image" width="40" height="40" alt="">
+                        <div class="common-post-info">
+                            <div class="user-and-group u-flex">
+                                <a href="#" target="_blank"><?php echo $post['sharer_full_name']; ?></a>
+                            </div>
+                            <div class="time-and-privacy">
+                                <time datetime="<?php echo $post['created_date']; ?>">
+                                    <?php echo date('F j \a\t g:i A', strtotime($post['date_shared'])); ?>
+                                </time>
+                                <span class="icon icon-privacy">
+                                    <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Only Me';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Public';
+                                        } elseif ($post['privacy'] == 3) {
+                                            echo '👥 Friends';
+                                        }
+                                    ?>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Dropdown Menu of Post -->
+                        <button class="icon-button-2 u-margin-inline-start" aria-label="more options" onclick="toggleCustomDropdown(event, '<?php echo $post['id']; ?>')">
+                            <span class="icon-menu"></span>
+                        </button>
+                         <!-- Dropdown menu -->
+                         <div id="custom-dropdown-menu-<?php echo $post['id']; ?>" class="custom-dropdown-menu">
+                            <ul>
+                              <?php if($user_id == $post['user_id'] || $user_id == $post['sharer_id']): ?>
+                                <li><span class="icon">🔖</span>
+                                  <?php if ($post['is_saved'] == 1): ?> Unsave Post
+                                  <?php else: ?> Save Post
+                                  <?php endif; ?>
+                                </li>
+                                <li class="edit-post" data-post-id="<?php echo $post['id']; ?>" data-is-shared="1">
+                                  <span class="icon">✏️</span> Edit Post
+                                </li>
+                                <li class="edit-privacy" data-post-id="<?php echo $post['id']; ?>"><span class="icon"></span> 
+                                     <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Change Audience (Only Me)';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Change Audience (Public)';
+                                        }elseif ($post['privacy'] == 3) {
+                                          echo '👥 Change Audience (Friends)';
+                                      }
+                                    ?>
+                                </li>
+                                <li><span class="icon">💬</span> Who can comment on this post?</li>
+                                <li
+                                    class="toggle-archieve-post" 
+                                    data-post-id="<?php echo $post['id']; ?>" 
+                                    data-is-archieve="<?php echo $post['is_archieve']; ?>"
+                                    ><span class="icon">📦</span> Move to Archive
+                                </li>
+                                <li class="toggle-trash-post" 
+                                    data-post-id="<?php echo $post['id']; ?>">
+                                    <span class="icon">🗑️</span> Move to Trash
+                                </li>
+                                <li><span class="icon">🔔</span> Get Notified about this Post</li>
+                                <li><span class="icon">📸</span> Add to Album</li>
+                                <?php else: ?>
+                                  <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #1877f2; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">+</span> Interested
+                                </li>
+                                <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #f02849; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">−</span> Not Interested
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </header>
+                    <div class="common-post-content common-content">
+                        <?php 
+                        $caption = $post['sharer_caption']; 
+                        $postId = $post['id']; 
+                        if (strlen($caption) > 100) {
+                            $truncatedCaption = substr($caption, 0, 100);
+                            echo '<p id="truncated-caption-' . $postId . '">' . h($truncatedCaption) . '... 
+                                    <a href="#" class="see-more" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See more</a>
+                                  </p>';
+                            echo '<p id="full-caption-' . $postId . '" style="display: none;">' . h($caption) . ' 
+                                    <a href="#" class="see-less" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See less</a>
+                                  </p>';
+                        } else {
+                            echo '<p>' . h($caption) . '</p>';
+                        }
+                        ?>
+                    </div> <?php if ($post['sharer_caption'] != NULL || !empty($post['sharer_caption'])): ?> <br> <?php endif; ?>
+                    <div class="main-feed-item shared-facebook-post">
+                        <article class="common-post" style="border: 1px solid #ccc;">
+                            <header class="common-post-header u-flex">
+                                <!-- Display the user's avatar using the dynamic image path -->
+                                <?php 
+                                    $avatarUrl = !empty($post['images']) ? $post['images'][0] : 'https://assets.codepen.io/65740/internal/avatars/users/default.png';
+                                ?>
+                                <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
+                                <div class="common-post-info">
+                                    <div class="user-and-group u-flex">
+                                        <a href="#" target="_blank"><?php echo $post['fullname']; ?></a>
+                                    </div>
+                                    <div class="time-and-privacy">
+                                        <time datetime="<?php echo $post['created_date']; ?>">
+                                            <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                        </time>
+                                        <span class="icon icon-privacy">
+                                            <?php 
+                                                if ($post['original_privacy'] == 1) {
+                                                    echo '🔒 Only Me';
+                                                } elseif ($post['original_privacy'] == 2) {
+                                                    echo '🌎 Public';
+                                                } elseif ($post['original_privacy'] == 3) {
+                                                    echo '👥 Friends';
+                                                }
+                                            ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="common-post-content common-content">
+                                <?php 
+                                $caption = $post['captions']; 
+                                $postId = $post['id']; 
+                                if (strlen($caption) > 100) {
+                                    $truncatedCaption = substr($caption, 0, 100);
+                                    echo '<p id="truncated-caption-' . $postId . '">' . h($truncatedCaption) . '... 
+                                            <a href="#" class="see-more" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See more</a>
+                                          </p>';
+                                    echo '<p id="full-caption-' . $postId . '" style="display: none;">' . h($caption) . ' 
+                                            <a href="#" class="see-less" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See less</a>
+                                          </p>';
+                                } else {
+                                    echo '<p>' . h($caption) . '</p>';
+                                }
+                                ?>
+                            </div>
+                            <?php if (!empty($post['file_paths'])): ?>
+                                <div class="image-grid">
+                                    <?php foreach ($post['file_paths'] as $index => $image): ?>
+                                        <div class="image-item">
+                                            <img src="<?php echo $this->Html->url('/' . $image); ?>" alt="Post Image" class="image">
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <br>
+                            <?php endif; ?>
+                            <div class="summary u-flex">
+                                <div class="reactions">
+                                <?php
+                                    // Decode the JSON data
+                                    $reactions = json_decode($post['react'], true);
+                                    $totalReactions = array_sum($reactions);
+                                    // Check and display icons based on the values
+                                    if ($reactions['Like'] > 0) {
+                                      echo '<i class="fas fa-thumbs-up" style="color: blue;"></i>';
+                                    }
+                                    if ($reactions['Love'] > 0) {
+                                      echo '<i class="fas fa-heart" style="color: red;"></i>';
+                                    }
+                                    if ($reactions['Care'] > 0) {
+                                        echo '<i class="care-icon">🤗</i>';
+                                    }
+                                    if ($reactions['Haha'] > 0) {
+                                        echo '<i class="fas fa-laugh" style="color: #f4d03f;"></i>';
+                                    }
+                                    if ($reactions['Wow'] > 0) {
+                                        echo '<i class="fas fa-surprise" style="color: #f39c12;"></i>';
+                                    }
+                                    if ($reactions['Sad'] > 0) {
+                                        echo '<i class="fas fa-sad-tear" style="color: #3498db;"></i>';
+                                    }
+                                    if ($reactions['Angry'] > 0) {
+                                        echo '<i class="fas fa-angry" style="color: #e74c3c;"></i>';
+                                    }
+                                ?>
+                                </div>
+                                <div class="reactions-total">
+                                <?php 
+                                  if ($totalReactions > 1 ) { 
+                                      echo '<span class="text">' . 
+                                          htmlspecialchars($post['recent_reactor']) . 
+                                          ' reacted ' . 
+                                          htmlspecialchars($post['other_reaction']) . 
+                                          ' and ' . 
+                                          ($totalReactions - 1) . 
+                                          ' others </span>';
+                                  }if($totalReactions == 1){
+                                      echo $totalReactions; 
+                                  }
+                                  ?>
+                                </div>
+                                <div class="total-comments u-margin-inline-start">
+                                  <a> <?php echo $post['total_number_of_shared_post']; ?> Shares</a>
+                                </div>
+                            </div>
+                        </article>
+                        <section class="actions-buttons">
+                                <ul class="actions-buttons-list u-flex">
+                                    <li style="list-style-type: none;" class="actions-buttons-item">
+                                        <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
+                                            <span class="icon"><i class="fas fa-thumbs-up" style="font-weight:normal;"></i> Like</span>
+                                        </button>
+                                    </li>
+                                    <li style="list-style-type: none;" class="actions-buttons-item">
+                                        <button class="actions-buttons-button">
+                                            <span class="icon">💬</span>
+                                            <span class="text">Comment</span>
+                                        </button>
+                                    </li>
+                                    <li style="list-style-type: none;" class="actions-buttons-item">
+                                        <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
+                                            <span class="icon">🔗</span>
+                                            <span class="text">Share</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </section>
+                    </div>
+                </div>
+
+          <?php else: ?>
             <div class="main-feed-item">
                 <article class="common-post">
                     <?php if ($post['is_pinned'] == 1): ?>
@@ -353,6 +595,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                 </div>
             </div>
             <!--------------------------------------- [END] Modal for Share Modal ----------------------------------------->
+            <?php endif; ?>
         <?php endforeach; ?>
     <?php endif; ?>
 

@@ -29,9 +29,9 @@ class UserProfilesController extends AppController
                         ),
                         array(
                             'ProfilePost.privacy' => array(2, 3)
-                        )
+                        ),
                     ),
-                    'ProfilePost.is_archieve !=' => 1
+                    'ProfilePost.is_archieve !=' => 1,
             ),
             'order' => array('ProfilePost.created_date' => 'DESC','ProfilePost.date_shared' => 'DESC'),
         ));
@@ -101,6 +101,22 @@ class UserProfilesController extends AppController
                     ],
                     'order' => ['Reactions.created' => 'DESC']
                 ]);
+                $myNameOrSharerName = $this->User->find('first', [
+                    'fields' => ['User.full_name'],
+                    'conditions' => [
+                        'User.user_id' => $post['ProfilePost']['user_id']
+                    ]
+                ]);
+                $sharerName = '';
+                if(!empty($post['ProfilePost']['sharer_id'])){
+                    $findSharerName = $this->User->find('first', [
+                        'fields' => ['User.full_name'],
+                        'conditions' => [
+                            'User.user_id' => $post['ProfilePost']['sharer_id']
+                        ]
+                    ]);
+                    $sharerName = $findSharerName['User']['full_name'];
+                }
                 $recentReactorName = '';
                 if (!empty($certainReaction) && !empty($certainReaction['Reactions']['user_id'])) {
                     $recentReactor = $this->User->find('first', [
@@ -114,6 +130,24 @@ class UserProfilesController extends AppController
                         $recentReactorName = $recentReactor['User']['full_name'];
                     }
                 }
+                $totalNumberOfSharedPost = $this->ProfilePost->find('count', [
+                    'conditions' => [
+                        'ProfilePost.shared_id' => $post['ProfilePost']['id']
+                    ]
+                ]);    
+
+                $originalPrivacy = '';
+                if (!empty($post['ProfilePost']['shared_id']) || $post['ProfilePost']['shared_id'] != NULL) {
+                    $findOriginalPrivacy = $this->ProfilePost->find('first', [
+                        'fields' => ['ProfilePost.privacy'],
+                        'conditions' => [
+                            'ProfilePost.id' => $post['ProfilePost']['shared_id']
+                        ]
+                    ]);     
+                    if (!empty($findOriginalPrivacy)) {
+                        $originalPrivacy = $findOriginalPrivacy['ProfilePost']['privacy'];
+                    }
+                } 
                 $certainReaction = isset($certainReaction['Reactions']['reaction_type'])
                         ? [
                             1 => 'Like',
@@ -132,7 +166,7 @@ class UserProfilesController extends AppController
                         'my_reaction' => isset($myReaction['Reactions']['reaction_type']) ? $myReaction['Reactions']['reaction_type'] : 0,
                         'other_reaction' => $certainReaction,
                         'recent_reactor' => $recentReactorName,
-                        'fullname' => $post['ProfilePost']['fullname'],
+                        'fullname' => $myNameOrSharerName['User']['full_name'],
                         'captions' => $post['ProfilePost']['captions'],
                         'react' => $post['ProfilePost']['react'],
                         'is_pinned' => $post['ProfilePost']['is_pinned'],
@@ -142,8 +176,11 @@ class UserProfilesController extends AppController
                         'file_paths' => json_decode($post['ProfilePost']['file_paths']),
                         'is_shared' => $post['ProfilePost']['is_shared'],
                         'shared_id' => $post['ProfilePost']['shared_id'],
+                        'sharer_caption' => $post['ProfilePost']['sharer_caption'],
                         'sharer_id' => $post['ProfilePost']['sharer_id'],
-                        'sharer_full_name' => isset($post['ProfilePost']['sharer_full_name']) ? $post['ProfilePost']['sharer_full_name'] : '',
+                        'sharer_full_name' =>  $sharerName,
+                        'original_privacy' => $originalPrivacy,
+                        'total_number_of_shared_post' => $totalNumberOfSharedPost,
                         'date_shared' => $post['ProfilePost']['date_shared'],
                         'created_date' => $post['ProfilePost']['created_date'],
                         'updated_date' => $post['ProfilePost']['updated_date'],
@@ -243,9 +280,19 @@ class UserProfilesController extends AppController
         $user_id = $this->Session->read('Auth.User.user_id');
 
         $findPost = $this->ProfilePost->find('all', array(
-            'conditions' => array('ProfilePost.user_id' => $user_id, 'ProfilePost.is_archieve' => 0),
-            'order' => array('ProfilePost.is_pinned' => 'DESC','ProfilePost.created_date' => 'DESC'),
-        ));
+            'conditions' => array(
+                'ProfilePost.is_archieve' => 0, 
+                'OR' => array(
+                    'ProfilePost.user_id' => $user_id,  
+                    'ProfilePost.sharer_id' => $user_id 
+                )
+            ),
+            'order' => array(
+                'ProfilePost.is_pinned' => 'DESC',
+                'ProfilePost.date_shared' => 'DESC',
+                'ProfilePost.created_date' => 'DESC'
+            ),
+        ));        
 
         $organizedPosts = $this->getPost($findPost);
 
@@ -288,6 +335,7 @@ class UserProfilesController extends AppController
         $this->set('userProfileData', $userProfileData);
         $this->set('findPost', $organizedPosts);
         $this->set('photoList', $photoList); 
+        $this->set('user_id', $user_id);
     }
 
     private function photoGrid() {
@@ -507,7 +555,7 @@ class UserProfilesController extends AppController
 
         $post = $this->ProfilePost->find('first', [
             'conditions' => ['ProfilePost.id' => $postId],
-            'fields' => ['id', 'captions', 'privacy', 'file_paths'], 
+            'fields' => ['id', 'captions', 'privacy', 'file_paths', 'sharer_caption'], 
             'contain' => ['PostImages' => ['fields' => ['path']]]
         ]);
 
@@ -518,7 +566,8 @@ class UserProfilesController extends AppController
                     'id' => $post['ProfilePost']['id'],
                     'captions' => $post['ProfilePost']['captions'],
                     'privacy' => $post['ProfilePost']['privacy'],
-                    'file_paths' => $post['ProfilePost']['file_paths'] 
+                    'file_paths' => $post['ProfilePost']['file_paths'],
+                    'sharer_caption' => $post['ProfilePost']['sharer_caption']
                 ]
             ]));
             // $this->log(print_r($data, true), 'error');
@@ -535,11 +584,12 @@ class UserProfilesController extends AppController
 
         if ($this->request->is('post')) {
             $data = $this->request->data['Posts'];
-            $this->log(print_r($data, true), 'error');
+            // $this->log(print_r($data, true), 'error');
 
             // Get data from the form
             $postId = $data['id'] ?? null; 
             $captions = $data['captions'] ?? ''; 
+            $sharer_captions = $data['sharer_caption'] ?? ''; 
             $privacy = $data['privacy'] ?? null; 
             $files = $data['file'] ?? [];
 
@@ -558,6 +608,7 @@ class UserProfilesController extends AppController
 
             // Update the captions and privacy fields
             $post['ProfilePost']['captions'] = $captions;
+            $post['ProfilePost']['sharer_caption'] = $sharer_captions;
             $post['ProfilePost']['privacy'] = $privacy;
             $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
 
@@ -678,6 +729,37 @@ class UserProfilesController extends AppController
         }
     }
     
+    
+    public function getSharedUsers($postId) {
+        $this->autoRender = false; 
+        $this->response->type('json');
+    
+        $sharedUsers = $this->ProfilePost->find('all', [
+            'conditions' => ['ProfilePost.shared_id' => $postId],
+            'fields' => ['sharer_full_name', 'date_shared', 'sharer_id', 'privacy'],
+            'order' => ['date_shared' => 'DESC']
+        ]);
+    
+        $sharedUsersData = [];
+        foreach ($sharedUsers as $user) {
+            $findName = $this->User->find('first', [
+                'fields' => ['User.full_name'],
+                'conditions' => ['User.user_id' => $user['ProfilePost']['sharer_id']]
+            ]);
+            $findSharerImage = $this->Posts->find('first', [
+                'fields' => ['Posts.id', 'Posts.path'],
+                'conditions' => ['Posts.id' => $user['ProfilePost']['sharer_id']]
+            ]);
+            $sharedUsersData[] = [
+                'sharer_full_name' => $findName['User']['full_name'],
+                'date_shared' => $user['ProfilePost']['date_shared'],
+                'privacy' => $user['ProfilePost']['privacy'],
+                'profile_picture' => $findSharerImage['Posts']['path']
+            ];
+        }
+    
+        echo json_encode($sharedUsersData);
+    }
     
 
 

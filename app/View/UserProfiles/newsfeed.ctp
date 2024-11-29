@@ -90,7 +90,82 @@
                         <button class="icon-button-2 u-margin-inline-start" aria-label="more options" onclick="toggleCustomDropdown(event, '<?php echo $post['id']; ?>')">
                             <span class="icon-menu"></span>
                         </button>
+                         <!-- Dropdown menu -->
+                         <div id="custom-dropdown-menu-<?php echo $post['id']; ?>" class="custom-dropdown-menu">
+                            <ul>
+                              <?php if($user_id == $post['user_id'] || $user_id == $post['sharer_id']): ?>
+                                <li><span class="icon">🔖</span>
+                                  <?php if ($post['is_saved'] == 1): ?> Unsave Post
+                                  <?php else: ?> Save Post
+                                  <?php endif; ?>
+                                </li>
+                                <li class="edit-post" data-post-id="<?php echo $post['id']; ?>" data-is-shared="1">
+                                  <span class="icon">✏️</span> Edit Post
+                                </li>
+                                <li class="edit-privacy" data-post-id="<?php echo $post['id']; ?>"><span class="icon"></span> 
+                                     <?php 
+                                        if ($post['privacy'] == 1) {
+                                            echo '🔒 Change Audience (Only Me)';
+                                        } elseif ($post['privacy'] == 2) {
+                                            echo '🌎 Change Audience (Public)';
+                                        }elseif ($post['privacy'] == 3) {
+                                          echo '👥 Change Audience (Friends)';
+                                      }
+                                    ?>
+                                </li>
+                                <li><span class="icon">💬</span> Who can comment on this post?</li>
+                                <li
+                                    class="toggle-archieve-post" 
+                                    data-post-id="<?php echo $post['id']; ?>" 
+                                    data-is-archieve="<?php echo $post['is_archieve']; ?>"
+                                    ><span class="icon">📦</span> Move to Archive
+                                </li>
+                                <li class="toggle-trash-post" 
+                                    data-post-id="<?php echo $post['id']; ?>">
+                                    <span class="icon">🗑️</span> Move to Trash
+                                </li>
+                                <li><span class="icon">🔔</span> Get Notified about this Post</li>
+                                <li><span class="icon">📸</span> Add to Album</li>
+                                <?php else: ?>
+                                  <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #1877f2; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">+</span> Interested
+                                </li>
+                                <li>
+                                    <span class="icon" style="
+                                        display: inline-block; width: 24px; 
+                                        height: 24px; line-height: 24px; 
+                                        border-radius: 50%; background-color: #f02849; 
+                                        color: white; text-align: center; 
+                                        font-size: 18px; font-weight: bold;
+                                    ">−</span> Not Interested
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
                     </header>
+                    <div class="common-post-content common-content">
+                        <?php 
+                        $caption = $post['sharer_caption']; 
+                        $postId = $post['id']; 
+                        if (strlen($caption) > 100) {
+                            $truncatedCaption = substr($caption, 0, 100);
+                            echo '<p id="truncated-caption-' . $postId . '">' . h($truncatedCaption) . '... 
+                                    <a href="#" class="see-more" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See more</a>
+                                  </p>';
+                            echo '<p id="full-caption-' . $postId . '" style="display: none;">' . h($caption) . ' 
+                                    <a href="#" class="see-less" onclick="toggleCaption(' . $postId . '); return false;" style="font-size: 14px;">See less</a>
+                                  </p>';
+                        } else {
+                            echo '<p>' . h($caption) . '</p>';
+                        }
+                        ?>
+                    </div> <?php if ($post['sharer_caption'] != NULL || !empty($post['sharer_caption'])): ?> <br> <?php endif; ?>
                     <div class="main-feed-item shared-facebook-post">
                         <article class="common-post" style="border: 1px solid #ccc;">
                             <header class="common-post-header u-flex">
@@ -109,11 +184,11 @@
                                         </time>
                                         <span class="icon icon-privacy">
                                             <?php 
-                                                if ($post['privacy'] == 1) {
+                                                if ($post['original_privacy'] == 1) {
                                                     echo '🔒 Only Me';
-                                                } elseif ($post['privacy'] == 2) {
+                                                } elseif ($post['original_privacy'] == 2) {
                                                     echo '🌎 Public';
-                                                } elseif ($post['privacy'] == 3) {
+                                                } elseif ($post['original_privacy'] == 3) {
                                                     echo '👥 Friends';
                                                 }
                                             ?>
@@ -194,7 +269,7 @@
                                   ?>
                                 </div>
                                 <div class="total-comments u-margin-inline-start">
-                                  <a>12 Shares</a>
+                                  <a> <?php echo $post['total_number_of_shared_post']; ?> Shares</a>
                                 </div>
                             </div>
                         </article>
@@ -334,7 +409,7 @@
                         }
                         ?>
                     </div>
-                    <?php if (!empty($post['file_paths'])): ?>
+                    <?php if (!empty($post['file_paths'])): ?> 
                         <div class="image-grid">
                             <?php foreach ($post['file_paths'] as $index => $image): ?>
                                 <div class="image-item">
@@ -389,9 +464,15 @@
                           }
                           ?>
                         </div>
+                         <!-- ---------- This line is for shared post ----------------- -->
                         <div class="total-comments u-margin-inline-start">
-                          <a>12 Shares</a>
+                            <a href="#" class="view-shares" 
+                              data-post-id="<?php echo $post['id']; ?>" 
+                              data-post-title="<?php echo htmlspecialchars($post['captions'], ENT_QUOTES, 'UTF-8'); ?>">
+                                <?php echo $post['total_number_of_shared_post']; ?> Shares
+                            </a>
                         </div>
+
                     </div>
                     <section class="actions-buttons">
                       <ul class="actions-buttons-list u-flex">

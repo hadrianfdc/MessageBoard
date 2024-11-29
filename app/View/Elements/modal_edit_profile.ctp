@@ -358,12 +358,13 @@
                 <!-- Post Text -->
                 <input type="hidden" id="postEditID" name="data[Posts][id]">
                 <textarea name="data[Posts][captions]" id="postEditText" placeholder="What's on your mind?" style="width: 100%; height: 80px; border: 1px solid #ddd; border-radius: 8px; padding: 8px; font-size: 14px; resize: none;"></textarea>
+                <textarea name="data[Posts][sharer_caption]" id="postEditTextSharer" placeholder="What's on your mind?" style="width: 100%; height: 80px; border: 1px solid #ddd; border-radius: 8px; padding: 8px; font-size: 14px; resize: none;"></textarea>
 
                 <!-- Image Previews -->
                 <div id="imageEditPreviewContainer" class="image-preview-container" style="margin: 10px 0; display: flex; flex-wrap: wrap; gap: 8px;"></div>
 
                 <!-- Add Options -->
-                <div class="add-options" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                <div class="add-options" id="addOptionsEdit" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
                     <label for="uploadEditImages" class="upload-label" style="cursor: pointer; display: flex; align-items: center; color: #1877F2; margin-bottom: 8px;">
                         <input type="file" name="data[Posts][file][]" id="uploadEditImages" multiple accept="image/*" style="display: none;">
                         <span id="click_edit_icon" style="color: black;">
@@ -542,6 +543,19 @@
 </div>
 <!--------------------------------------- [END] Modal for  Success----------------------------------------->
 
+<!--------------------------------------- [START] Modal for Who Shared The Post----------------------------------------->
+<div id="who_share_this_post" style="display:none;">
+    <div id="who_share_this_post_content" style="background-color: white; color: white; border-radius: 8px; padding: 20px;">
+        <span id="close_who_share_this_post" style="color: black; float: right; font-size: 20px; cursor: pointer;">&times;</span>
+        <h2 style="color: black;">People Who Shared This</h2>
+        <p id="postTitle" style="margin-bottom: 20px; color: black;"></p>
+        <ul id="sharedUsersList" style="list-style: none; padding: 0; max-height: 300px; overflow-y: auto; color: black;">
+            <!-- User list will be dynamically populated here -->
+        </ul>
+    </div>
+</div>
+
+<!--------------------------------------- [END] Modal for Who Shared The Post----------------------------------------->
 
 <script>
 
@@ -643,14 +657,17 @@ const editPostModal = document.getElementById('editPostModal');
 const closeEditModalBtn = document.getElementById('closeEditModalBtn');
 const cancelEditPostBtn = document.getElementById('cancelEditPostBtn');
 const postTextArea = document.getElementById('postEditText'); 
+const postTextAreaSharer = document.getElementById('postEditTextSharer'); 
 const postID = document.getElementById('postEditID'); 
 const privacySelector = document.getElementById('privacyEditSelector'); 
 const imagePreviewContainer = document.getElementById('imageEditPreviewContainer'); 
+const addOptionsEdit = document.getElementById('addOptionsEdit');
 
 // Open Edit Modal for a specific post
 document.querySelectorAll('.edit-post').forEach((button) => {
     button.addEventListener('click', async function () {
         const postId = this.getAttribute('data-post-id');
+        const isShared = this.getAttribute('data-is-shared');
         
         try {
             const response = await fetch(`/MessageBoard/UserProfiles/getPostDetails/${postId}`);
@@ -658,46 +675,57 @@ document.querySelectorAll('.edit-post').forEach((button) => {
 
             if (response.ok && postDetails.success) {
 
-                postTextArea.value = postDetails.data.captions;
-                privacySelector.value = postDetails.data.privacy;
                 postID.value = postDetails.data.id;
-
                 // Clear previous image previews
                 imagePreviewContainer.innerHTML = '';
+                postTextArea.value = postDetails.data.captions;
+                privacySelector.value = postDetails.data.privacy;
 
                 // Parse file_paths into an array
                 const filePaths = JSON.parse(postDetails.data.file_paths);
 
                 // Add new image previews
-                    if (Array.isArray(filePaths)) {
-                        filePaths.forEach((filePath, index) => {
-                          const imageWrapper = document.createElement('div');
-                          imageWrapper.classList.add('image-preview');
-                          console.log('filePath:', filePath);
-                          const img = document.createElement('img');
-                          img.src = filePath;
-                          img.alt = 'Existing Image';
-                          img.style.width = '100px';
-                          img.style.height = '100px';
-                          img.style.objectFit = 'cover';
-                          img.style.borderRadius = '8px';
+                if (Array.isArray(filePaths)) {
+                    filePaths.forEach((filePath, index) => {
+                        const imageWrapper = document.createElement('div');
+                        imageWrapper.classList.add('image-preview');
+                        console.log('filePath:', filePath);
+                        const img = document.createElement('img');
+                        img.src = '/MessageBoard/' + filePath;
+                        img.alt = 'Existing Image';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
 
-                          const removeBtn = document.createElement('span');
-                          removeBtn.textContent = '×';
-                          removeBtn.classList.add('remove-btn');
+                        const removeBtn = document.createElement('span');
+                        removeBtn.textContent = '×';
+                        removeBtn.classList.add('remove-btn');
 
-                          // Remove existing image on click
-                          removeBtn.addEventListener('click', function () {
-                              filePaths.splice(index, 1); // Remove from filePaths array
-                              imageWrapper.remove(); // Remove from UI
-                          });
+                        // Remove existing image on click
+                        removeBtn.addEventListener('click', function () {
+                            filePaths.splice(index, 1); // Remove from filePaths array
+                            imageWrapper.remove(); // Remove from UI
+                        });
 
-                          imageWrapper.appendChild(img);
-                          imageWrapper.appendChild(removeBtn);
-                          imagePreviewContainer.appendChild(imageWrapper);
-                      });
-                  }
-
+                        imageWrapper.appendChild(img);
+                        imageWrapper.appendChild(removeBtn);
+                        imagePreviewContainer.appendChild(imageWrapper);
+                    });
+                }
+                if (isShared == 1) {
+                    postTextAreaSharer.style.display = 'block';
+                    postTextArea.style.display = 'none'; 
+                    privacySelector.style.display = 'block'; 
+                    imagePreviewContainer.style.display = 'none'; 
+                    postTextAreaSharer.value = postDetails.data.sharer_caption;
+                    addOptionsEdit.style.display = 'none';
+                }else{
+                    postTextAreaSharer.style.display = 'none'; 
+                    postTextArea.style.display = 'block';  
+                    privacySelector.style.display = 'block'; 
+                    imagePreviewContainer.style.display = 'block'; 
+                }
                 // Display the modal
                 editPostModal.style.display = 'flex';
             } else {
@@ -790,9 +818,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle form submission
     form.addEventListener('submit', function (event) {
             const postText = postTextArea.value.trim();
+            const postTextSharer = postTextAreaSharer.value.trim();
             const dataTransfer = new DataTransfer();
 
-            if (postText === '' && selectedFiles.length === 0) {
+            if (postText === '' && selectedFiles.length === 0 && postTextSharer === '') {
                 event.preventDefault();
                 alert('Please write something before posting.');
                 return;
@@ -1032,5 +1061,114 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//Who Share this Post Modal
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("who_share_this_post");
+    const modalContent = document.getElementById("who_share_this_post_content");
+    const sharedUsersList = document.getElementById("sharedUsersList");
+    const postTitle = document.getElementById("postTitle");
+    const closeModal = document.getElementById("close_who_share_this_post");
+
+    // Open Modal
+    document.querySelectorAll(".view-shares").forEach(link => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            const postId = this.getAttribute("data-post-id");
+            const title = this.getAttribute("data-post-title");
+
+            // Set Post Title
+            postTitle.textContent = `Post: "${title}"`;
+
+            // Clear previous list
+            sharedUsersList.innerHTML = "<li>Loading...</li>";
+
+            // Fetch Shared Users
+            fetch(`/MessageBoard/UserProfiles/getSharedUsers/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                sharedUsersList.innerHTML = ""; // Clear existing content
+                if (data.length > 0) {
+                    data.forEach(user => {
+                        const listItem = document.createElement("li");
+                        listItem.style.display = "flex";
+                        listItem.style.alignItems = "center";
+                        listItem.style.marginBottom = "10px";
+
+                        // User Profile Picture
+                        const profilePicture = document.createElement("img");
+                        profilePicture.src = user.profile_picture || "default-profile.jpg"; // Use default if not available
+                        profilePicture.alt = `${user.sharer_full_name}'s profile picture`;
+                        profilePicture.style.width = "40px";
+                        profilePicture.style.height = "40px";
+                        profilePicture.style.borderRadius = "50%";
+                        profilePicture.style.marginRight = "10px";
+
+                        // User Info
+                        const userInfo = document.createElement("div");
+                        const name = document.createElement("p");
+                        name.textContent = user.sharer_full_name;
+                        name.style.margin = "0";
+                        name.style.fontWeight = "bold";
+
+                        // Format date_shared
+                        const date = new Date(user.date_shared);
+                        const formattedDate = date.toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true // Ensures AM/PM format
+                        });
+
+                        const dateShared = document.createElement("small");
+                        dateShared.textContent = `Shared on ${formattedDate}`;
+
+                        // Privacy Information with Icons
+                        const privacy = document.createElement("small");
+                        privacy.style.display = "block";
+                        if (user.privacy == 1) {
+                            privacy.textContent = "🔒 Only Me";
+                        } else if (user.privacy == 2) {
+                            privacy.textContent = "🌎 Public";
+                        } else if (user.privacy == 3) {
+                            privacy.textContent = "👥 Friends";
+                        }
+
+                        // Append Elements
+                        userInfo.appendChild(name);
+                        userInfo.appendChild(dateShared);
+                        userInfo.appendChild(privacy);
+                        listItem.appendChild(profilePicture);
+                        listItem.appendChild(userInfo);
+                        sharedUsersList.appendChild(listItem);
+                    });
+                } else {
+                    sharedUsersList.innerHTML = "<li>No shares found.</li>";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching shared users:", error);
+                sharedUsersList.innerHTML = "<li>Error loading data.</li>";
+            });
+
+            // Show Modal
+            modal.style.display = "flex";
+        });
+    });
+
+    // Close Modal
+    closeModal.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
 
 </script>
