@@ -486,7 +486,6 @@ class UserProfilesController extends AppController
                 $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
                     return $this->response->body(json_encode(['success' => true]));
-                    $this->log($this->response->body(json_encode(['success' => true]), 'error'));
                 }
             }
         }
@@ -512,7 +511,6 @@ class UserProfilesController extends AppController
                 $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
                     return $this->response->body(json_encode(['success' => true]));
-                    $this->log($this->response->body(json_encode(['success' => true]), 'error'));
                 }
             }
         }
@@ -528,15 +526,13 @@ class UserProfilesController extends AppController
 
         if ($this->request->is('post')) {
             $data = $this->request->input('json_decode', true); 
-            $this->log(print_r($data, true), 'error'); 
 
             $postId = $data['post_id']; 
 
             $post = $this->ProfilePost->findById($postId);
             if ($post) {
                 if ($this->ProfilePost->delete($postId)) {
-                    $this->log("Post ID {$postId} deleted successfully.", 'error'); 
-                    return $this->response->body(json_encode(['success' => true])); 
+                    
                 } else {
                     $this->log("Failed to delete Post ID {$postId}.", 'error'); 
                 }
@@ -636,7 +632,6 @@ class UserProfilesController extends AppController
 
             // Save the updated post data
             if ($this->ProfilePost->save($post)) {
-                $this->log("Post ID {$postId} updated successfully.", 'error');
                 $this->redirect(['controller' => 'UserProfiles', 'action' => 'user_profile']);
             } else {
                 $this->log("Failed to update Post ID {$postId}.", 'error');
@@ -656,7 +651,6 @@ class UserProfilesController extends AppController
     
         if ($this->request->is('post')) {
             $data = $this->request->input('json_decode', true);
-            $this->log(print_r($data, true), 'error');
     
             $postId = $data['post_id']; 
             $privacy = $data['privacy']; 
@@ -668,7 +662,6 @@ class UserProfilesController extends AppController
                 $post['ProfilePost']['privacy'] = $privacy;
                 $post['ProfilePost']['updated_date'] = date('Y-m-d H:i:s'); 
                 if ($this->ProfilePost->save($post)) {
-                    $this->log("Post ID {$postId} privacy updated to {$privacy}.", 'error'); 
                     return $this->response->body(json_encode(['success' => true]));
                 } else {
                     $this->log("Failed to update privacy for Post ID {$postId}.", 'error'); 

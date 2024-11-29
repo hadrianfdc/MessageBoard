@@ -513,17 +513,18 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                         </div>
                         <div class="reactions-total">
                         <?php 
-                          if ($totalReactions > 1 ) { 
-                              echo '<span class="text">' . 
-                                  htmlspecialchars($post['recent_reactor']) . 
-                                  ' reacted ' . 
-                                  htmlspecialchars($post['other_reaction']) . 
-                                  ' and ' . 
-                                  ($totalReactions - 1) . 
-                                  ' others </span>';
-                          }if($totalReactions == 1){
-                              echo $totalReactions; 
-                          }
+                            if ($totalReactions > 1) { 
+                              echo '
+                                      <span style="text-decoration: none; cursor: pointer;" data-post-id="' . $post['id'] . '" class="showReactionsModal" class="text">' . 
+                                          htmlspecialchars($post['recent_reactor']) . 
+                                          ' reacted ' . 
+                                          htmlspecialchars($post['other_reaction']) . 
+                                          ' and ' . 
+                                          ($totalReactions - 1) . 
+                                          ' others </span> ';
+                            }if($totalReactions == 1){
+                                echo $totalReactions; 
+                            }
                           ?>
                         </div>
                     </div>

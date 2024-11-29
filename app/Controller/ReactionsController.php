@@ -144,8 +144,8 @@ class ReactionsController extends AppController
         ];
 
       if($type == 'reaction'){
-        $notification['Notification']['type'] = 1;
-        $notification['Notification']['description'] = 
+            $notification['Notification']['type'] = 1;
+            $notification['Notification']['description'] = 
             $reaction['Reactions']['reaction_type'] == 1 ? 'Like to your Post' :
             ($reaction['Reactions']['reaction_type'] == 2 ? 'Reacted Heart to your Post' :
             ($reaction['Reactions']['reaction_type'] == 3 ? 'Reacted Care to your Post' :
@@ -165,5 +165,34 @@ class ReactionsController extends AppController
     }
 
 
-   
+    public function getReactions($postId)
+    {
+        $this->autoRender = false; 
+
+        $reactions = $this->Reactions->find('all', [
+            'conditions' => ['Reactions.profile_post_id' => $postId], 
+        ]);
+        $this->log(print_r($reactions, true), 'error');
+
+        $reactionData = [];
+        foreach ($reactions as $reaction) {
+            $findName = $this->User->find('first', [
+                'fields' => ['User.full_name'],
+                'conditions' => ['User.user_id' => $reaction['Reactions']['user_id']]
+            ]);
+            $findSharerImage = $this->Posts->find('first', [
+                'fields' => ['Posts.id', 'Posts.path'],
+                'conditions' => ['Posts.id' => $reaction['Reactions']['user_id']]
+            ]);
+            $reactionData[] = [
+                'type' => $reaction['Reactions']['reaction_type'], 
+                'user' => [
+                    'name' => $findName['User']['full_name'],
+                    'profile_pic' => $findSharerImage['Posts']['path']
+                ]
+            ];
+        }
+        echo json_encode(['success' => true, 'reactions' => $reactionData]);
+    }
+
 }

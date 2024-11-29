@@ -557,6 +557,47 @@
 
 <!--------------------------------------- [END] Modal for Who Shared The Post----------------------------------------->
 
+<!--------------------------------------- [START] Modal for displaying reactions----------------------------------------->
+<div id="modal_shows_who_react" class="modal_who_react" style="display: none;">
+    <div class="modal_who_react_content">
+        <span class="close-modal" id="closeModalWhoReact">&times;</span>
+        <div id="reactionsList"></div> <!-- List of users and reactions -->
+    </div>
+</div>
+<!--------------------------------------- [END] Modal for displaying reactions----------------------------------------->
+
+<!--------------------------------------- [START] Modal for making Comments----------------------------------------->
+
+<div id="commentModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div id="commentModalContent" style="background-color: #ffffff; color: #000; border-radius: 8px; padding: 20px; width: 90%; max-width: 500px; margin: auto; margin-top: 10%; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+    <button id="closeCommentModal" style="float: right; background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer;">&times;</button>
+    <h2 style="color: #1877f2;">Comments</h2>
+    <div id="commentList"></div>
+    <textarea id="commentInput" placeholder="Write a comment..." style="width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+    <!-- Container for image preview -->
+    <div id="imagePreviewContainerComment" style="display: none; margin-top: 10px;"></div>
+    <div id="commentActions" style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+      <div style="display: flex; gap: 15px; align-items: center; color: grey;">
+        <input type="text" id="postId" hidden>
+        <input type="file" id="fileInputComment" accept="image/*" style="display: none;"/>
+        <button id="uploadImageButton" style="background: none; border: none; cursor: pointer;">
+          <i class="fas fa-camera"></i>
+        </button>
+        <button id="gifButton" style="background: none; border: none; cursor: pointer;">
+          <i class="fas fa-film"></i>
+        </button>
+        <button id="emojiButton" style="background: none; border: none; cursor: pointer;">
+          <i class="fas fa-smile"></i>
+        </button>
+      </div>
+      <button id="postCommentButton" style="background-color: #1877f2; color: white; padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer;">Post Comment</button>
+    </div>
+  </div>
+</div>
+
+
+<!--------------------------------------- [END] Modal for making Comments----------------------------------------->
+
 <script>
 
   // <!-- Dropdown Menu of Post -->
@@ -910,8 +951,8 @@ function updateCharCount() {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-//FOR REACTIONS
-
+//FOR REACTIONS //FOR REACTIONS
+//FOR REACTIONS //FOR REACTIONS 
 document.addEventListener('DOMContentLoaded', function () {
     // Event listener for each "Like" button
     document.querySelectorAll('.toggle-reactions').forEach((reactionButton) => {
@@ -956,6 +997,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 const reactionsPopup = document.getElementById(`reactions-popup-${postId}`);
                 reactionsPopup.classList.remove('active'); // Close the popup after selecting a reaction
+                window.location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1169,6 +1211,328 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.style.display = "none";
         }
     });
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// modal WHO REACT THIS POST
+document.querySelectorAll('.showReactionsModal').forEach(button => {
+    button.addEventListener('click', async function() {
+        const postId = this.getAttribute('data-post-id');
+        
+        // Fetch reaction data for the post
+        try {
+            const response = await fetch(`/MessageBoard/Reactions/getReactions/${postId}`);
+            const reactionData = await response.json();
+
+            if (reactionData.success) {
+                const reactionsList = document.getElementById('reactionsList');
+                reactionsList.innerHTML = ''; // Clear previous list
+
+                // Iterate over the reactions and display users
+                const reactionMap = {
+                    1: 'Like',
+                    2: 'Heart',
+                    3: 'Care',
+                    4: 'Haha',
+                    5: 'Wow',
+                    6: 'Sad',
+                    7: 'Angry'
+                };
+
+                    // Initialize an object to store the count of each reaction type
+                    const reactionCount = {
+                        1: 0, // Like
+                        2: 0, // Heart
+                        3: 0, // Care
+                        4: 0, // Haha
+                        5: 0, // Wow
+                        6: 0, // Sad
+                        7: 0  // Angry
+                    };
+
+                    // Update reactionCount based on the reaction data
+                    reactionData.reactions.forEach(reaction => {
+                        reactionCount[reaction.type]++;
+                        
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('reaction-user');
+                        userDiv.style.display = 'flex';
+
+                        const reactionType = reactionMap[reaction.type] || 'Unknown';
+                        const reactionIcon = getReactionIcon(reaction.type);
+
+                        userDiv.innerHTML = `
+                            <img src="${reaction.user.profile_pic}" alt="${reaction.user.name}'s profile picture" class="reaction-profile-pic">
+                            <div class="reaction-details" style="flex-grow: 1; display: flex; align-items: center;">
+                                <span class="reaction-icon">${reactionIcon}</span>
+                                <strong class="reaction-name">${reaction.user.name}</strong>
+                            </div>
+                            <button class="message-btn">Message</button>
+                        `;
+
+                        reactionsList.appendChild(userDiv);
+                    });
+
+                    // Create a summary header for the reactions
+                    const reactionSummary = document.createElement('div');
+                    reactionSummary.classList.add('reaction-summary');
+                    reactionSummary.style.marginBottom = '10px';
+
+                    // Display total reactions (All reactions count)
+                    const totalReactions = reactionData.reactions.length;
+                    reactionSummary.innerHTML = `
+                        <span><strong>All</strong> ${totalReactions} reactions  ${Object.keys(reactionCount).map(type => {
+                                const count = reactionCount[type];
+                                if (count > 0) {
+                                    const reactionIcon = getReactionIcon(type);
+                                    return `<span>${reactionIcon} ${count}</span>`;
+                                }
+                             }).join('&nbsp;&nbsp;&nbsp;&nbsp;')}
+                    `;
+
+                    reactionsList.insertBefore(reactionSummary, reactionsList.firstChild);
+
+
+                // Display the modal
+                document.getElementById('modal_shows_who_react').style.display = 'flex';
+            } else {
+                alert('Could not load reactions. Please try again later.');
+            }
+        } catch (error) {
+            console.error('Error fetching reactions:', error);
+            alert('An error occurred while loading the reactions.');
+        }
+    });
+});
+
+const modal = document.getElementById('modal_shows_who_react');
+const modalContent = document.getElementById('modal_who_react_content');
+
+// Close modal when clicking outside the modal content
+modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+
+function getReactionIcon(reactionType) {
+    const type = parseInt(reactionType, 10);
+
+    switch(type) {
+        case 1: return '<span class="like-icon">👍</span>';  // Like
+        case 2: return '<span class="heart-icon">❤️</span>';  // Heart
+        case 3: return '<span class="care-icon">🤗</span>';  // Care
+        case 4: return '<span class="haha-icon">😂</span>';  // Haha
+        case 5: return '<span class="wow-icon">😮</span>';  // Wow
+        case 6: return '<span class="sad-icon">😢</span>';  // Sad
+        case 7: return '<span class="angry-icon">😡</span>';  // Angry
+        default: return '<span>❓</span>';  // Default (Unknown)
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+ //FOR COMMENTS js //FOR COMMENTS js //FOR COMMENTS js //FOR COMMENTS js 
+ //FOR COMMENTS js //FOR COMMENTS js //FOR COMMENTS js //FOR COMMENTS js 
+
+ document.addEventListener('click', async function (e) {
+  // Check if the clicked element is a comment button
+  if (e.target.closest('.comment-button')) {
+    const button = e.target.closest('.comment-button');
+    const postId = button.getAttribute('data-post-id');
+    const postIdValue = document.getElementById('postId'); // this is for post profile id to save
+
+    // Fetch comments for the post
+    try {
+      const response = await fetch(`/MessageBoard/Comment/getComments/${postId}`);
+      const commentData = await response.json();
+      postIdValue.value = '';     // this is for post profile id to save
+      postIdValue.value = postId; // this is for post profile id to save
+      if (Array.isArray(commentData) && commentData.length > 0) {
+        const commentList = document.getElementById('commentList');
+        commentList.innerHTML = ''; // Clear previous comments
+
+        commentData.forEach(comment => {
+            const commentDiv = document.createElement('div');
+            commentDiv.style.padding = '10px';
+            commentDiv.style.borderBottom = '1px solid #ccc';
+            commentDiv.style.display = 'flex';
+            commentDiv.style.alignItems = 'center';
+
+            commentDiv.innerHTML = `
+                <img src="${comment.profile_picture}" alt="${comment.full_name}'s profile picture" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                <div style="flex-grow: 1;">
+                    <strong style="color: black;">${comment.full_name}</strong>
+                    <p>${comment.comment}</p>
+                    ${comment.images && comment.images.length > 0 ? `
+                        <div>
+                            <img src="${comment.images}" alt="Comment image" style="max-width: 100%; height: auto; margin-top: 10px; border-radius: 8px;">
+                        </div>
+                    ` : ''}
+                    <small style="color: #999;">${timeAgo(comment.created)}</small>
+                </div>
+            `;
+
+            commentList.appendChild(commentDiv);
+        });
+
+        // Open the modal
+        document.getElementById('commentModal').style.display = 'block';
+      } else {
+        const commentList = document.getElementById('commentList');
+        commentList.innerHTML = '<p style="text-align: center; color: #999;">No comments yet.</p>';
+        document.getElementById('commentModal').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      alert('An error occurred while loading comments.');
+    }
+  }
+
+  // Close modal on click of close button
+  if (e.target.id === 'closeCommentModal') {
+    document.getElementById('commentModal').style.display = 'none';
+  }
+
+  // Close modal when clicking outside the modal content
+  if (e.target.id === 'commentModal') {
+    document.getElementById('commentModal').style.display = 'none';
+  }
+});
+
+function timeAgo(dateString) {
+  const now = new Date();
+  const commentDate = new Date(dateString);
+  const diffInSeconds = Math.floor((now - commentDate) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else if (diffInSeconds < 172800) {
+    return `Yesterday`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+ //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER 
+ //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER //FOR COMMENT SEND TO CONTROLER 
+
+ document.addEventListener('DOMContentLoaded', function () {
+    const uploadImageButton = document.getElementById('uploadImageButton');
+    const fileInputComment = document.getElementById('fileInputComment');
+    const imagePreviewContainerComment = document.getElementById('imagePreviewContainerComment');  // Updated ID
+
+    uploadImageButton.addEventListener('click', function () {
+        fileInputComment.click();
+    });
+
+    fileInputComment.addEventListener('change', function () {
+        const file = fileInputComment.files[0];
+        if (file) {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.style.maxWidth = '200px'; 
+                    imgElement.style.marginTop = '10px';
+                    imgElement.style.borderRadius = '8px'; 
+
+                    imagePreviewContainerComment.style.display = 'block'; 
+                    imagePreviewContainerComment.innerHTML = '';
+                    imagePreviewContainerComment.appendChild(imgElement);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select an image file.');
+            }
+        }
+    });
+});
+
+
+
+
+
+document.getElementById('postCommentButton').addEventListener('click', function () {
+    const commentInput = document.getElementById('commentInput');
+    const fileInput = document.getElementById('fileInputComment'); 
+    const postId = document.getElementById('postId').value; 
+    const comment = commentInput.value.trim();
+
+    // Validation
+    if (!comment) {
+        alert('Comment cannot be empty.');
+        return;
+    }
+
+    const files = fileInput.files;
+    
+    if (files.length > 1) {
+        alert('You can upload only one image.');
+        return;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
+    if(files.length > 0 && !allowedTypes.includes(files[0].type)){
+        alert('Invalid file type. Please upload an image.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('profile_post_id', postId);
+    formData.append('comment', comment);
+    if (files.length > 0) {
+        formData.append('file', fileInput.files[0]);  
+        console.log([...formData]);
+    }
+
+
+    fetch('/MessageBoard/Comment/saveComment', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        return response.text().then(text => {
+            try {
+                const data = JSON.parse(text); 
+                return data;
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                console.log('Response was:', text);  
+                throw e;  
+            }
+        });
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            commentInput.value = '';
+            fileInput.value = '';
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+    });
+
 });
 
 </script>

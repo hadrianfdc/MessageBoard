@@ -85,4 +85,123 @@
     color: #555; /* Keep this subtle for descriptions */
 }
 
+
+
+/* Modal Who react */
+/* Modal Who react */
+/* Modal Who react */
+/* Modal Who react */
+/* Modal Who react */
+
+#modal_shows_who_react {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Background color */
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal_who_react_content {
+        background-color: #fff; /* White background */
+        color: black; /* Black text */
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    #reactionsList {
+        margin-top: 20px;
+    }
+
+    .reaction-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.reaction-profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.reaction-details {
+    display: flex;
+    align-items: center;
+}
+
+.reaction-icon {
+    margin-right: 10px;
+    font-size: 20px; /* Icon size */
+}
+
+.reaction-name {
+    font-weight: bold;
+}
+
+.message-btn {
+    background-color: #1877f2; /* Facebook blue */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.message-btn:hover {
+    background-color: #165eab;
+}
+
+
+
+
+
+#commentActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#commentActions input[type="file"] {
+    display: none;
+}
+
+#commentActions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+#imagePreviewContainerComment {
+    display: block;  /* Initially hidden, shown when a file is selected */
+    margin-top: 10px;
+    max-width: 200px;  /* Limit the size of the image */
+    /* Optional additional styles */
+}
+
+
+
+
+
 </style>

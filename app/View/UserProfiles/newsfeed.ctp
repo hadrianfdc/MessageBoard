@@ -254,26 +254,27 @@
                                 ?>
                                 </div>
                                 <div class="reactions-total">
-                                <?php 
-                                  if ($totalReactions > 1 ) { 
-                                      echo '<span class="text">' . 
-                                          htmlspecialchars($post['recent_reactor']) . 
-                                          ' reacted ' . 
-                                          htmlspecialchars($post['other_reaction']) . 
-                                          ' and ' . 
-                                          ($totalReactions - 1) . 
-                                          ' others </span>';
-                                  }if($totalReactions == 1){
-                                      echo $totalReactions; 
-                                  }
-                                  ?>
+                                    <?php 
+                                      if ($totalReactions > 1 ) { 
+                                          echo '<a> <span class="text">' . 
+                                              htmlspecialchars($post['recent_reactor']) . 
+                                              ' reacted ' . 
+                                              htmlspecialchars($post['other_reaction']) . 
+                                              ' and ' . 
+                                              ($totalReactions - 1) . 
+                                              ' others </span> </a>';
+                                      }if($totalReactions == 1){
+                                          echo $totalReactions; 
+                                      }
+                                    ?>
                                 </div>
                                 <div class="total-comments u-margin-inline-start">
                                   <a> <?php echo $post['total_number_of_shared_post']; ?> Shares</a>
                                 </div>
                             </div>
                         </article>
-                        <section class="actions-buttons">
+                    </div>
+                    <section class="actions-buttons">
                                 <ul class="actions-buttons-list u-flex">
                                     <li style="list-style-type: none;" class="actions-buttons-item">
                                         <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
@@ -287,14 +288,13 @@
                                         </button>
                                     </li>
                                     <li style="list-style-type: none;" class="actions-buttons-item">
-                                        <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
-                                            <span class="icon">🔗</span>
-                                            <span class="text">Share</span>
-                                        </button>
+                                      <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
+                                        <span class="icon">🔗</span>
+                                        <span class="text">Share</span>
+                                      </button>
                                     </li>
                                 </ul>
                             </section>
-                    </div>
                 </div>
 
           <?php else: ?>
@@ -451,17 +451,19 @@
                         </div>
                         <div class="reactions-total">
                         <?php 
-                          if ($totalReactions > 1 ) { 
-                              echo '<span class="text">' . 
-                                  htmlspecialchars($post['recent_reactor']) . 
-                                  ' reacted ' . 
-                                  htmlspecialchars($post['other_reaction']) . 
-                                  ' and ' . 
-                                  ($totalReactions - 1) . 
-                                  ' others </span>';
-                          }if($totalReactions == 1){
-                              echo $totalReactions; 
-                          }
+                            if ($totalReactions > 1) { 
+                              echo '<a href="javascript:void(0)" data-post-id="' . $post['id'] . '" class="showReactionsModal"> 
+                                      <span class="text">' . 
+                                          htmlspecialchars($post['recent_reactor']) . 
+                                          ' reacted ' . 
+                                          htmlspecialchars($post['other_reaction']) . 
+                                          ' and ' . 
+                                          ($totalReactions - 1) . 
+                                          ' others </span> 
+                                    </a>';
+                            }if($totalReactions == 1){
+                                echo $totalReactions; 
+                            }
                           ?>
                         </div>
                          <!-- ---------- This line is for shared post ----------------- -->
@@ -510,7 +512,7 @@
                           </div>
                         </li>
                         <li style="list-style-type: none;" class="actions-buttons-item">
-                          <button class="actions-buttons-button">
+                          <button class="actions-buttons-button comment-button" data-post-id="<?php echo $post['id']; ?>">
                             <span class="icon">💬</span>
                             <span class="text">Comment</span>
                           </button>
