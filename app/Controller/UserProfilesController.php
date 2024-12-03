@@ -67,12 +67,68 @@ class UserProfilesController extends AppController
         $findMyPics = $this->Posts->find('all', [
             'conditions' => ['Posts.id' => $user_id]
         ]);
+
+        $this->getFriendList();
      
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
         $this->set('findPost', $organizedPosts);
         $this->set('user_id', $user_id);
     }
+
+    public function getFriendList() {
+
+        $user_id = $this->Session->read('Auth.User.user_id');
+    
+
+        $friendIdsResult = $this->FriendsList->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['FriendsList.user_id' => $user_id],
+                    ['FriendsList.acceptor' => $user_id]
+                ],
+                'FriendsList.status' => 'accepted' 
+            ],
+            'fields' => ['FriendsList.user_id', 'FriendsList.acceptor']
+        ]);
+    
+        $friendsData = [];
+    
+        foreach ($friendIdsResult as $friend) {
+
+            $friendUserIds = [
+                $friend['FriendsList']['user_id'],
+                $friend['FriendsList']['acceptor']
+            ];
+    
+         
+            $friendUserIds = array_diff($friendUserIds, [$user_id]);
+    
+            foreach ($friendUserIds as $friendUserId) {
+
+                $user = $this->User->find('first', [
+                    'conditions' => ['User.user_id' => $friendUserId],
+                    'fields' => ['User.full_name', 'User.is_online'] 
+                ]);
+    
+                $profilePicture = $this->Posts->find('first', [
+                    'conditions' => ['Posts.id' => $friendUserId],
+                    'fields' => ['Posts.id', 'Posts.path'] 
+                ]);
+    
+                $friendsData[] = [
+                    'full_name' => $user['User']['full_name'], 
+                    'profile_picture' => isset($profilePicture['Posts']['path']) ? $profilePicture['Posts']['path'] : 'default.jpg' ,
+                    'is_online' => $user['User']['is_online']
+                ];
+            }
+        }
+    
+        // echo "<pre>"; print_r($friendsData); echo "</pre>"; 
+        // Set the data to be available in the view
+        $this->set('friendsData', $friendsData);
+    }
+    
 
     private function checkReactNullOrEmpty(){
         $posts = $this->ProfilePost->find('all', array(
@@ -406,7 +462,7 @@ class UserProfilesController extends AppController
             'conditions' => ['Posts.id' => $user_id]
         ]);
         // echo "<pre>"; print_r($isAFriend); echo "</pre>"; 
-        $photoList = $this->photoGrid();
+        $photoList = $this->photoGridOthers($user_id);
         $this->set('myPhoto', $findMyPics);
         $this->set('users', $findUsers);
 
@@ -417,6 +473,25 @@ class UserProfilesController extends AppController
         $this->set('isAFriend', $isAFriend);
         $this->set('my_user_Id', $my_user_Id);
         $this->set('acceptor', $user_id);
+    }
+    private function photoGridOthers($user_id) {
+        $this->layout = null; 
+    
+        $findAllPhotos = $this->ProfilePost->find('all', [
+            'fields' => ['ProfilePost.file_paths'], 
+            'conditions' => ['ProfilePost.user_id' => $user_id], 
+        ]);
+    
+        $photoList = [];
+        foreach ($findAllPhotos as $post) {
+            if (!empty($post['ProfilePost']['file_paths'])) {
+                $decodedPaths = json_decode($post['ProfilePost']['file_paths'], true); // Decode JSON
+                if (is_array($decodedPaths)) {
+                    $photoList = array_merge($photoList, $decodedPaths); // Merge into one list
+                }
+            }
+        }
+        return $photoList;
     }
 
     private function isFriend($user_id, $friend_id) {

@@ -596,36 +596,46 @@
     </ul>
   </main>
   <aside class="side-b">
-    <section class="common-section">
-      <h2 class="section-title">Sponsored</h2>
-      <ul class="common-list">
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
-            <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Export Sketch to HTML with a click</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
-            <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-      </ul>
-      <button class="common-more">
-        <span class="text">See More</span>
-        <span class="icon">🔻</span>
-      </button>
-    </section>
-  </aside>
-</div>
+      <section class="common-section">
+        <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Friend List</h2>
+        
+        <!-- Friend List -->
+        <ul class="common-list" style="list-style-type: none; padding: 0;">
+            <?php foreach ($friendsData as $friend): ?>
+            <li class="common-list-item" style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #e0e0e0; margin-bottom: 10px;">
+                <div class="friend-avatar" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin-right: 10px;">
+                   <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"> 
+                      <img src="<?php echo $this->Html->url('/' . $friend['profile_picture']); ?>" alt="Friend Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                   </a>
+                </div>
+                <div class="friend-info" style="flex-grow: 1;">
+                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>" style="font-size: 14px; margin: 0; font-weight: bold; color: #333;"><?php echo $friend['full_name']; ?></a>
+                  <?php if ($friend['is_online'] == 1): ?>
+                      <p style="font-size: 12px; color: #777; display: flex; align-items: center; margin: 0;">
+                          <span style="width: 8px; height: 8px; background-color: #4CAF50; border-radius: 50%; margin-right: 5px; display: inline-block;"></span>
+                          Online
+                      </p>
+                  <?php else: ?>
+                      <p style="font-size: 12px; color: #777; display: flex; align-items: center; margin: 0;">
+                          <span style="width: 8px; height: 8px; background-color: #9e9e9e; border-radius: 50%; margin-right: 5px; display: inline-block;"></span>
+                          Offline
+                      </p>
+                  <?php endif; ?>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        
+        <!-- See More Button -->
+        <button class="common-more" id="seeMoreBtn" style="background-color: #1877f2; color: white; font-size: 14px; padding: 8px 15px; border: none; border-radius: 5px; width: 100%; cursor: pointer; display: flex; justify-content: center; align-items: center;">
+            <span class="text" style="margin-right: 8px;">See More</span>
+            <span class="fas fa-arrow-down" style="font-size: 14px; color: white;"></span>
+        </button>
+      </section>
+    </aside>
 
+</div>
+<?php echo $this->element('Actions/modal_search_friend'); ?>
 <?php echo $this->element('modal_edit_profile'); ?>
 
 <script>

@@ -29,6 +29,9 @@ class LoginsController extends AppController
                         $this->Logins->id = $user['Logins']['user_id'];
                         $this->Logins->saveField('last_login_time', date('Y-m-d H:i:s'));
 
+                        // Update is_online to 1
+                        $this->Logins->saveField('is_online', 1);
+
                         $this->Session->write('Auth.User.user_id', $user['Logins']['user_id']);
                         $this->Session->write('Auth.User.full_name', $user['Logins']['full_name']);
 
@@ -49,12 +52,22 @@ class LoginsController extends AppController
 
     public function logout()
     {
+        $this->loadModel('Logins');
+
+        $user_id = $this->Session->read('Auth.User.user_id');
+
+        if (!empty($user_id)) {
+            $this->Logins->id = $user_id;
+            $this->Logins->saveField('is_online', 0);
+        }
+
         $this->Session->delete('Auth.User');
         CakeSession::delete('Auth.User.user_id');
         CakeSession::delete('Auth.User.full_name');
 
         $this->redirect(['controller' => 'logins', 'action' => 'login']);
     }
+
 
     public function change_password()
     {

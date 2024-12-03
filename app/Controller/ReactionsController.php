@@ -23,6 +23,20 @@ class ReactionsController extends AppController
                         'Reactions.profile_post_id' => $data['profile_post_id']
                     ]
                 ]);
+                $findPostAuthor = $this->ProfilePost->find('first', [
+                    'conditions' => [
+                        'ProfilePost.id' => $data['profile_post_id']
+                    ],
+                    'fields' => [
+                        'ProfilePost.sharer_id', 
+                        'ProfilePost.user_id'    
+                    ]
+                ]);
+                
+                $authorId = !empty($findPostAuthor['ProfilePost']['sharer_id']) 
+                    ? $findPostAuthor['ProfilePost']['sharer_id'] 
+                    : $findPostAuthor['ProfilePost']['user_id'];
+                
                 if ($existingReaction) {
                     
                     if($existingReaction['Reactions']['reaction_type'] == $data['reaction_type']){
@@ -64,7 +78,7 @@ class ReactionsController extends AppController
                     if ($this->Reactions->save($reaction)) {
                         $this->updateReactionCount($reaction);
                         $type = 'reaction';
-                        $this->saveToNotification($reaction, $type);
+                        $this->saveToNotification($reaction, $type, $authorId);
                         return $this->response->body(json_encode(['success' => true, 'message' => 'Reaction saved successfully.']));
                     }
                 }
@@ -134,12 +148,13 @@ class ReactionsController extends AppController
     }
 
 
-    private function saveToNotification($reaction, $type){
+    private function saveToNotification($reaction, $type, $authorId){
         $notification = [
             'Notification' => [
                 'user_id' => $reaction['Reactions']['user_id'],
                 'profile_post_id' => $reaction['Reactions']['profile_post_id'],
                 'created' => date('Y-m-d H:i:s'), 
+                'author' => $authorId
             ]
         ];
 

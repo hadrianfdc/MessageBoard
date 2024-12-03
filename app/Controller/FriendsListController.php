@@ -9,7 +9,7 @@ class FriendsListController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'FriendsListNotification');
 
     public function beforeFilter()
     {
@@ -70,6 +70,8 @@ class FriendsListController extends AppController
     
                 if ($this->FriendsList->save($data)) {
                     echo json_encode(['success' => true]);
+                    $type = 1;
+                    $this->saveToNotificationList($data , $type);
                 } else {
                     echo json_encode(['success' => false]);
                 }
@@ -103,6 +105,12 @@ class FriendsListController extends AppController
                 
                 if ($this->FriendsList->save($friendRequest)) {
                     echo json_encode(['success' => true]);
+                    $type = 2;
+                    $data = [
+                        'user_id' => $friendUserId,
+                        'acceptor' => $userId
+                    ];
+                    $this->saveToNotificationList($data, $type);
                 } else {
                     echo json_encode(['success' => false]);
                 }
@@ -143,6 +151,85 @@ class FriendsListController extends AppController
             $this->response->type('json');
         }
     }
+
+
+    public function searchFriends() {
+        $this->autoRender = false;
+        $this->layout = null;
+    
+        if ($this->request->is('get')) {
+            $query = $this->request->query['query'];
+    
+            // Find users matching the search query
+            $results = $this->User->find('all', [
+                'conditions' => [
+                    'User.full_name LIKE' => '%' . $query . '%'
+                ],
+                'fields' => ['User.user_id', 'User.full_name', 'User.is_online'],
+                'limit' => 10
+            ]);
+    
+            $friends = [];
+            foreach ($results as $result) {
+                $userId = $result['User']['user_id'];
+                $fullName = $result['User']['full_name'];
+    
+                $profilePic = $this->Posts->find('first', [
+                    'conditions' => ['Posts.id' => $userId],
+                    'fields' => ['Posts.path']
+                ]);
+    
+                $profilePicPath = isset($profilePic['Posts']['path']) ? $profilePic['Posts']['path'] : 'path/to/default/profile-pic.jpg';
+
+                $isFriend = $this->FriendsList->find('first', [
+                    'conditions' => [
+                        'OR' => [
+                            [
+                                'FriendsList.user_id' => $this->Session->read('Auth.User.user_id'),
+                                'FriendsList.acceptor' => $userId
+                            ],
+                            [
+                                'FriendsList.user_id' => $userId,
+                                'FriendsList.acceptor' => $this->Session->read('Auth.User.user_id')
+                            ]
+                        ]
+                    ]
+                ]);
+                
+                //    echo "<pre>"; print_r($isFriend); echo "</pre>"; 
+                $friends[] = [
+                    'user_id' => $userId,
+                    'full_name' => $fullName,
+                    'profile_pic' => $profilePicPath,
+                    'is_online' => $result['User']['is_online'],
+                    'is_friend' => empty($isFriend) ? false : true
+                ];
+            }
+    
+            echo json_encode($friends);
+        }
+    }
+
+    private function saveToNotificationList($data, $type){
+
+        $this->FriendsListNotification->create();
+        $notification = [
+            'FriendsListNotification' => [
+                'for_who_acceptor' => $data['acceptor'],
+                'from_who_user_id' => $data['user_id'],
+                'type' => $type,
+                'created' => date('Y-m-d H:i:s'), 
+                'is_seen' => 0
+            ]
+        ];
+        $this->FriendsListNotification->set($notification);
+
+      if(!$this->FriendsListNotification->save()){
+        $this->response->body(json_encode(['success' => true, 'message' => 'Notification was not save successfully.']));
+      }
+    }
+    
+    
     
     
     
