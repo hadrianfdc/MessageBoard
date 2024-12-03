@@ -14,7 +14,7 @@
       <ul class="common-list">
         <div class="common-list-item">
         <?php if (!empty($user)): ?>
-          <a href="/MessageBoard/user-profile" target="_blank" class="common-list-button">
+          <a href="/MessageBoard/user-profile" class="common-list-button">
             <span class="icon">
               <?php if (isset($findMyPic['Posts']['path'])): ?>
                 <img class="user-image" src="<?php echo $this->Html->url('/' . $findMyPics[0]['Posts']['path']); ?>" height="36" width="36" alt="">
@@ -67,7 +67,7 @@
                         <img src="<?php echo $this->Html->url('/' . $sharerImage); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="#" target="_blank"><?php echo $post['sharer_full_name']; ?></a>
+                                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['sharer_full_name']; ?></a>
                             </div>
                             <div class="time-and-privacy">
                                 <time datetime="<?php echo $post['created_date']; ?>">
@@ -176,7 +176,7 @@
                                 <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                                 <div class="common-post-info">
                                     <div class="user-and-group u-flex">
-                                        <a href="#" target="_blank"><?php echo $post['fullname']; ?></a>
+                                        <a href="#"><?php echo $post['fullname']; ?></a>
                                     </div>
                                     <div class="time-and-privacy">
                                         <time datetime="<?php echo $post['created_date']; ?>">
@@ -353,7 +353,7 @@
                         <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="#" target="_blank"><?php echo $post['fullname']; ?></a>
+                                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['fullname']; ?></a>
                             </div>
                             <div class="time-and-privacy">
                                 <!-- Display the created date -->
@@ -436,7 +436,7 @@
                             </ul>
                         </div>
                         <!-- End Of Dropdown Menu of Post -->
-                    </header>
+                    </header> 
                     <div class="common-post-content common-content">
                         <?php 
                         $caption = $post['captions']; 
@@ -600,7 +600,7 @@
       <h2 class="section-title">Sponsored</h2>
       <ul class="common-list">
         <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" target="_blank" class="common-list-button is-ads">
+          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
             <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
             <div class="text">
               <h4 class="ads-title">Export Sketch to HTML with a click</h4>
@@ -609,7 +609,7 @@
           </a>
         </li>
         <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" target="_blank" class="common-list-button is-ads">
+          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
             <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
             <div class="text">
               <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>

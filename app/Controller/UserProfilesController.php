@@ -9,7 +9,7 @@ class UserProfilesController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList');
 
     public function beforeFilter()
     {
@@ -20,23 +20,43 @@ class UserProfilesController extends AppController
         $this->checkReactNullOrEmpty();
         $user_id = $this->Session->read('Auth.User.user_id');
 
-        $findPost = $this->ProfilePost->find('all', array(
-            'conditions' => array(
-                   'OR' => array(
-                        array(
-                            'ProfilePost.privacy' => 1,
-                            'ProfilePost.user_id' => $user_id
-                        ),
-                        array(
-                            'ProfilePost.privacy' => array(2, 3)
-                        ),
-                    ),
-                    'ProfilePost.is_archieve !=' => 1,
-            ),
-            'order' => array('ProfilePost.created_date' => 'DESC','ProfilePost.date_shared' => 'DESC'),
-        ));
+        $friendIdsResult = $this->FriendsList->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['FriendsList.user_id' => $user_id],
+                    ['FriendsList.acceptor' => $user_id]
+                ],
+                'FriendsList.status' => 'accepted' // Only accepted friends
+            ],
+            'fields' => ['FriendsList.user_id', 'FriendsList.acceptor']
+        ]);
+        
+        $friendIds = [];
+        foreach ($friendIdsResult as $friend) {
+            $friendIds[] = $friend['FriendsList']['user_id'];
+            $friendIds[] = $friend['FriendsList']['acceptor'];
+        }
+        $friendIds = array_unique($friendIds);
+        $friendIds[] = $user_id;
+                
+        $findPost = $this->ProfilePost->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['ProfilePost.privacy' => 1, 'ProfilePost.user_id' => $user_id],
+                    ['ProfilePost.privacy' => [2, 3]]
+                ],
+                'ProfilePost.is_archieve !=' => 1, 
+                'ProfilePost.user_id' => $friendIds, // Only posts from friends
+                'OR' => [
+                    ['ProfilePost.sharer_id' => null], 
+                    ['ProfilePost.sharer_id' => $friendIds] 
+                ]
+            ],
+            'order' => ['ProfilePost.user_id' => 'ASC', 'ProfilePost.created_date' => 'DESC', 'ProfilePost.date_shared' => 'DESC'],
+        ]);
 
         $organizedPosts = $this->getPost($findPost);
+        // echo "<pre>"; print_r($organizedPosts); echo "</pre>"; 
 
         if (empty($user_id)) {
             $this->redirect(['controller' => 'logins', 'action' => 'login']);
@@ -47,7 +67,7 @@ class UserProfilesController extends AppController
         $findMyPics = $this->Posts->find('all', [
             'conditions' => ['Posts.id' => $user_id]
         ]);
-        // echo "<pre>"; print_r($organizedPosts); echo "</pre>"; die();
+     
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
         $this->set('findPost', $organizedPosts);
@@ -337,6 +357,89 @@ class UserProfilesController extends AppController
         $this->set('photoList', $photoList); 
         $this->set('user_id', $user_id);
     }
+
+    public function user_profile_by_others()
+    {
+        $this->layout = null;
+        $user_id = $this->request->params['pass'][0];
+        $my_user_Id = $this->Session->read('Auth.User.user_id');
+        $isAFriend = $this->isFriend($this->Session->read('Auth.User.user_id'), $user_id);
+
+        $findPost = $this->ProfilePost->find('all', array(
+            'conditions' => array(
+                'ProfilePost.is_archieve' => 0, 
+                'OR' => array(
+                    'ProfilePost.user_id' => $user_id,  
+                    'ProfilePost.sharer_id' => $user_id 
+                )
+            ),
+            'order' => array(
+                'ProfilePost.is_pinned' => 'DESC',
+                'ProfilePost.date_shared' => 'DESC',
+                'ProfilePost.created_date' => 'DESC'
+            ),
+        ));        
+
+        $organizedPosts = $this->getPost($findPost);
+
+        if (empty($user_id)) {
+            return $this->redirect(array('controller' => 'logins', 'action' => 'logut'));
+        }
+
+        $this->loadModel('Posts');
+        $imageRecord = $this->Posts->find('first', [
+            'conditions' => ['Posts.id' => $user_id]
+        ]);
+        $this->set(compact('imageRecord'));
+
+        $this->loadModel('UserProfiles');
+        $this->loadModel('Posts');
+        $this->loadModel('ProfilePost');
+        $userProfileData = $this->UserProfiles->find('all', [
+            'conditions' => ['UserProfiles.user_id' => $user_id]
+        ]);
+
+        $findUsers = $this->User->find('all', [
+            'conditions' => ['User.user_id' => $user_id]
+        ]);
+        $findMyPics = $this->Posts->find('all', [
+            'conditions' => ['Posts.id' => $user_id]
+        ]);
+        // echo "<pre>"; print_r($isAFriend); echo "</pre>"; 
+        $photoList = $this->photoGrid();
+        $this->set('myPhoto', $findMyPics);
+        $this->set('users', $findUsers);
+
+        $this->set('userProfileData', $userProfileData);
+        $this->set('findPost', $organizedPosts);
+        $this->set('photoList', $photoList); 
+        $this->set('user_id', $user_id);
+        $this->set('isAFriend', $isAFriend);
+        $this->set('my_user_Id', $my_user_Id);
+        $this->set('acceptor', $user_id);
+    }
+
+    private function isFriend($user_id, $friend_id) {
+        $findIfExist = $this->FriendsList->find('first', [
+            'conditions' => [
+                'OR' => [
+                    // Check if the current user sent the request
+                    [
+                        'FriendsList.user_id' => $user_id,
+                        'FriendsList.acceptor' => $friend_id,
+                    ],
+                    // Check if the current user received the request
+                    [
+                        'FriendsList.user_id' => $friend_id,
+                        'FriendsList.acceptor' => $user_id,
+                    ],
+                ],
+            ],
+        ]);
+    
+        return $findIfExist;
+    }
+    
 
     private function photoGrid() {
         $this->layout = null; 

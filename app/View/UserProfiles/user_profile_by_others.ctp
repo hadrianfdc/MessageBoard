@@ -14,28 +14,27 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
 <button class="icon-button e-dark-mode-button u-animation-click" id="darkMode" aria-label="Dark Mode"><span class="icon" aria-hidden="true">🌜</span></button>
 <div id="profile-upper">
     <div id="profile-banner-image">
-      <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['background_img']); ?>" alt="Banner image">
+        <img src="<?php echo $this->Html->url('/' . $myPhoto[0]['Posts']['background_img']); ?>" alt="Banner image">
     </div>
     <div id="profile-d">
-      <div id="profile-pic">
-        <?php if (!empty($findMyPic['Posts']['path'])): ?>
-          <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>">
+        <div id="profile-pic">
+            <?php if (!empty($myPhoto[0]['Posts']['path'])): ?>
+                <img src="<?php echo $this->Html->url('/' . $myPhoto[0]['Posts']['path']); ?>" alt="Profile Picture">
+            <?php endif; ?>
+        </div>
+        <div id="u-name"><?php echo $userProfileData[0]['UserProfiles']['full_name']; ?>  
+        <?php if (isset($isAFriend['FriendsList']) && !empty($isAFriend['FriendsList'])): ?>
+          <?php if ($isAFriend['FriendsList']['status'] == 'accepted'): ?>
+              <button id="unfriend-btn" class="action-btn" style="padding: 10px; font-size: 14px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                  <i class="fas fa-user-times" style="margin-right: 5px;"></i> Unfriend
+              </button>
+          <?php endif; ?>
         <?php endif; ?>
-        <a href="/MessageBoard/upload_profile_picture"><i class="fa fa-camera" style="font-size:24px; color: white"></i></a>
       </div>
-      <div id="u-name"><?php echo $user['User']['full_name']; ?></div>
-      <div class="tb" id="m-btns">
-        <div class="td">
-          <div class="m-btn"><i>📋</i><span>Activity log</span></div>
-        </div>
-        <div class="td">
-            <div class="m-btn"><i>🔒</i><span>Privacy</span></div>
-        </div>
-      </div>
-      <div id="edit-profile"><a href="/MessageBoard/update_background_img"><i class="fa fa-camera" style="font-size:24px"></i></a></div>
     </div>
     <div id="black-grd"></div>
-  </div>
+</div>
+
 <div class="common-structure">
   <?php echo $this->element('Nav/navbar'); ?>
   <aside class="side-a">
@@ -119,11 +118,12 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
           </div>
       </div>
   </div>
-
-
-
   </aside>
   <main class="main-feed">
+
+  <?php echo $this->element('Actions/actions_to_do'); ?>
+
+
     <ul class="main-feed-list">
     <?php if (!empty($findPost)): ?>
         <?php foreach ($findPost as $post): ?>
@@ -138,7 +138,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                         <img src="<?php echo $this->Html->url('/' . $sharerImage); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="#" ><?php echo $post['sharer_full_name']; ?></a>
+                                <a href="#"><?php echo $post['sharer_full_name']; ?></a>
                             </div>
                             <div class="time-and-privacy">
                                 <time datetime="<?php echo $post['created_date']; ?>">
@@ -247,7 +247,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                                 <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                                 <div class="common-post-info">
                                     <div class="user-and-group u-flex">
-                                        <a href="#" ><?php echo $post['fullname']; ?></a>
+                                        <a href="#"><?php echo $post['fullname']; ?></a>
                                     </div>
                                     <div class="time-and-privacy">
                                         <time datetime="<?php echo $post['created_date']; ?>">
@@ -428,7 +428,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                         <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="#" ><?php echo h($post['fullname']); ?></a>
+                                <a href="#"><?php echo h($post['fullname']); ?></a>
                             </div>
                             <div class="time-and-privacy">
                                 <!-- Display the created date -->
@@ -653,7 +653,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
       <h2 class="section-title">Sponsored</h2>
       <ul class="common-list">
         <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW"  class="common-list-button is-ads">
+          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
             <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
             <div class="text">
               <h4 class="ads-title">Export Sketch to HTML with a click</h4>
@@ -662,7 +662,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
           </a>
         </li>
         <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW"  class="common-list-button is-ads">
+          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
             <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
             <div class="text">
               <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>

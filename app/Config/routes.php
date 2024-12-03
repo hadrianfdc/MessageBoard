@@ -41,6 +41,7 @@
 	Router::connect('/togglePin', ['controller' => 'UserProfiles', 'action' => 'togglePin']);
 	Router::connect('/toggleArchieve', ['controller' => 'UserProfiles', 'action' => 'toggleArchieve']);
 	Router::connect('/toggleTrash', ['controller' => 'UserProfiles', 'action' => 'toggleTrash']);	
+	Router::connect('/user-profiles-of/*', ['controller' => 'UserProfiles', 'action' => 'user_profile_by_others']);	
 
 	// Router::connect('/Registers/new_user', array('controller' => 'Registers', 'action' => 'new_user'));
 	// Load the HtmlHelper
