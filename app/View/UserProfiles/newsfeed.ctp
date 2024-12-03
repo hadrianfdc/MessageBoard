@@ -275,27 +275,72 @@
                         </article>
                     </div>
                     <section class="actions-buttons">
-                                <ul class="actions-buttons-list u-flex">
-                                    <li style="list-style-type: none;" class="actions-buttons-item">
-                                        <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
-                                            <span class="icon"><i class="fas fa-thumbs-up" style="font-weight:normal;"></i> Like</span>
-                                        </button>
-                                    </li>
-                                    <li style="list-style-type: none;" class="actions-buttons-item">
-                                        <button class="actions-buttons-button">
-                                            <span class="icon">💬</span>
-                                            <span class="text">Comment</span>
-                                        </button>
-                                    </li>
-                                    <li style="list-style-type: none;" class="actions-buttons-item">
-                                      <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
-                                        <span class="icon">🔗</span>
-                                        <span class="text">Share</span>
-                                      </button>
-                                    </li>
-                                </ul>
-                            </section>
+                        <ul class="actions-buttons-list u-flex">
+                            <li style="list-style-type: none;" class="actions-buttons-item">
+                                <button class="actions-buttons-button toggle-reactions" data-post-id="<?php echo $post['id']; ?>">
+                                    <?php 
+                                      if ($post['my_reaction'] == 1){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-thumbs-up" style="color: blue;"></i> Like</span>';
+                                      }elseif($post['my_reaction'] == 2){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-heart" style="color: red;"></i> Love </span>';
+                                      }elseif($post['my_reaction'] == 3){
+                                        echo '<span class="icon" style="filter: none;">🤗 Care </span>';
+                                      }elseif($post['my_reaction'] == 4){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-laugh" style="color: #f4d03f;"></i> Haha </span>';
+                                      }elseif($post['my_reaction'] == 5){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-surprise" style="color: #f39c12;"></i> Wow</span>';
+                                      }elseif($post['my_reaction'] == 6){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-sad-tear" style="color: #3498db;"></i> Sad</span>';
+                                      }elseif($post['my_reaction'] == 7){
+                                        echo '<span class="icon" style="filter: none;"><i class="fas fa-angry" style="color: #e74c3c;"></i> Angry</span>';
+                                      }else{
+                                        echo '<span class="icon"><i class="far fa-thumbs-up"></i> Like </span>';
+                                      }
+                                      ?>
+                                </button>
+                                <!-- Reactions Pop-up -->
+                                <div class="reactions-popup" id="reactions-popup-<?php echo $post['id']; ?>">
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="1" class="reaction-item">👍</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="2" class="reaction-item">❤️</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="3" class="reaction-item">🤗</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="4" class="reaction-item">😂</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="5" class="reaction-item">😮</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="6" class="reaction-item">😢</button>
+                                    <button data-post-id="<?php echo $post['id']; ?>" data-user-id="<?php echo $post['reactor']; ?>" data-reaction="7" class="reaction-item">😡</button>
+                                </div>
+                            </li>
+                            <li style="list-style-type: none;" class="actions-buttons-item">
+                              <button class="actions-buttons-button comment-button" data-post-id="<?php echo $post['id']; ?>">
+                                <span class="icon">💬</span>
+                                <span class="text">Comment</span>
+                              </button>
+                            </li>
+                            <li style="list-style-type: none;" class="actions-buttons-item">
+                              <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
+                                <span class="icon">🔗</span>
+                                <span class="text">Share</span>
+                              </button>
+                            </li>
+                        </ul>
+                    </section>
                 </div>
+                <!--------------------------------------- [START] Modal for Share Modal ----------------------------------------->
+              <!-- Share Modal for each post -->
+              <div id="share-modal-<?php echo $post['id']; ?>" class="share-modal">
+                  <div class="share-modal-content">
+                      <button class="close-modal" id="close-modal-<?php echo $post['id']; ?>">&times;</button>
+                      <h2>Share this Post</h2>
+                      <ul class="share-options">
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-edit"></i> Share to Facebook</button></li>
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-camera-retro"></i> Share to your story now</button></li>
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-user-friends"></i> Share to a friend's profile</button></li>
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-users"></i> Share in a Group</button></li>
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-envelope"></i> Share as Message</button></li>
+                          <li><button data-post-id="<?php echo $post['id']; ?>" class="share-option"><i class="fas fa-link"></i> Copy Link</button></li>
+                      </ul>
+                  </div>
+              </div>
+              <!--------------------------------------- [END] Modal for Share Modal ----------------------------------------->
 
           <?php else: ?>
             <div class="main-feed-item">

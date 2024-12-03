@@ -570,7 +570,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                           </button>
                         </li>
                         <li style="list-style-type: none;" class="actions-buttons-item">
-                          <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
+                          <button data-post-idgfdgdfg="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
                             <span class="icon">🔗</span>
                             <span class="text">Share</span>
                           </button>
