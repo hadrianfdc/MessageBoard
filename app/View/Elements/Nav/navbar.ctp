@@ -110,7 +110,7 @@
 
       <li class="user-nav-item">
           <button class="icon-button alt-text" aria-label="Account" id="dropdown-toggle">
-              <span class="icon" aria-hidden="true">🔻</span>
+              <span class="icon" aria-hidden="true"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
           </button>
           <!-- Dropdown Menu -->
           <ul id="dropdown-menu" class="dropdown-menu">

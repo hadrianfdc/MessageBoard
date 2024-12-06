@@ -3,7 +3,7 @@
 <div id="searchFriendModal" class="modal" style="display: none; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); 
         justify-content: center; align-items: center; z-index: 9999;">
     <div class="modal-content" style="width: 500px; padding: 20px; background-color: white; border-radius: 8px;">
-        <span class="close" style="font-size: 30px; cursor: pointer; ">&times;</span>
+        <span class="close" id="closeModalBtnSearchFriend" style="font-size: 30px; cursor: pointer; ">&times;</span>
         <h4 style="margin-bottom: 20px; text-align: center;">Search for Friends</h4>
         <input type="text" id="searchInput" placeholder="Search for friends..." 
             style="width: 100%; padding: 10px; margin-bottom: 20px; font-size: 14px; border-radius: 5px; border: 1px solid #ddd;">
