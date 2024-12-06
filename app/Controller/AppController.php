@@ -59,6 +59,7 @@ class AppController extends Controller
             $findMyPic = $this->Posts->find('first', [
                 'conditions' => ['Posts.id' => $user_id]
             ]);
+            // echo "<pre>"; print_r($user); echo "</pre>";
             $this->set(compact('user', 'findMyPic'));
         }
 
@@ -82,6 +83,7 @@ class AppController extends Controller
         $findMyPic = $this->Posts->find('all', [
             'conditions' => ['Posts.user_id' => $user_id]
         ]);
+
         $this->set('findMyPic', $findMyPic);
         $this->set('user', $findUser);
         

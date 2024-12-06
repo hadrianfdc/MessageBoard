@@ -22,7 +22,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                 <img src="<?php echo $this->Html->url('/' . $myPhoto[0]['Posts']['path']); ?>" alt="Profile Picture">
             <?php endif; ?>
         </div>
-        <div id="u-name"><?php echo $userProfileData[0]['UserProfiles']['full_name']; ?>  
+        <div id="u-name"><?php echo $users[0]['User']['full_name']; ?>  
         <?php if (isset($isAFriend['FriendsList']) && !empty($isAFriend['FriendsList'])): ?>
           <?php if ($isAFriend['FriendsList']['status'] == 'accepted'): ?>
               <button id="unfriend-btn" class="action-btn" style="padding: 10px; font-size: 14px; background-color: #0164e1; color: white; border: none; border-radius: 5px; cursor: pointer;">

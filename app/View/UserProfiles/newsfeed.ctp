@@ -33,7 +33,12 @@ function timeAgo($timestamp) {
 
 
 
-<button class="icon-button e-dark-mode-button u-animation-click" id="darkMode" aria-label="Dark Mode"><span class="icon" aria-hidden="true">🌜</span></button>
+<button class="icon-button e-dark-mode-button u-animation-click" post-data-id="<?php echo $user['User']['user_id']; ?>" id="darkMode" aria-label="Dark Mode">
+    <span class="icon" aria-hidden="true"> <i class="fas fa-moon"></i></span>
+</button>
+
+
+
 <div class="common-structure">
   <?php echo $this->element('Nav/navbar'); ?>
   <aside class="side-a">
@@ -85,6 +90,65 @@ function timeAgo($timestamp) {
   </aside>
   <main class="main-feed">
     <ul class="main-feed-list">
+
+      <!-- My Story Section -->
+    <div class="my-story-section" style="position: relative; overflow: hidden; margin-top: 20px;">
+        <div class="story-carousel" style="display: flex; transition: transform 0.5s ease;">
+
+            <?php foreach ($organizedMyDaysPost as $story): ?>
+            <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
+                <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;"/>
+                
+                <!-- User info overlay -->
+                <div class="story-overlay" style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.5); color: white; padding: 5px; text-align: center; border-radius: 5px;">
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <img src="<?php echo $this->Html->url('/' . $story['profile_picture']); ?>" alt="Profile Image" style="width: 35px; height: 35px; border-radius: 50%; margin-right: 5px;"/>
+                        <span style="font-size: 10px; font-weight: bold;"><?php echo $story['full_name']; ?></span>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+
+        </div>
+
+    <!-- Prev and Next buttons -->
+        <button class="prev-btn" onclick="moveCarousel('prev')" style="position: absolute; top: 50%; left: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 10;">&lt;</button>
+        <button class="next-btn" onclick="moveCarousel('next')" style="position: absolute; top: 50%; right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 10;">&gt;</button>
+    </div>
+
+
+    <div class="m-mrg" id="composer" style="width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+          <div id="c-tabs-cvr" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
+              <div class="tb" id="c-tabs" style="display: flex; justify-content: space-between; padding: 10px 0;">
+                  <div id="makePost" class="td active" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #1c1e21; font-weight: bold; padding: 5px 15px; border-bottom: 2px solid #4267b2;">
+                      <i class="fas fa-pencil-alt" style="font-size: 20px; margin-right: 5px;"></i><span>Make Post</span>
+                  </div>
+                  <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
+                      <i class="fas fa-camera" style="font-size: 20px; margin-right: 5px;"></i><span>Photo/Video</span>
+                  </div>
+                  <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
+                      <i class="fas fa-video" style="font-size: 20px; margin-right: 5px;"></i><span>Live Video</span>
+                  </div>
+                  <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
+                      <i class="fas fa-calendar-alt" style="font-size: 20px; margin-right: 5px;"></i><span>Life Event</span>
+                  </div>
+              </div>
+          </div>
+          <div id="c-c-main" style="display: flex; align-items: center; padding: 10px 0;">
+              <div class="tb" style="display: flex; width: 100%; align-items: center;">
+                  <div class="td" id="p-c-i" style="width: 40px; height: 40px; margin-right: 15px; border-radius: 50%; overflow: hidden;">
+                      <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>" alt="Profile pic" style="width: 100%; height: 100%; object-fit: cover;">
+                  </div>
+                  <div class="td" id="c-inp" style="flex-grow: 1;">
+                      <input type="text" id="whats-on-your-mind" placeholder="What's on your mind?" style="width: 100%; padding: 10px 15px; border-radius: 18px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+                  </div>
+              </div>
+          </div>
+    </div>
+
+
+
+
     <?php if (!empty($findPost)): ?>
         <?php foreach ($findPost as $post): ?>
           <?php if ($post['is_shared'] == 1 && !empty($post['shared_id']) && !empty($post['sharer_full_name'])): ?>
@@ -650,12 +714,12 @@ function timeAgo($timestamp) {
             <?php foreach ($friendsData as $friend): ?>
             <li class="common-list-item" style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #e0e0e0; margin-bottom: 10px;">
                 <div class="friend-avatar" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin-right: 10px;">
-                   <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"> 
+                   <a href="/MessageBoard/user-profiles-of/<?php echo $friend['user_id']; ?>"> 
                       <img src="<?php echo $this->Html->url('/' . $friend['profile_picture']); ?>" alt="Friend Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                    </a>
                 </div>
                 <div class="friend-info" style="flex-grow: 1;">
-                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>" style="font-size: 14px; margin: 0; font-weight: bold; color: #333;"><?php echo $friend['full_name']; ?></a>
+                <a href="/MessageBoard/user-profiles-of/<?php echo $friend['user_id']; ?>" style="font-size: 14px; margin: 0; font-weight: bold; color: #333;"><?php echo $friend['full_name']; ?></a>
                   <?php if ($friend['is_online'] == 1): ?>
                       <p style="font-size: 12px; color: #777; display: flex; align-items: center; margin: 0;">
                           <span style="width: 8px; height: 8px; background-color: #4CAF50; border-radius: 50%; margin-right: 5px; display: inline-block;"></span>
@@ -783,12 +847,22 @@ function timeAgo($timestamp) {
 
   // Modal functionality
   const openModalBtn = document.getElementById('openModalBtn');
+  const makePost = document.getElementById('makePost');
+  const whatsOnYourMind = document.getElementById('whats-on-your-mind');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const createPostModal = document.getElementById('createPostModal');
   const cancelPostBtn = document.getElementById('cancelPostBtn');
 
   // Open Modal
   openModalBtn.addEventListener('click', () => {
+      createPostModal.style.display = 'flex';
+  });
+   // Open Modal
+  makePost.addEventListener('click', () => {
+      createPostModal.style.display = 'flex';
+  });
+  // Open Modal
+  whatsOnYourMind.addEventListener('click', () => {
       createPostModal.style.display = 'flex';
   });
 
@@ -800,5 +874,38 @@ function timeAgo($timestamp) {
   cancelPostBtn.addEventListener('click', () => {
       createPostModal.style.display = 'none';
   });
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+////// FOR STORY AND MY DAYS
+let currentIndex = 0;
+
+function moveCarousel(direction) {
+    const carousel = document.querySelector('.story-carousel');
+    const stories = document.querySelectorAll('.story-item');
+    const totalStories = stories.length;
+
+    if (direction === 'next') {
+        currentIndex = (currentIndex + 1) % totalStories;
+    } else {
+        currentIndex = (currentIndex - 1 + totalStories) % totalStories;
+    }
+
+    const newTransformValue = -(currentIndex * 135); // Adjust based on the story item width and margin
+    carousel.style.transform = `translateX(${newTransformValue}px)`;
+}
+
+// Optional: Add hover effect for story items
+const storyItems = document.querySelectorAll('.story-item');
+storyItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        item.style.transform = 'scale(1.05)';
+    });
+    item.addEventListener('mouseleave', () => {
+        item.style.transform = 'scale(1)';
+    });
+});
 
 </script>

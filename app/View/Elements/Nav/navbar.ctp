@@ -10,7 +10,7 @@
     </div>
     <nav class="main-nav">
     <ul class="main-nav-list u-flex">
-      <div class="main-nav-item u-only-wide"> <a aria-label="Homepage" class="main-nav-button alt-text"> <span class="icon fas fa-home" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-wide"> <a aria-label="Homepage" id="scrollToTopButton" class="main-nav-button alt-text"> <span class="icon fas fa-home" aria-hidden="true"></span> </a> </div>
       <div class="main-nav-item u-only-wide"> <a aria-label="Pages" class="main-nav-button alt-text"> <span class="icon fas fa-file-alt" aria-hidden="true"></span> </a> </div>
       <div class="main-nav-item u-only-wide"> <a aria-label="Watch" class="main-nav-button alt-text"> <span class="icon fas fa-video" aria-hidden="true"></span> </a> </div>
       <div class="main-nav-item u-only-wide"> <a aria-label="Marketplace" class="main-nav-button alt-text"> <span class="icon fas fa-store" aria-hidden="true"></span> </a> </div>
@@ -31,7 +31,7 @@
         </a>
       </li>
       <li class="user-nav-item">
-        <a id="openModalBtn" class="icon-button alt-text" aria-label="Create"><span class="icon" aria-hidden="true">➕</span></a>
+        <a id="openModalBtn" class="icon-button alt-text" aria-label="Create"><span class="icon" aria-hidden="true"><span class="icon fas fa-plus" aria-hidden="true"></span></span></a>
       </li>
       <li class="user-nav-item">
         <a href="http://localhost/MessageBoard/Messages/index" class="icon-button alt-text" aria-label="Messenger"><span class="icon" aria-hidden="true">💬</span></a>
@@ -128,16 +128,24 @@
 
   <script>
 
-    /*JS isn't my expertise 😉*/
 $(document).ready(function() {
+    // Check if the condition is met (user_id == 1)
+    var isDarkSetting = <?php echo $user['User']['is_dark_setting'] == 1 ? 'true' : 'false'; ?>;
+
+    if (isDarkSetting) {
+        $("html").addClass("is-dark");
+    }
+
     $("#menuButton").on("click", function(){
         $(".side-a").toggleClass("is-open");
         $("html").toggleClass("is-nav-open");
     });
-      $("#darkMode").on("click", function(){
+
+    $("#darkMode").on("click", function(){
         $("html").toggleClass("is-dark");
     });
 });
+
 
 
   function confirmLogout() {
@@ -224,5 +232,57 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// Get the button element
+const scrollToTopButton = document.getElementById('scrollToTopButton');
+
+// Add click event listener
+scrollToTopButton.addEventListener('click', function () {
+    // Scroll to the top of the page
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // For smooth scrolling
+    });
+
+    // Reload the page after scrolling completes
+    setTimeout(function () {
+        window.location.reload();
+    }, 500); // Delay the reload for a smooth scroll effect (500ms)
+});
+
+
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+$(document).ready(function() {
+    $("#darkMode").on("click", function() {
+        var userId = $(this).attr("post-data-id"); 
+
+
+        $.ajax({
+            url: '/MessageBoard/UserProfiles/update_dark_mode',  
+            type: 'POST',
+            data: {
+                user_id: userId  
+            },
+            success: function(response) {
+                if (response.success) {
+
+                    if (response.is_dark_setting == 1) {
+                        $("html").addClass("is-dark");
+                        $(".fas.fa-moon").removeClass("fa-moon").addClass("fa-sun");
+                    } else {
+                        $("html").removeClass("is-dark");
+                        $(".fas.fa-sun").removeClass("fa-sun").addClass("fa-moon");
+                    }
+                } else {
+                    console.log("Error updating dark mode setting.");
+                }
+            },
+            error: function() {
+                console.log("Request failed");
+            }
+        });
+    });
+});
 
   </script>

@@ -9,7 +9,7 @@ class UserProfilesController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory');
 
     public function beforeFilter()
     {
@@ -56,6 +56,7 @@ class UserProfilesController extends AppController
         ]);
 
         $organizedPosts = $this->getPost($findPost);
+        $organizedMyDaysPost = $this->getMyDayAndStory();
         // echo "<pre>"; print_r($organizedPosts); echo "</pre>"; 
 
         if (empty($user_id)) {
@@ -74,6 +75,7 @@ class UserProfilesController extends AppController
         $this->set('users', $findUsers);
         $this->set('findPost', $organizedPosts);
         $this->set('user_id', $user_id);
+        $this->set('organizedMyDaysPost', $organizedMyDaysPost);
     }
 
     public function getFriendList() {
@@ -108,7 +110,7 @@ class UserProfilesController extends AppController
 
                 $user = $this->User->find('first', [
                     'conditions' => ['User.user_id' => $friendUserId],
-                    'fields' => ['User.full_name', 'User.is_online'] 
+                    'fields' => ['User.full_name', 'User.is_online','User.user_id'] 
                 ]);
     
                 $profilePicture = $this->Posts->find('first', [
@@ -117,6 +119,7 @@ class UserProfilesController extends AppController
                 ]);
     
                 $friendsData[] = [
+                    'user_id' => $user['User']['user_id'], 
                     'full_name' => $user['User']['full_name'], 
                     'profile_picture' => isset($profilePicture['Posts']['path']) ? $profilePicture['Posts']['path'] : 'default.jpg' ,
                     'is_online' => $user['User']['is_online']
@@ -291,6 +294,47 @@ class UserProfilesController extends AppController
         return $organizedPosts;
     }
 
+    private function getMyDayAndStory(){
+
+        $findAll = $this->MyDayStory->find('all', [
+            'fields' => [
+                'MyDayStory.id',
+                'MyDayStory.user_id',
+                'MyDayStory.path',
+                'MyDayStory.date_created'
+            ],
+            'order' => ['MyDayStory.date_created' => 'DESC'],
+        ]);
+    
+        $organizedData = [];
+    
+        foreach ($findAll as $story) {
+
+            $findUserDetails = $this->User->find('first', [
+                'fields' => ['User.full_name', 'User.is_online'],
+                'conditions' => ['User.user_id' => $story['MyDayStory']['user_id']] 
+            ]);
+            $findProfilePic = $this->Posts->find('first', [
+                'fields' => ['Posts.path'],
+                'conditions' => ['Posts.id' => $story['MyDayStory']['user_id']] 
+            ]);
+
+            $organizedData[] = [
+                'id' => $story['MyDayStory']['id'],
+                'profile_picture' => !empty($findProfilePic['Posts']['path']) ? $findProfilePic['Posts']['path'] : '',
+                'full_name' => $findUserDetails['User']['full_name'],
+                'is_online' => $findUserDetails['User']['is_online'],
+                'user_id' => $story['MyDayStory']['user_id'],
+                'image_story' => $story['MyDayStory']['path'],
+                'date_created' => $story['MyDayStory']['date_created'],
+            ];
+        }
+    
+        return $organizedData;
+    }
+    
+    
+
     public function createPost(){
         $this->autoRender = false;
         if($this->request->is('post')){
@@ -356,21 +400,21 @@ class UserProfilesController extends AppController
 
         $user_id = $this->Session->read('Auth.User.user_id');
 
-        $findPost = $this->ProfilePost->find('all', array(
-            'conditions' => array(
-                'ProfilePost.is_archieve' => 0, 
-                'OR' => array(
-                    'ProfilePost.user_id' => $user_id,  
-                    'ProfilePost.sharer_id' => $user_id 
-                )
-            ),
-            'order' => array(
-                'ProfilePost.is_pinned' => 'DESC',
-                'ProfilePost.date_shared' => 'DESC',
-                'ProfilePost.created_date' => 'DESC'
-            ),
-        ));        
+        $findPost = $this->ProfilePost->query("
+            SELECT * 
+            FROM profile_posts as ProfilePost
+            WHERE ProfilePost.is_archieve = 0
+            AND (
+                (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id IS NULL) 
+                OR (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id = {$user_id})
+            )
+            ORDER BY 
+                ProfilePost.is_pinned DESC, 
+                ProfilePost.date_shared DESC, 
+                ProfilePost.created_date DESC
+        ");
 
+//  echo "<pre>"; print_r($findPost); echo "</pre>"; die();
         $organizedPosts = $this->getPost($findPost);
 
         if (empty($user_id)) {
@@ -422,20 +466,19 @@ class UserProfilesController extends AppController
         $my_user_Id = $this->Session->read('Auth.User.user_id');
         $isAFriend = $this->isFriend($this->Session->read('Auth.User.user_id'), $user_id);
 
-        $findPost = $this->ProfilePost->find('all', array(
-            'conditions' => array(
-                'ProfilePost.is_archieve' => 0, 
-                'OR' => array(
-                    'ProfilePost.user_id' => $user_id,  
-                    'ProfilePost.sharer_id' => $user_id 
-                )
-            ),
-            'order' => array(
-                'ProfilePost.is_pinned' => 'DESC',
-                'ProfilePost.date_shared' => 'DESC',
-                'ProfilePost.created_date' => 'DESC'
-            ),
-        ));        
+        $findPost = $this->ProfilePost->query("
+            SELECT * 
+            FROM profile_posts as ProfilePost
+            WHERE ProfilePost.is_archieve = 0
+            AND (
+                (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id IS NULL) 
+                OR (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id = {$user_id})
+            )
+            ORDER BY 
+                ProfilePost.is_pinned DESC, 
+                ProfilePost.date_shared DESC, 
+                ProfilePost.created_date DESC
+        ");
 
         $organizedPosts = $this->getPost($findPost);
 
@@ -467,7 +510,7 @@ class UserProfilesController extends AppController
         $this->set('myPhoto', $findMyPics);
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
-        // echo "<pre>"; print_r($findMyPics); echo "</pre>"; die();
+        // echo "<pre>"; print_r($findUsers); echo "</pre>"; die();
         $this->set('userProfileData', $userProfileData);
         $this->set('findPost', $organizedPosts);
         $this->set('photoList', $photoList); 
@@ -936,5 +979,37 @@ class UserProfilesController extends AppController
     
 
 
+    public function update_dark_mode() {
+        if ($this->request->is('post')) {
+            $userId = $this->request->data('user_id');
+    
+            $user = $this->User->find('first', array('conditions' => array('User.user_id' => $userId)));
+            if ($user) {
+                $currentDarkModeSetting = $user['User']['is_dark_setting'];
+    
+                $newDarkModeSetting = ($currentDarkModeSetting == 1) ? 0 : 1;
+    
+                $this->User->id = $userId;
+                if ($this->User->saveField('is_dark_setting', $newDarkModeSetting)) {
+                    $this->set([
+                        'success' => true,
+                        'is_dark_setting' => $newDarkModeSetting,
+                        '_serialize' => ['success', 'is_dark_setting']
+                    ]);
+                } else {
+                    $this->set([
+                        'success' => false,
+                        '_serialize' => ['success']
+                    ]);
+                }
+            } else {
+                $this->set([
+                    'success' => false,
+                    '_serialize' => ['success']
+                ]);
+            }
+        }
+    }
+    
 
 }
