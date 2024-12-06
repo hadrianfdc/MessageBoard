@@ -178,7 +178,7 @@ class UserProfilesController extends AppController
                     'order' => ['Reactions.created' => 'DESC']
                 ]);
                 $myNameOrSharerName = $this->User->find('first', [
-                    'fields' => ['User.full_name'],
+                    'fields' => ['User.full_name', 'User.is_online'],
                     'conditions' => [
                         'User.user_id' => $post['ProfilePost']['user_id']
                     ]
@@ -243,6 +243,7 @@ class UserProfilesController extends AppController
                         'other_reaction' => $certainReaction,
                         'recent_reactor' => $recentReactorName,
                         'fullname' => $myNameOrSharerName['User']['full_name'],
+                        'is_online' => $myNameOrSharerName['User']['is_online'],
                         'captions' => $post['ProfilePost']['captions'],
                         'react' => $post['ProfilePost']['react'],
                         'is_pinned' => $post['ProfilePost']['is_pinned'],

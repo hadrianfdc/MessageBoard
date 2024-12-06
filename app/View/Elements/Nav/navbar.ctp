@@ -2,21 +2,22 @@
 <?php echo $this->Html->css('Navbar/navbar');  ?>
 <header class="main-header u-flex">
     <div class="start u-flex">
-       <a class="logo" href="/MessageBoard/newsfeed">f</a>
+       <div class="logo" onclick="window.location.href='/MessageBoard/newsfeed';" style="cursor: pointer;">f</div>
        <div class="search-box-wrapper">
          <input type="search" class="search-box" placeholder="Search Facebook">
          <span class="icon-search" aria-label="hidden">🔎</span>
       </div>
     </div>
     <nav class="main-nav">
-      <ul class="main-nav-list u-flex">
-      <div class="main-nav-item u-only-wide"><a aria-label="Homepage" class="main-nav-button alt-text"><span class="icon" aria-hidden="true"></span></a></div>
-        <div class="main-nav-item u-only-wide"><a aria-label="Pages" class="main-nav-button alt-text"><span class="icon" aria-hidden="true"></span></a></div>
-        <div class="main-nav-item u-only-wide"><a aria-label="Watch" class="main-nav-button alt-text"><span class="icon" aria-hidden="true"></span></a></div>
-        <div class="main-nav-item u-only-wide"><a aria-label="Marketplace" class="main-nav-button alt-text"><span class="icon" aria-hidden="true"></span></a></div>
-        <div class="main-nav-item u-only-wide"><a aria-label="Groups" class="main-nav-button alt-text"><span class="icon" aria-hidden="true"></span></a></div>
-        <div class="main-nav-item u-only-small"><button aria-label="Menu" class="main-nav-button u-animation-click" id="menuButton"><span class="icon icon-hamburger" aria-hidden="true"></span></button></div>
-      </ul>
+    <ul class="main-nav-list u-flex">
+      <div class="main-nav-item u-only-wide"> <a aria-label="Homepage" class="main-nav-button alt-text"> <span class="icon fas fa-home" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-wide"> <a aria-label="Pages" class="main-nav-button alt-text"> <span class="icon fas fa-file-alt" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-wide"> <a aria-label="Watch" class="main-nav-button alt-text"> <span class="icon fas fa-video" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-wide"> <a aria-label="Marketplace" class="main-nav-button alt-text"> <span class="icon fas fa-store" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-wide"> <a aria-label="Groups" class="main-nav-button alt-text"> <span class="icon fas fa-users" aria-hidden="true"></span> </a> </div>
+      <div class="main-nav-item u-only-small"> <button aria-label="Menu" class="main-nav-button u-animation-click" id="menuButton"> <span class="icon fas fa-bars" aria-hidden="true"></span> </button></div>
+    </ul>
+
     </nav>
     <div class="end"></div>
     <nav class="user-nav">
@@ -60,7 +61,7 @@
                   <a data-notif-id="<?php echo $notification['id']; ?>" data-notif-source="friends_list" href="/MessageBoard/user-profiles-of/<?php echo $notification['details']['from_who_user_id']; ?>" 
                       class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
                 <?php else: ?>
-                  <a data-notif-id="<?php echo $notification['id']; ?>" data-notif-source="notification" href="#" class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
+                  <a data-notif-id="<?php echo $notification['id']; ?>" data-notif-source="notification" href="/MessageBoard/newsfeed" class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
                 <?php endif; ?>
                       <!-- Red Circle for Unread Notifications -->
                       <?php if ($notification['is_seen'] == 0): ?>
@@ -126,6 +127,19 @@
 
 
   <script>
+
+    /*JS isn't my expertise 😉*/
+$(document).ready(function() {
+    $("#menuButton").on("click", function(){
+        $(".side-a").toggleClass("is-open");
+        $("html").toggleClass("is-nav-open");
+    });
+      $("#darkMode").on("click", function(){
+        $("html").toggleClass("is-dark");
+    });
+});
+
+
   function confirmLogout() {
     var result = confirm('Are you sure you want to logout?');
     if (result) {

@@ -203,5 +203,8 @@
 
 
 
+time::before {
+        content: none !important;
+    }
 
 </style>

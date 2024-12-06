@@ -1,10 +1,38 @@
 
 <head>
-<?php echo $this->Html->css('UserProfiles/newsfeed');  ?>
+<?php echo $this->Html->css('UserProfiles/newsfeed'); 
+  echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'); //Boostrap for navigation bar
+?>
+
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script> <!--Facebook CDN Link -->
   
+<?php
+function timeAgo($timestamp) {
+
+    $timeDifference = time() - $timestamp;
+
+    if ($timeDifference < 60) {
+        return $timeDifference . ' seconds ago';
+    } elseif ($timeDifference < 3600) {
+        $minutes = floor($timeDifference / 60);
+        return $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago';
+    } elseif ($timeDifference < 86400) {
+        $hours = floor($timeDifference / 3600);
+        return $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+    } elseif ($timeDifference < 604800) { // Less than 7 days
+        $days = floor($timeDifference / 86400);
+        return $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
+    } else {
+        // Return the original date for anything older than 7 days
+        return date('F j \a\t g:i A', $timestamp); 
+    }
+}
+?>
+
+
+
 <button class="icon-button e-dark-mode-button u-animation-click" id="darkMode" aria-label="Dark Mode"><span class="icon" aria-hidden="true">🌜</span></button>
 <div class="common-structure">
   <?php echo $this->element('Nav/navbar'); ?>
@@ -21,6 +49,9 @@
               <?php endif; ?>
             </span>
             <span class="text"><?php echo $users[0]['User']['full_name']; ?></span>
+            <?php if ($users[0]['User']['is_online'] == 1): ?>
+                <span style="width: 9px; height: 9px; background-color: #4CAF50; border-radius: 50%; display: inline-block;"></span>
+            <?php endif; ?> 
           </a>
         <?php endif; ?>
         </div>
@@ -74,8 +105,11 @@
                                 <?php endif; ?>
                             </div>
                             <div class="time-and-privacy">
+                                <?php if ($post['is_online'] == 1 && $post['sharer_id'] == $user_id): ?>
+                                    <span style="width: 9px; height: 9px; background-color: #4CAF50; border-radius: 50%; display: inline-block;"></span>
+                                <?php endif; ?>   
                                 <time datetime="<?php echo $post['created_date']; ?>">
-                                    <?php echo date('F j \a\t g:i A', strtotime($post['date_shared'])); ?>
+                                    <?php echo timeAgo(strtotime($post['date_shared'])); ?>
                                 </time>
                                 <span class="icon icon-privacy">
                                     <?php 
@@ -184,7 +218,7 @@
                                     </div>
                                     <div class="time-and-privacy">
                                         <time datetime="<?php echo $post['created_date']; ?>">
-                                            <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                            <?php echo timeAgo(strtotime($post['created_date'])); ?>
                                         </time>
                                         <span class="icon icon-privacy">
                                             <?php 
@@ -347,6 +381,7 @@
               <!--------------------------------------- [END] Modal for Share Modal ----------------------------------------->
 
           <?php else: ?>
+
             <div class="main-feed-item">
                 <article class="common-post">
                     <header class="common-post-header u-flex">
@@ -363,10 +398,13 @@
                                     <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['fullname']; ?></a>
                                 <?php endif; ?>
                             </div>
-                            <div class="time-and-privacy">
+                            <div class="time-and-privacy"> 
+                                <?php if ($post['is_online'] == 1): ?>
+                                    <span style="width: 9px; height: 9px; background-color: #4CAF50; border-radius: 50%; display: inline-block;"></span>
+                                <?php endif; ?>                  
                                 <!-- Display the created date -->
-                                <time datetime="<?php echo $post['created_date']; ?>">
-                                    <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                <time datetime="<?php echo $post['created_date']; ?>" style="content: none;">
+                                    <?php echo timeAgo(strtotime($post['created_date'])); ?>
                                 </time>
                                 <span class="icon icon-privacy">
                                     <?php 
