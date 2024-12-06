@@ -107,8 +107,8 @@ class FriendsListController extends AppController
                     echo json_encode(['success' => true]);
                     $type = 2;
                     $data = [
-                        'user_id' => $friendUserId,
-                        'acceptor' => $userId
+                        'user_id' => $userId,
+                        'acceptor' => $friendUserId
                     ];
                     $this->saveToNotificationList($data, $type);
                 } else {
@@ -227,6 +227,34 @@ class FriendsListController extends AppController
       if(!$this->FriendsListNotification->save()){
         $this->response->body(json_encode(['success' => true, 'message' => 'Notification was not save successfully.']));
       }
+    }
+
+    public function updateSeen() {
+        $this->autoRender = false;
+        $this->response->type('json');
+    
+        if ($this->request->is('post')) {
+            $data = json_decode($this->request->input(), true);
+    
+            $notifId = $data['id'];
+            $notifSource = $data['source'];
+    
+            if ($notifSource === 'friends_list') {
+                $this->loadModel('FriendsListNotification');
+                $this->FriendsListNotification->id = $notifId;
+                if ($this->FriendsListNotification->save(['is_seen' => 1])) {
+                    return json_encode(['success' => true]);
+                }
+            } elseif ($notifSource === 'notification') {
+                $this->loadModel('Notification');
+                $this->Notification->id = $notifId;
+                if ($this->Notification->save(['is_seen' => 1])) {
+                    return json_encode(['success' => true]);
+                }
+            }
+        }
+    
+        return json_encode(['success' => false]);
     }
     
     

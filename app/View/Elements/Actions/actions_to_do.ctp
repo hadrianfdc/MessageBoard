@@ -25,9 +25,14 @@
                       <?php endif; ?>
                   <?php endif; ?>
                   <?php else: ?>
-                    <button id="add-friend-btn" class="action-btn" data-user-id="<?php echo $my_user_Id; ?>" style="padding: 10px; font-size: 14px; background-color: #1877f2; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                          <i class="fas fa-user-plus" style="margin-right: 5px;"></i> Add Friend
-                    </button>
+                        <?php if ($acceptor != $my_user_Id || $my_user_Id != $acceptor): ?>
+                            <button id="add-friend-btn" class="action-btn" data-user-id="<?php echo $my_user_Id; ?>" style="padding: 10px; font-size: 14px; background-color: #1877f2; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                <i class="fas fa-user-plus" style="margin-right: 5px;"></i> Add Friend
+                            </button>
+                        <?php else: ?>
+                            <i class="fas fa-users" style="font-size: 24px;"></i>
+                            <span style="font-size: 12px; font-weight: bold;">FRIENDS</span>
+                        <?php endif; ?>
                   <?php endif; ?>
                   
               </div>

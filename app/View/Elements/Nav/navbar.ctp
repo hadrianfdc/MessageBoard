@@ -57,9 +57,10 @@
           <div id="notificationDropdown" class="dropdown-menu" style="display: none; position: absolute; top: 40px; right: 0; background-color: #fff; border: 1px solid #ddd; width: 300px; max-height: 400px; overflow-y: auto; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); z-index: 100; padding: 0; border-radius: 8px;">
               <?php foreach ($allNotifications as $notification): ?>
                 <?php if ($notification['source'] == 'friends_list'): ?>
-                  <a href="/MessageBoard/user-profiles-of/<?php echo $notification['details']['from_who_user_id']; ?>" class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
+                  <a data-notif-id="<?php echo $notification['id']; ?>" data-notif-source="friends_list" href="/MessageBoard/user-profiles-of/<?php echo $notification['details']['from_who_user_id']; ?>" 
+                      class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
                 <?php else: ?>
-                  <a href="#" class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
+                  <a data-notif-id="<?php echo $notification['id']; ?>" data-notif-source="notification" href="#" class="notification-item" style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; text-decoration: none; color: black; background-color: <?php echo $notification['is_seen'] == 0 ? '#f0f0f0' : '#fff'; ?>; position: relative;">
                 <?php endif; ?>
                       <!-- Red Circle for Unread Notifications -->
                       <?php if ($notification['is_seen'] == 0): ?>
@@ -172,6 +173,42 @@ document.addEventListener("click", function(event) {
         dropdown.style.display = "none";
     }
 });
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+ //Update is_seen //Update is_seen //Update is_seen //Update is_seen 
+ //Update is_seen //Update is_seen //Update is_seen //Update is_seen 
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const notifId = this.getAttribute('data-notif-id');
+            const notifSource = this.getAttribute('data-notif-source');
+            const link = this.getAttribute('href');
+
+            fetch('/MessageBoard/FriendsList/updateSeen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: notifId, source: notifSource }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = link;
+                } else {
+                    alert('Failed to mark notification as seen.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
 
 
   </script>

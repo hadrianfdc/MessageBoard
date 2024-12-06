@@ -67,7 +67,11 @@
                         <img src="<?php echo $this->Html->url('/' . $sharerImage); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['sharer_full_name']; ?></a>
+                                <?php if($post['sharer_id'] == $user_id): ?>
+                                    <a href="/MessageBoard/user-profile"><?php echo $post['sharer_full_name']; ?></a>
+                                <?php else: ?>
+                                    <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['sharer_full_name']; ?></a>
+                                <?php endif; ?>
                             </div>
                             <div class="time-and-privacy">
                                 <time datetime="<?php echo $post['created_date']; ?>">
@@ -176,7 +180,7 @@
                                 <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                                 <div class="common-post-info">
                                     <div class="user-and-group u-flex">
-                                        <a href="#"><?php echo $post['fullname']; ?></a>
+                                        <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['fullname']; ?></a>
                                     </div>
                                     <div class="time-and-privacy">
                                         <time datetime="<?php echo $post['created_date']; ?>">
@@ -353,7 +357,11 @@
                         <img src="<?php echo $this->Html->url('/' . $avatarUrl); ?>" class="user-image" width="40" height="40" alt="">
                         <div class="common-post-info">
                             <div class="user-and-group u-flex">
-                                <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['fullname']; ?></a>
+                                <?php if($post['user_id'] == $user_id): ?>
+                                    <a href="/MessageBoard/user-profile"><?php echo $post['fullname']; ?></a>
+                                <?php else: ?>
+                                    <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['fullname']; ?></a>
+                                <?php endif; ?>
                             </div>
                             <div class="time-and-privacy">
                                 <!-- Display the created date -->
