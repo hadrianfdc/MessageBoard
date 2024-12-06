@@ -405,7 +405,7 @@ class UserProfilesController extends AppController
             'conditions' => ['Posts.id' => $user_id]
         ]);
         $photoList = $this->photoGrid();
-        // echo "<pre>"; print_r($organizedPosts); echo "</pre>"; die();
+        
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
 
@@ -465,8 +465,9 @@ class UserProfilesController extends AppController
         // echo "<pre>"; print_r($isAFriend); echo "</pre>"; 
         $photoList = $this->photoGridOthers($user_id);
         $this->set('myPhoto', $findMyPics);
+        $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
-
+        // echo "<pre>"; print_r($findMyPics); echo "</pre>"; die();
         $this->set('userProfileData', $userProfileData);
         $this->set('findPost', $organizedPosts);
         $this->set('photoList', $photoList); 

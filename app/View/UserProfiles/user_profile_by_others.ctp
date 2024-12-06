@@ -25,7 +25,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
         <div id="u-name"><?php echo $userProfileData[0]['UserProfiles']['full_name']; ?>  
         <?php if (isset($isAFriend['FriendsList']) && !empty($isAFriend['FriendsList'])): ?>
           <?php if ($isAFriend['FriendsList']['status'] == 'accepted'): ?>
-              <button id="unfriend-btn" class="action-btn" style="padding: 10px; font-size: 14px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer;">
+              <button id="unfriend-btn" class="action-btn" style="padding: 10px; font-size: 14px; background-color: #0164e1; color: white; border: none; border-radius: 5px; cursor: pointer;">
                   <i class="fas fa-user-times" style="margin-right: 5px;"></i> Unfriend
               </button>
           <?php endif; ?>
@@ -34,6 +34,29 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
     </div>
     <div id="black-grd"></div>
 </div>
+
+<?php
+function timeAgo($timestamp) {
+
+    $timeDifference = time() - $timestamp;
+
+    if ($timeDifference < 60) {
+        return $timeDifference . ' seconds ago';
+    } elseif ($timeDifference < 3600) {
+        $minutes = floor($timeDifference / 60);
+        return $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago';
+    } elseif ($timeDifference < 86400) {
+        $hours = floor($timeDifference / 3600);
+        return $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+    } elseif ($timeDifference < 604800) { // Less than 7 days
+        $days = floor($timeDifference / 86400);
+        return $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
+    } else {
+        // Return the original date for anything older than 7 days
+        return date('F j \a\t g:i A', $timestamp); 
+    }
+}
+?>
 
 <div class="common-structure">
   <?php echo $this->element('Nav/navbar'); ?>
@@ -142,7 +165,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                             </div>
                             <div class="time-and-privacy">
                                 <time datetime="<?php echo $post['created_date']; ?>">
-                                    <?php echo date('F j \a\t g:i A', strtotime($post['date_shared'])); ?>
+                                    <?php echo timeAgo(strtotime($post['date_shared'])); ?>
                                 </time>
                                 <span class="icon icon-privacy">
                                     <?php 
@@ -251,7 +274,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                                     </div>
                                     <div class="time-and-privacy">
                                         <time datetime="<?php echo $post['created_date']; ?>">
-                                            <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                            <?php echo timeAgo(strtotime($post['created_date'])); ?>
                                         </time>
                                         <span class="icon icon-privacy">
                                             <?php 
@@ -415,6 +438,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                 </div>
 
           <?php else: ?>
+
             <div class="main-feed-item">
                 <article class="common-post">
                     <?php if ($post['is_pinned'] == 1): ?>
@@ -433,7 +457,7 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
                             <div class="time-and-privacy">
                                 <!-- Display the created date -->
                                 <time datetime="<?php echo h($post['created_date']); ?>">
-                                    <?php echo date('F j \a\t g:i A', strtotime($post['created_date'])); ?>
+                                    <?php echo timeAgo(strtotime($post['created_date'])); ?>
                                 </time>
                                 <span class="icon icon-privacy">
                                     <?php 
