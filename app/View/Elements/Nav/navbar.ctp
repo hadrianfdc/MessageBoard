@@ -115,7 +115,7 @@
           <!-- Dropdown Menu -->
           <ul id="dropdown-menu" class="dropdown-menu">
               <li><a href="/MessageBoard/user-profile">Profile</a></li>
-              <li><a href="#">Settings</a></li>
+              <li><a href="/MessageBoard/setting">Settings</a></li>
               <li><a href="#" onclick="showLogoutModal()" >Log Out</a></li>
           </ul>
       </li>
@@ -181,7 +181,6 @@ $(document).ready(function() {
             type: 'POST',
             url: '<?php echo $this->Html->url(array("controller" => "logins", "action" => "logout")); ?>',
             success: function(data) {
-                debugger;
                 window.location.href = '<?php echo $this->Html->url(array("controller" => "logins", "action" => "login")); ?>';
             }
         });

@@ -3,7 +3,7 @@
 class LoginsController extends AppController
 {
     public $components = array('Flash');
-
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory');
 
     public function login()
     {

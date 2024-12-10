@@ -1011,5 +1011,38 @@ class UserProfilesController extends AppController
         }
     }
     
+    public function setting() {
+        $this->layout = null;
+    
+        $id = $this->Session->read('Auth.User.user_id');
+        if (empty($id)) {
+            return $this->redirect(array('controller' => 'logins', 'action' => 'logut'));
+        }
+
+        $this->loadModel('Posts');
+
+
+        $imageRecord = $this->Posts->find('first', [
+            'conditions' => ['Posts.id' => $id]
+        ]);
+
+
+        $this->set(compact('imageRecord'));
+
+        if (empty($id)) {
+            $this->redirect(['controller' => 'logins', 'action' => 'login']);
+        }
+
+        $this->loadModel('UserProfiles');
+        $this->loadModel('Posts');
+        $userProfileData = $this->UserProfiles->find('all', [
+            'conditions' => ['UserProfiles.user_id' => $id],
+            'contain' => 'ProfileDetails'
+        ]);
+
+        $this->set('userProfileData', $userProfileData);
+        // echo "<pre>"; print_r($userProfileData); echo "</pre>"; die();
+    }
+
 
 }
