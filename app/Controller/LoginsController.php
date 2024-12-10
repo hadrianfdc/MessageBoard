@@ -89,6 +89,7 @@ class LoginsController extends AppController
                     )
                 ));
 
+                $this->log(print_r($this->request->data, true));
                 $oldPassword = $this->request->data['Registers']['old_password'];
                 $newPassword = $this->request->data['Registers']['password'];
                 $confirmPassword = $this->request->data['Registers']['confirm_password'];
@@ -98,6 +99,8 @@ class LoginsController extends AppController
                 if ($hashedEnteredPassword === $user['Registers']['password']) {
 
                     if ($newPassword !== $confirmPassword) {
+                        $message = 'New Password and Confirm Password do not match';
+                        $this->set('message', $message);
                         $this->set('success', false);
                         return;
                     } else {
@@ -110,10 +113,14 @@ class LoginsController extends AppController
                         if ($this->Registers->save($user)) {
                             $this->set('success', true);
                         } else {
+                            $message = 'New Password does not save!';
+                            $this->set('message', $message);
                             $this->set('success', false);
                         }
                     }
                 } else {
+                    $message = 'Old Password is incorrect';
+                    $this->set('message', $message);
                     $this->set('success', false);
                 }
             } else {

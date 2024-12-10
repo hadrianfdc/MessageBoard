@@ -30,7 +30,7 @@
         <?php echo $this->Form->create('Registers', array('url' => array('controller' => 'logins', 'action' => 'changePassword'))); ?>
 
         <div class="form-group">
-            <?php echo $this->Form->input('old_password', array('type' => 'password', 'label' => 'Old Password', 'class' => 'form-control', 'required')); ?>
+            <?php echo $this->Form->input('old_password', array('type' => 'text', 'label' => 'Old Password', 'class' => 'form-control', 'required')); ?>
         </div>
 
         <div class="form-group">
@@ -61,7 +61,7 @@
             var password = this.value;
             var changePasswordButton = document.getElementById('change-password-button');
 
-            var mediumThreshold = 10;
+            var mediumThreshold = 7;
 
             if (password.length < mediumThreshold) {
                 changePasswordButton.setAttribute('disabled', 'disabled');
@@ -99,6 +99,8 @@
 
     <script>
         console.log("Script executed");
+        var changePasswordButton = document.getElementById('change-password-button');
+        changePasswordButton.removeAttribute('disabled');
         <?php
         if (isset($success)) {
             if ($success === true) {
@@ -116,7 +118,7 @@
                         });";
             } elseif ($success === false) {
                 echo "console.log('Error!');";
-                echo "Swal.fire('Error!', 'Something wrong with your password. Please try again.', 'error');";
+                echo "Swal.fire('Error!', '$message.', 'error');";
             } else {
                 echo "console.log('Unknown status: " . $success . "');";
             }

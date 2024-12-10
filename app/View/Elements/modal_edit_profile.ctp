@@ -1387,6 +1387,10 @@ function getReactionIcon(reactionType) {
 
         // Open the modal
         document.getElementById('commentModal').style.display = 'block';
+        setTimeout(() => {
+            commentList.scrollTop = commentList.scrollHeight;
+        }, 0);
+
       } else {
         const commentList = document.getElementById('commentList');
         commentList.innerHTML = '<p style="text-align: center; color: #999;">No comments yet.</p>';

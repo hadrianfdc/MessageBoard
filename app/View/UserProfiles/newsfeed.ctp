@@ -79,7 +79,7 @@ function timeAgo($timestamp) {
           </a>
         </div>
         <div class="common-list-item">
-          <a class="common-list-button" href="#" onclick="confirmLogout()">
+          <a class="common-list-button" href="#" onclick="showLogoutModal()">
             <span class="icon">📺</span>
             <span class="text">Logout</span>
           </a>
@@ -749,18 +749,7 @@ function timeAgo($timestamp) {
 <?php echo $this->element('modal_edit_profile'); ?>
 
 <script>
-  function confirmLogout() {
-    var result = confirm('Are you sure you want to logout?');
-    if (result) {
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo $this->Html->url(array("controller" => "logins", "action" => "logout")); ?>',
-        success: function(data) {
-          window.location.href = '<?php echo $this->Html->url(array("controller" => "logins", "action" => "login")); ?>';
-        }
-      });
-    }
-  }
+
 
   document.addEventListener('DOMContentLoaded', function () {
     const uploadImages = document.getElementById('uploadImages');

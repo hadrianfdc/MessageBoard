@@ -116,13 +116,33 @@
           <ul id="dropdown-menu" class="dropdown-menu">
               <li><a href="/MessageBoard/user-profile">Profile</a></li>
               <li><a href="#">Settings</a></li>
-              <li><a href="#" onclick="confirmLogout()" >Log Out</a></li>
+              <li><a href="#" onclick="showLogoutModal()" >Log Out</a></li>
           </ul>
       </li>
     </ul>
   </nav>
   </header>
 
+   <!-- Logout Modal -->
+   <div id="logoutModal" 
+         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-size: 18px; margin: 0; margin-bottom: 10px;">Log Out</h2>
+            <p style="font-size: 14px; color: #606770; margin-bottom: 20px;">
+                Are you sure you want to log out?
+            </p>
+            <div style="display: flex; justify-content: space-between;">
+                <button onclick="hideLogoutModal()" 
+                        style="background-color: #e4e6eb; color: #050505; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                    Cancel
+                </button>
+                <button onclick="confirmLogout()" 
+                        style="background-color: #1877f2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -148,18 +168,25 @@ $(document).ready(function() {
 
 
 
-  function confirmLogout() {
-    var result = confirm('Are you sure you want to logout?');
-    if (result) {
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo $this->Html->url(array("controller" => "logins", "action" => "logout")); ?>',
-        success: function(data) {
-          window.location.href = '<?php echo $this->Html->url(array("controller" => "logins", "action" => "login")); ?>';
-        }
-      });
+    function showLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'flex';
     }
-  }
+
+    function hideLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+    }
+
+    function confirmLogout() {
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $this->Html->url(array("controller" => "logins", "action" => "logout")); ?>',
+            success: function(data) {
+                debugger;
+                window.location.href = '<?php echo $this->Html->url(array("controller" => "logins", "action" => "login")); ?>';
+            }
+        });
+    }
+
       // Get the button and dropdown menu
   const dropdownToggle = document.getElementById('dropdown-toggle');
   const dropdownMenu = document.getElementById('dropdown-menu');

@@ -35,6 +35,9 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
               </button>
           <?php endif; ?>
         <?php endif; ?>
+        <button id="message-btn" class="action-btn" style="padding: 10px; font-size: 14px; background-color: #0164e1; color: white; border: none; border-radius: 5px; cursor: pointer;">
+           <i class="fas fa-envelope" style="margin-right: 5px;"></i> Message
+        </button>
       </div>
     </div>
     <div id="black-grd"></div>
