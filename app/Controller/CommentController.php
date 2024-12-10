@@ -59,7 +59,9 @@ class CommentController extends AppController
                 return;
             }
     
-            $file = $this->request->params['form']['file']; 
+            if(isset($data['file']) && !empty($data['file'])){
+                $file = $this->request->params['form']['file']; 
+            }
     
             if (isset($file['name']) && !empty($file['name'])) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];

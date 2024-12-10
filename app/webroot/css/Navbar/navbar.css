@@ -1029,3 +1029,56 @@ html.is-dark #closeModalBtnSearchFriend{
   color: #f0f0f0 !important;
 }
 
+
+html.is-dark .custom-dropdown-menu{
+  background-color: #252525 !important;
+  border: 1px solid #444 !important;
+  color: #f0f0f0 !important;
+}
+
+html.is-dark .custom-dropdown-menu li:hover {
+  border: 1px solid #444 !important;
+  color: black !important;
+}
+
+html.is-dark .side-a, 
+html.is-dark .reactions-popup,
+html.is-dark #commentModalContent{
+  background-color: #252525 !important;
+  border: 1px solid #444 !important;
+  color: #f0f0f0 !important;
+}
+
+html.is-drark .m-mrg,
+html.isd-dark #p-tabs,
+html.is-dark .cancel-btn,
+html.is-dark #commentInput,
+html.is-dark #who_share_this_post_content,
+html.is-dark .share-modal-content {
+  background-color: #252525 !important;
+  border: 1px solid #444 !important;
+  color: #f0f0f0 !important;
+}
+
+html.is-dark  .l-cnt {
+  background-color: #252525 !important;
+  border: 1px solid #444 !important;
+  color: #f0f0f0 !important;
+}
+
+
+html.is-dark  .cnt-label span{
+  color: #f0f0f0 !important;
+}
+
+
+
+html.is-dark #i-box,
+html.is-dark p, 
+html.is-dark b, 
+html.is-dark a,
+html.is-dark #commentModalContent strong,
+html.is-dark #intro-line,
+html.is-dark #who_share_this_post_content small{
+  color: #f0f0f0 !important;
+}

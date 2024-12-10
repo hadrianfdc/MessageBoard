@@ -5,13 +5,15 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
 ?>
 
 </head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"><!-- For Icons CDN Link -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script> <!--Facebook CDN Link -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
-<button class="icon-button e-dark-mode-button u-animation-click" id="darkMode" aria-label="Dark Mode"><span class="icon" aria-hidden="true"> <i class="fas fa-moon"></i></span></button>
+<button class="icon-button e-dark-mode-button u-animation-click" post-data-id="<?php echo $user['User']['user_id']; ?>" id="darkMode" aria-label="Dark Mode">
+    <span class="icon" aria-hidden="true"> <i class="fas fa-moon"></i></span>
+</button>
+
 <div id="profile-upper">
     <div id="profile-banner-image">
       <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['background_img']); ?>" alt="Banner image">
@@ -582,14 +584,15 @@ function timeAgo($timestamp) {
                         <div class="reactions-total">
                         <?php 
                             if ($totalReactions > 1) { 
-                              echo '
-                                      <span style="text-decoration: none; cursor: pointer;" data-post-id="' . $post['id'] . '" class="showReactionsModal" class="text">' . 
+                              echo '<a href="javascript:void(0)" data-post-id="' . $post['id'] . '" class="showReactionsModal"> 
+                                      <span class="text">' . 
                                           htmlspecialchars($post['recent_reactor']) . 
                                           ' reacted ' . 
                                           htmlspecialchars($post['other_reaction']) . 
                                           ' and ' . 
                                           ($totalReactions - 1) . 
-                                          ' others </span> ';
+                                          ' others </span> 
+                                    </a>';
                             }if($totalReactions == 1){
                                 echo $totalReactions; 
                             }
@@ -632,13 +635,13 @@ function timeAgo($timestamp) {
                           </div>
                         </li>
                         <li style="list-style-type: none;" class="actions-buttons-item">
-                          <button class="actions-buttons-button">
+                          <button class="actions-buttons-button comment-button" data-post-id="<?php echo $post['id']; ?>">
                             <span class="icon">💬</span>
                             <span class="text">Comment</span>
                           </button>
                         </li>
                         <li style="list-style-type: none;" class="actions-buttons-item">
-                          <button data-post-idgfdgdfg="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
+                          <button data-post-id="<?php echo $post['id']; ?>" class="actions-buttons-button share-button">
                             <span class="icon">🔗</span>
                             <span class="text">Share</span>
                           </button>

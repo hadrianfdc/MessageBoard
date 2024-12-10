@@ -165,7 +165,7 @@ function timeAgo($timestamp) {
                                 <?php if($post['sharer_id'] == $user_id): ?>
                                     <a href="/MessageBoard/user-profile"><?php echo $post['sharer_full_name']; ?></a>
                                 <?php else: ?>
-                                    <a href="/MessageBoard/user-profiles-of/<?php echo $post['user_id']; ?>"><?php echo $post['sharer_full_name']; ?></a>
+                                    <a href="/MessageBoard/user-profiles-of/<?php echo $post['sharer_id']; ?>"><?php echo $post['sharer_full_name']; ?></a>
                                 <?php endif; ?>
                             </div>
                             <div class="time-and-privacy">

@@ -13,7 +13,6 @@
   border-radius: 4px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   right: 70mm; 
-  width: 220px;
   z-index: 1000;
 }
 
@@ -572,7 +571,13 @@
   <div id="commentModalContent" style="background-color: #ffffff; color: #000; border-radius: 8px; padding: 20px; width: 90%; max-width: 500px; margin: auto; margin-top: 10%; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
     <button id="closeCommentModal" style="float: right; background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer;">&times;</button>
     <h2 style="color: #1877f2;">Comments</h2>
-    <div id="commentList"></div>
+    <div id="commentList" style="max-height: 300px; overflow-y: auto; margin-top: 10px; border: 1px solid #ccc; border-radius: 8px; padding: 10px;">
+      <!-- Example content -->
+      <p>Example comment 1</p>
+      <p>Example comment 2</p>
+      <p>Example comment 3</p>
+      <!-- More comments will go here -->
+    </div>
     <textarea id="commentInput" placeholder="Write a comment..." style="width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
     <!-- Container for image preview -->
     <div id="imagePreviewContainerComment" style="display: none; margin-top: 10px;"></div>
@@ -595,8 +600,8 @@
   </div>
 </div>
 
-
 <!--------------------------------------- [END] Modal for making Comments----------------------------------------->
+
 
 <script>
 

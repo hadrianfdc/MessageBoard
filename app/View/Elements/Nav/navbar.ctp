@@ -2,7 +2,7 @@
 <?php echo $this->Html->css('Navbar/navbar');  ?>
 <header class="main-header u-flex">
     <div class="start u-flex">
-       <div class="logo" onclick="window.location.href='/MessageBoard/newsfeed';" style="cursor: pointer;">f</div>
+       <div class="logo" onclick="window.location.href='/MessageBoard/newsfeed';" style="cursor: pointer;">H</div>
        <div class="search-box-wrapper">
          <input type="search" class="search-box" placeholder="Search Facebook">
          <span class="icon-search" aria-label="hidden">🔎</span>
