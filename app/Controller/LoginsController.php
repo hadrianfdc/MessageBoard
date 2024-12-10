@@ -3,7 +3,7 @@
 class LoginsController extends AppController
 {
     public $components = array('Flash');
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory','Notification');
 
     public function login()
     {
@@ -34,7 +34,11 @@ class LoginsController extends AppController
 
                         $this->Session->write('Auth.User.user_id', $user['Logins']['user_id']);
                         $this->Session->write('Auth.User.full_name', $user['Logins']['full_name']);
+                        if($user['Logins']['login_notif'] == 1){
+                            $this->Session->write('login_notif', $user['Logins']['login_notif']);
+                        }
 
+                        $this->saveToNotificationLogin($user['Logins']['user_id']);
 
                         $this->set('success', true);
                     } else {
@@ -46,6 +50,26 @@ class LoginsController extends AppController
                 }
             } else {
                 $this->redirect(array('controller' => 'registers', 'action' => 'new_user'));
+            }
+        }
+    }
+    private function saveToNotificationLogin($user_id){
+
+        $notification = [
+            'Notification' => [
+                'user_id' => $user_id,
+                'profile_post_id' => 0,
+                'created' => date('Y-m-d H:i:s'), 
+                'type' => 6,
+                'description' => 'You have successfully login. If you did not initiate this, please contact support immediately.',
+                'author' => $user_id
+            ]
+        ];
+
+
+        if($this->Session->read('login_notif') == 1){
+            if($this->Notification->save($notification)){
+                
             }
         }
     }
@@ -62,9 +86,17 @@ class LoginsController extends AppController
         }
         $this->Logins->saveField('last_login_time',  date('Y-m-d H:i:s'));
 
+        $this->Session->delete('login_notif');
         $this->Session->delete('Auth.User');
+        $this->Session->delete('reaction_notif');
+        $this->Session->delete('comment_notif');
+        $this->Session->delete('change_password_notif');
         CakeSession::delete('Auth.User.user_id');
         CakeSession::delete('Auth.User.full_name');
+        CakeSession::delete('reaction_notif');
+        CakeSession::delete('comment_notif');
+        CakeSession::delete('change_password_notif');
+        CakeSession::delete('login_notif');
 
         $this->redirect(['controller' => 'logins', 'action' => 'login']);
     }
@@ -113,6 +145,7 @@ class LoginsController extends AppController
 
                         if ($this->Registers->save($user)) {
                             $this->set('success', true);
+                            $this->saveToNotificationChangePass($user_id);
                         } else {
                             $message = 'New Password does not save!';
                             $this->set('message', $message);
@@ -126,6 +159,27 @@ class LoginsController extends AppController
                 }
             } else {
                 $this->Flash->error('Please correct the errors below.');
+            }
+        }
+    }
+
+    private function saveToNotificationChangePass($user_id){
+
+        $notification = [
+            'Notification' => [
+                'user_id' => $user_id,
+                'profile_post_id' => 0,
+                'created' => date('Y-m-d H:i:s'), 
+                'type' => 5,
+                'description' => 'You have successfully changed your password. If you did not initiate this, please contact support immediately.',
+                'author' => $user_id
+            ]
+        ];
+
+
+        if($this->Session->read('change_password_notif') == 1){
+            if($this->Notification->save($notification)){
+                
             }
         }
     }
@@ -172,6 +226,7 @@ class LoginsController extends AppController
                             'success' => true,
                             'message' => 'Password updated successfully'
                         );
+                        $this->saveToNotificationChangePass($user_id);
                     } else {
                         $response = array(
                             'success' => false,

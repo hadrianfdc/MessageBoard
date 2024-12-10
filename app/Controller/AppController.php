@@ -63,6 +63,7 @@ class AppController extends Controller
             $this->set(compact('user', 'findMyPic'));
         }
 
+        $this->isAllowedBySettingsNotifications();
         $this->myNotifications();
     }
 
@@ -88,6 +89,35 @@ class AppController extends Controller
         $this->set('user', $findUser);
         
     }
+
+    public function isAllowedBySettingsNotifications(){
+        $user_id = $this->Session->read('Auth.User.user_id');
+        $User = $this->User->find('first', [
+            'conditions' => ['User.user_id' => $user_id]
+        ]);
+
+        if($user_id){
+            if($User['User']['people_u_may_know_notif'] == 1){
+                $this->Session->write('people_u_may_know_notif', $User['User']['people_u_may_know_notif']);
+            }
+            if($User['User']['birthday_notif'] == 1){
+                $this->Session->write('birthday_notif', $User['User']['birthday_notif']);
+            }
+            if($User['User']['events_notif'] == 1){
+                $this->Session->write('events_notif', $User['User']['events_notif']);
+            }
+            if($User['User']['highlights_notif'] == 1){
+                $this->Session->write('highlights_notif', $User['User']['highlights_notif']);
+            }
+            if($User['User']['login_notif'] == 1){
+                $this->Session->write('login_notif', $User['User']['login_notif']);
+            }
+            if($User['User']['change_password_notif'] == 1){
+                $this->Session->write('change_password_notif', $User['User']['change_password_notif']);
+            }
+        }
+    }
+
 
     public function myNotifications() {
         $this->layout = null;

@@ -212,6 +212,10 @@ class FriendsListController extends AppController
 
     private function saveToNotificationList($data, $type){
 
+
+        $User = $this->User->find('first',array(
+            'conditions' => ['User.user_id' => $data['acceptor']]
+        ));
         $this->FriendsListNotification->create();
         $notification = [
             'FriendsListNotification' => [
@@ -224,9 +228,11 @@ class FriendsListController extends AppController
         ];
         $this->FriendsListNotification->set($notification);
 
-      if(!$this->FriendsListNotification->save()){
-        $this->response->body(json_encode(['success' => true, 'message' => 'Notification was not save successfully.']));
-      }
+        if($User['User']['friend_req_notif'] == 1){
+            if(!$this->FriendsListNotification->save()){
+                $this->response->body(json_encode(['success' => true, 'message' => 'Notification was not save successfully.']));
+            }
+        }
     }
 
     public function updateSeen() {

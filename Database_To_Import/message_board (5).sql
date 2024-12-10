@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 10, 2024 at 09:19 AM
+-- Generation Time: Dec 10, 2024 at 10:33 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -211,8 +211,8 @@ CREATE TABLE `notification` (
   `user_id` int(11) NOT NULL,
   `author` int(11) NOT NULL COMMENT 'for whom this',
   `profile_post_id` int(11) NOT NULL,
-  `type` int(11) NOT NULL COMMENT '1: react 2: comment 3: add_friend 4: accept_friend\r\n',
-  `description` varchar(50) NOT NULL,
+  `type` int(11) NOT NULL COMMENT '1: react 2: comment 3: add_friend 4: accept_friend 5:change_pass\r\n',
+  `description` varchar(500) NOT NULL,
   `is_seen` int(1) NOT NULL DEFAULT 0 COMMENT '0: not seen, 1: seen',
   `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -237,8 +237,12 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 (63, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:47'),
 (64, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:52'),
 (65, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:53'),
-(66, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:36:40'),
-(67, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:37:30');
+(66, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:36:40'),
+(67, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:37:30'),
+(68, 2, 2, 25, 1, 'Reacted Haha to your Post', 1, '2024-12-10 09:42:15'),
+(69, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 09:59:30'),
+(70, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 10:01:51'),
+(71, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-10 10:10:26');
 
 -- --------------------------------------------------------
 
@@ -311,7 +315,7 @@ INSERT INTO `profile_posts` (`id`, `user_id`, `fullname`, `captions`, `file_path
 (22, 30, 'FDC Tester', 'Velit vivamus facilisi sem ex bibendum est elementum tincidunt. Volutpat nulla tristique scelerisque imperdiet varius himenaeos vitae. Nostra ultrices consequat felis dignissim ultricies. Vestibulum integer dictum pretium nisi ut; efficitur orci. Parturient congue nec non sollicitudin ultricies netus. Pretium suspendisse semper pharetra sociosqu hac. Eleifend volutpat nec feugiat lectus turpis aliquet tempor porttitor? Elit hendrerit magna sem auctor erat a. Neque efficitur taciti vulputate quam quis ex nostra.', '[\"images\\/cutetest.webp\",\"images\\/cutecats.jpg\"]', 1, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":\"1\",\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 03:17:59', NULL),
 (23, 30, 'FDC Tester', 'Test phost', '[\"images\\/cutecats.jpg\",\"images\\/cutetest.webp\",\"images\\/test.png\"]', 3, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 03:25:53', NULL),
 (24, 30, 'FDC Tester', 'Post Test!', '[\"images\\/Angpic.jpeg\",\"images\\/avatartest.jpeg\",\"images\\/test8.jpeg\"]', 3, '{\"Like\":0,\"Love\":\"1\",\"Care\":\"1\",\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 03:26:35', NULL),
-(25, 2, 'Hadrian Evarula', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.', '[\"images\\/cutecats.jpg\",\"images\\/cutetest.webp\",\"images\\/avatartest.jpeg\",\"images\\/test7.jpeg\",\"images\\/cutetest.webp\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 08:01:13', NULL),
+(25, 2, 'Hadrian Evarula', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.', '[\"images\\/cutecats.jpg\",\"images\\/cutetest.webp\",\"images\\/avatartest.jpeg\",\"images\\/test7.jpeg\",\"images\\/cutetest.webp\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":\"1\",\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 08:01:13', NULL),
 (28, 2, 'Hadrian Evarula', 'My Third Tryal Attemp! I will achieve this one! On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, ', '[\"images\\/cutetest.webp\",\"images\\/cutecats.jpg\",\"images\\/avatartest.jpeg\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":\"1\",\"Wow\":\"1\",\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-27 02:54:51', '2024-12-10 05:08:42'),
 (40, 20, 'Clint Anthony Savilla', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '[\"images\\/test6.jpeg\",\"images\\/test7.jpeg\",\"images\\/test8.jpeg\"]', 3, '{\"Like\":0,\"Love\":\"1\",\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 1, 17, 'With the online text generator you can process your personal Lorem Ipsum enriching it with html elements that define its structure, with the possibility to insert external links, but not only.\r\n\r\nNow to compose a text Lorem Ipsum is much more fun!\r\n\r\nIn fact, inserting any fantasy text or a famous text, be it a poem, a speech, a literary passage, a song\'s text, etc., our text generator will provide the random extraction of terms and steps to compose your own exclusive Lorem Ipsum.\r\n\r\nBe original, test your imagination... our Lorem Ipsum generator will amaze you. Try it now! Copy and Paste!', 2, 'Hadrian Evarula', '2024-11-29 02:07:50', '2024-11-25 09:40:46', '2024-12-03 02:38:05'),
 (43, 20, 'Clint Anthony Savilla', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '[\"images\\/test6.jpeg\",\"images\\/test7.jpeg\",\"images\\/test8.jpeg\"]', 3, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 1, 17, '1212Ab blanditiis ratione et dolores provident rem nulla aliquid est velit totam nam alias aliquam aut magni obcaecati. Id delectus omnis eum dolorem laboriosam ut iste delectus qui repellendus reiciendis eos tenetur molestiae eum quia alias. Aut illum unde vel voluptatibus sapiente quo galisum nobis sed porro praesentium ab enim iure. Non culpa autem ut omnis provident ut omnis voluptatem qui modi ipsa.', 30, 'FDC Tester', '2024-11-29 04:09:00', '2024-11-25 09:40:46', '2024-11-29 04:50:02'),
@@ -344,7 +348,8 @@ INSERT INTO `reactions` (`id`, `user_id`, `profile_post_id`, `reaction_type`, `c
 (61, 2, 24, 3, '2024-12-09 03:53:14'),
 (62, 2, 17, 7, '2024-12-09 03:55:38'),
 (63, 2, 22, 5, '2024-12-09 03:57:56'),
-(64, 2, 28, 4, '2024-12-10 05:06:40');
+(64, 2, 28, 4, '2024-12-10 05:06:40'),
+(66, 2, 25, 4, '2024-12-10 09:42:15');
 
 -- --------------------------------------------------------
 
@@ -395,7 +400,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-12 09:38:48', '2024-12-10 07:48:14', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. 123', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-10 10:11:02', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. 123', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0),
 (20, 'Clint Anthony Savilla', 'Male', '2024-03-18', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (21, 'Janrae Fagaragan', 'Male', '2024-03-18', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
@@ -528,7 +533,7 @@ ALTER TABLE `my_day_story`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `posts`
@@ -546,7 +551,7 @@ ALTER TABLE `profile_posts`
 -- AUTO_INCREMENT for table `reactions`
 --
 ALTER TABLE `reactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `users`

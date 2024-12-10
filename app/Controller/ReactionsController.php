@@ -149,6 +149,7 @@ class ReactionsController extends AppController
 
 
     private function saveToNotification($reaction, $type, $authorId){
+
         $notification = [
             'Notification' => [
                 'user_id' => $reaction['Reactions']['user_id'],
@@ -157,26 +158,30 @@ class ReactionsController extends AppController
                 'author' => $authorId
             ]
         ];
+        $userNotif = $this->User->find('first', [
+            'conditions' => ['User.user_id' => $authorId]
+        ]);
 
-      if($type == 'reaction'){
-            $notification['Notification']['type'] = 1;
-            $notification['Notification']['description'] = 
-            $reaction['Reactions']['reaction_type'] == 1 ? 'Like to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 2 ? 'Reacted Heart to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 3 ? 'Reacted Care to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 4 ? 'Reacted Haha to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 5 ? 'Reacted Wow to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 6 ? 'Reacted Sad to your Post' :
-            ($reaction['Reactions']['reaction_type'] == 7 ? 'Reacted Angry to your Post' :
-            'Reacted to your Post'))))));
+        if($type == 'reaction'){
+                $notification['Notification']['type'] = 1;
+                $notification['Notification']['description'] = 
+                $reaction['Reactions']['reaction_type'] == 1 ? 'Like to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 2 ? 'Reacted Heart to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 3 ? 'Reacted Care to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 4 ? 'Reacted Haha to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 5 ? 'Reacted Wow to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 6 ? 'Reacted Sad to your Post' :
+                ($reaction['Reactions']['reaction_type'] == 7 ? 'Reacted Angry to your Post' :
+                'Reacted to your Post'))))));
 
-      }else{
-        $notification['Notification']['type'] = 2;
-      }
-     
-      if($this->Notification->save($notification)){
-        $this->response->body(json_encode(['success' => true, 'message' => 'Notification saved successfully.']));
-      }
+        }else{
+            $notification['Notification']['type'] = 2;
+        }
+        if($userNotif['User']['reaction_notif'] == 1){
+            if($this->Notification->save($notification)){
+                $this->response->body(json_encode(['success' => true, 'message' => 'Notification saved successfully.']));
+            }
+        }
     }
 
 

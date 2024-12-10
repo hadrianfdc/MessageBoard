@@ -121,6 +121,10 @@ class CommentController extends AppController
             'conditions' => ['ProfilePost.id' => $commentData['profile_post_id']]
         ]);
 
+        $userNotif = $this->User->find('first', [
+            'conditions' => ['User.user_id' => $findOwnerOfPost['ProfilePost']['user_id']]
+        ]);
+        
         $notification = [
             'Notification' => [
                 'user_id' => $commentorId,
@@ -132,11 +136,11 @@ class CommentController extends AppController
             ]
         ];
 
-
-     
-      if($this->Notification->save($notification)){
-        
-      }
+        if($userNotif['User']['comment_notif'] == 1){
+            if($this->Notification->save($notification)){
+                
+            }
+        }
     }
     
     
