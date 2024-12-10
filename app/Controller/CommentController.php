@@ -46,6 +46,7 @@ class CommentController extends AppController
 
     public function saveComment() {
         $this->autoRender = false;
+        $this->layout = false;
         $this->response->type('json');
         
         if ($this->request->is('post')) {

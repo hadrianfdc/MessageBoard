@@ -97,15 +97,15 @@ function timeAgo($timestamp) {
             <p class="mb-0"><b><i class="fas fa-venus-mars"></i></b> <?php echo $userProfileData[0]['UserProfiles']['gender']; ?></p><br>
           <?php endif; ?>
 
-          <?php if (!empty($userProfileData[0]['UserProfiles']['location'])): ?>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['location']) && $userProfileData[0]['UserProfiles']['show_location_details'] == 1): ?>
             <p class="mb-0"><b><i class="fas fa-map-marker-alt"></i></b> From <b style="color: black;"><?php echo $userProfileData[0]['UserProfiles']['location']; ?></b></p><br>
           <?php endif; ?>
 
-          <?php if (!empty($userProfileData[0]['UserProfiles']['relationship'])): ?>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['relationship']) && $userProfileData[0]['UserProfiles']['show_inrelationship'] == 1): ?>
             <p class="mb-0"><b><i class="fas fa-heart"></i></b> In a relationship with <b style="color:black;"><?php echo $userProfileData[0]['UserProfiles']['relationship']; ?></b></p><br>
           <?php endif; ?>
 
-          <?php if (!empty($userProfileData[0]['UserProfiles']['birthdate'])): ?>
+          <?php if (!empty($userProfileData[0]['UserProfiles']['birthdate']) && $userProfileData[0]['UserProfiles']['show_birthday'] == 1): ?>
             <p class="mb-0"><b><i class="fas fa-birthday-cake"></i></b> <?php echo $userProfileData[0]['UserProfiles']['birthdate']; ?></p><br>
           <?php endif; ?>
 

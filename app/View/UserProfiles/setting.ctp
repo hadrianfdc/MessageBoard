@@ -156,19 +156,115 @@ function loadContent(page) {
         `;
         break;
 
-    case 'privacy':
-      contentDisplay.innerHTML = `
-        <h2>Privacy Settings</h2>
-        <p>Control who can see your posts, find you, or contact you.</p>
-        <div class="setting-item">
-          <input type="checkbox" id="post-visibility">
-          <label for="post-visibility">Who can see your posts?</label>
-        </div>
-        <div class="setting-item">
-          <button class="btn-save" onclick="savePrivacy()">Save Privacy Settings</button>
-        </div>
-      `;
-      break;
+        case 'privacy':
+        contentDisplay.innerHTML = `
+            <h2 style="font-size: 24px; margin-bottom: 10px; color: #333;">Privacy Settings</h2>
+            <p style="font-size: 14px; margin-bottom: 20px; color: #555;">Control who can see your posts, find you, or contact you.</p>
+            
+            <!-- Who can see your profile -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="account-type" style="font-size: 14px; color: #555;">Account type?</label>
+                <select id="account-type" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['account_type'] == 1 ? 'selected' : ''}>Private</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['account_type'] == 2 ? 'selected' : ''}>Public</option>
+                </select>
+            </div>
+            
+            <!-- Who can find your profile -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="search-visibility" style="font-size: 14px; color: #555;">Who can find your profile?</label>
+                <select id="search-visibility" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['search_visibility'] == 1 ? 'selected' : ''}>Everyone</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['search_visibility'] == 2 ? 'selected' : ''}>Friends</option>
+                </select>
+            </div>
+            
+            <!-- Who can send you messages -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="who-can-send-message" style="font-size: 14px; color: #555;">Who can send you messages?</label>
+                <select id="who-can-send-message" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 1 ? 'selected' : ''}>Everyone</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 2 ? 'selected' : ''}>Friends Only</option>
+                    <option value="0" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 0 ? 'selected' : ''}>No One</option>
+                </select>
+            </div>
+            
+            <!-- Location sharing -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="location-sharing" style="font-size: 14px; color: #555;">Location Sharing</label>
+                <select id="location-sharing" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="0" ${userProfileData[0]['UserProfiles']['location_sharing'] == 0 ? 'selected' : ''}>Disable</option>
+                    <option value="1" ${userProfileData[0]['UserProfiles']['location_sharing'] == 1 ? 'selected' : ''}>Enable</option>
+                </select>
+            </div>
+            
+            <!-- Who can post on your timeline -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="timeline-permission" style="font-size: 14px; color: #555;">Who can post on your timeline?</label>
+                <select id="timeline-permission" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 1 ? 'selected' : ''}>Everyone</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 2 ? 'selected' : ''}>Friends</option>
+                    <option value="3" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 3 ? 'selected' : ''}>Only Me</option>
+                </select>
+            </div>
+
+            <!-- Permission for Tag -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="profile-tagging" style="font-size: 14px; color: #555;">Permission for Tag?</label>
+                <select id="profile-tagging" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['profile_tagging'] == 1 ? 'selected' : ''}>Allow Friends</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['profile_tagging'] == 2 ? 'selected' : ''}>Approval for Tag</option>
+                </select>
+            </div>
+
+            <!-- Who can see my friends list -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="who-can-see-myfriends" style="font-size: 14px; color: #555;">Who can see my friends list?</label>
+                <select id="who-can-see-myfriends" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 1 ? 'selected' : ''}>Only Me</option>
+                    <option value="2" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 2 ? 'selected' : ''}>Friends</option>
+                    <option value="3" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 3 ? 'selected' : ''}>Public</option>
+                </select>
+            </div>
+
+            <!-- Show Birthday -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="show-birthday" style="font-size: 14px; color: #555;">Show birthday?</label>
+                <select id="show-birthday" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['show_birthday'] == 1 ? 'selected' : ''}>Yes</option>
+                    <option value="0" ${userProfileData[0]['UserProfiles']['show_birthday'] == 0 ? 'selected' : ''}>No</option>
+                </select>
+            </div>
+
+            <!-- Show Location Details -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="show-location-details" style="font-size: 14px; color: #555;">Show location in timeline?</label>
+                <select id="show-location-details" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['show_location_details'] == 1 ? 'selected' : ''}>Yes</option>
+                    <option value="0" ${userProfileData[0]['UserProfiles']['show_location_details'] == 0 ? 'selected' : ''}>No</option>
+                </select>
+            </div>
+
+            <!-- Show Relationship Details -->
+            <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <label for="show-inrelationship" style="font-size: 14px; color: #555;">Show in relationship in timeline?</label>
+                <select id="show-inrelationship" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    <option value="1" ${userProfileData[0]['UserProfiles']['show_inrelationship'] == 1 ? 'selected' : ''}>Yes</option>
+                    <option value="0" ${userProfileData[0]['UserProfiles']['show_inrelationship'] == 0 ? 'selected' : ''}>No</option>
+                </select>
+            </div>
+            
+            <!-- Save Button -->
+            <div class="setting-item" style="margin-top: 20px; display: flex; justify-content: center;">
+                <button class="btn-save" 
+                        onclick="savePrivacy()"
+                        style="background-color: #4267B2; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">
+                    Save Privacy Settings
+                </button>
+            </div>
+        `;
+        break;
+
     case 'notifications':
       contentDisplay.innerHTML = `
         <h2>Notifications</h2>
@@ -261,7 +357,7 @@ function confirmLogout() {
     });
 }
 
-
+//Case General Setting //Case General Setting//Case General Setting//Case General Setting//Case General Setting//Case General Setting//Case General Setting//Case General Setting
 function saveGeneral() {
     const fullName = document.getElementById('full_name').value;
     const gender = document.getElementById('gender').value;
@@ -311,7 +407,7 @@ function saveGeneral() {
     });
   }
 
-
+//Case Secuirty Password //Case Secuirty Password//Case Secuirty Password//Case Secuirty Password//Case Secuirty Password//Case Secuirty Password//Case Secuirty Password//Case Secuirty Password
   function saveSecurity() {
       const logoutURL = "<?php echo $this->Html->url(array('controller' => 'logins', 'action' => 'logout')); ?>";
       const oldPassword = document.getElementById('old-password').value;
@@ -356,6 +452,59 @@ function saveGeneral() {
         }
       });
   }
+
+//Case Privacy //Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy//Case Privacy
+function savePrivacy() {
+    const data = {
+        account_type: document.getElementById('account-type').value,
+        search_visibility: document.getElementById('search-visibility').value,
+        who_can_send_message: document.getElementById('who-can-send-message').value,
+        location_sharing: document.getElementById('location-sharing').value,
+        timeline_permision: document.getElementById('timeline-permission').value,
+        profile_tagging: document.getElementById('profile-tagging').value,
+        who_can_see_myfriends: document.getElementById('who-can-see-myfriends').value,
+        show_birthday: document.getElementById('show-birthday').value,
+        show_location_details: document.getElementById('show-location-details').value,
+        show_inrelationship: document.getElementById('show-inrelationship').value,
+    };
+
+    fetch('/MessageBoard/UserProfiles/updatePrivacySettings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Privacy settings updated successfully',
+                confirmButtonText: 'OK',
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed!',
+                text: 'Failed to update privacy settings: ' + data.message,
+                confirmButtonText: 'OK',
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'An error occurred while updating privacy settings.',
+            confirmButtonText: 'OK',
+        });
+    });
+}
+
+
 
 
 </script>

@@ -1044,5 +1044,53 @@ class UserProfilesController extends AppController
         // echo "<pre>"; print_r($userProfileData); echo "</pre>"; die();
     }
 
+    public function updatePrivacySettings() {
+        $this->autoRender = false; 
+        $this->response->type('json'); 
+        
+        if ($this->request->is('post')) {
+            $userId = $this->Session->read('Auth.User.user_id'); 
+            if (!$userId) {
+                return json_encode(['success' => false, 'message' => 'User not logged in']);
+            }
+            
+             // Decode JSON payload
+            $data = json_decode($this->request->input(), true);
+
+            $this->log(print_r($data, true), 'error'); 
+
+            $allowedFields = [
+                'account_type',
+                'search_visibility',
+                'who_can_send_message',
+                'location_sharing',
+                'timeline_permision',
+                'profile_tagging',
+                'who_can_see_myfriends',
+                'show_birthday',
+                'show_location_details',
+                'show_inrelationship'
+            ];
+            
+            $updateData = [];
+            foreach ($allowedFields as $field) {
+                if (isset($data[$field])) {
+                    $updateData['UserProfiles'][$field] = $data[$field];
+                }
+            }
+            $this->log("Update Data : " . print_r($updateData, true), 'error'); 
+            if (!empty($updateData)) {
+                $this->loadModel('UserProfiles'); 
+                if ($this->UserProfiles->updateAll($updateData['UserProfiles'], ['user_id' => $userId])) {
+                    return json_encode(['success' => true, 'message' => 'Privacy settings updated successfully']);
+                }
+            }
+            return json_encode(['success' => false, 'message' => 'Failed to update privacy settings']);
+        }
+        
+        return json_encode(['success' => false, 'message' => 'Invalid request']);
+    }
+    
+
 
 }
