@@ -122,7 +122,7 @@ function loadContent(page) {
         </div>
         
         <div class="setting-item" style="text-align: center; margin-top: 20px;">
-          <button class="btn-save" onclick="saveGeneral()" style="padding: 10px 20px; background-color: #4267B2; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Save Changes</button>
+          <button class="btn-save" onclick="saveGeneral()" style="padding: 10px 20px; background-color: #4267B2; color: white; border: none; border-radius: 5px; font-size: 12px; cursor: pointer;">Save Changes</button>
         </div>
       `;
       break;
@@ -149,7 +149,7 @@ function loadContent(page) {
             </div>
             <div class="setting-item" style="text-align: center;">
               <button class="btn-save" 
-                style="background-color: #1877f2; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.2s;"
+                style="background-color: #1877f2; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: background-color 0.2s;"
                 onclick="saveSecurity()">Save Security Settings</button>
             </div>
           </div>
@@ -258,26 +258,71 @@ function loadContent(page) {
             <div class="setting-item" style="margin-top: 20px; display: flex; justify-content: center;">
                 <button class="btn-save" 
                         onclick="savePrivacy()"
-                        style="background-color: #4267B2; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">
+                        style="background-color: #4267B2; color: white; padding: 10px 20px; font-size: 12px; border: none; border-radius: 5px; cursor: pointer;">
                     Save Privacy Settings
                 </button>
             </div>
         `;
         break;
 
-    case 'notifications':
-      contentDisplay.innerHTML = `
-        <h2>Notifications</h2>
-        <p>Manage notification preferences here.</p>
-        <div class="setting-item">
-          <input type="checkbox" id="email-notify">
-          <label for="email-notify">Receive email notifications</label>
-        </div>
-        <div class="setting-item">
-          <button class="btn-save" onclick="saveNotifications()">Save Changes</button>
-        </div>
-      `;
-      break;
+        case 'notifications':
+        contentDisplay.innerHTML = `
+            <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Notifications</h2>
+            <p style="color: #555; margin-bottom: 20px;">Manage notification preferences here.</p>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['friend_req_notif'] == 1 ? 'checked' : ''} type="checkbox" id="friend-req-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="friend-req-notif" style="font-size: 16px; color: #333;">Friend Request Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['people_u_may_know_notif'] == 1 ? 'checked' : ''} type="checkbox" id="people-u-may-know-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="people-u-may-know-notif" style="font-size: 16px; color: #333;">Suggested People Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['birthday_notif'] == 1 ? 'checked' : ''} type="checkbox" id="birthday-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="birthday-notif" style="font-size: 16px; color: #333;">Birthday Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['events_notif'] == 1 ? 'checked' : ''} type="checkbox" id="events-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="events-notif" style="font-size: 16px; color: #333;">Event Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['highlights_notif'] == 1 ? 'checked' : ''} type="checkbox" id="highlights-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="highlights-notif" style="font-size: 16px; color: #333;">Suggested Highlights Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['comment_notif'] == 1 ? 'checked' : ''} type="checkbox" id="comment-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="comment-notif" style="font-size: 16px; color: #333;">Comment Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['reaction_notif'] == 1 ? 'checked' : ''} type="checkbox" id="reaction-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="reaction-notif" style="font-size: 16px; color: #333;">Reaction Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['login_notif'] == 1 ? 'checked' : ''} type="checkbox" id="login-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="login-notif" style="font-size: 16px; color: #333;">Login Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+              <input ${userProfileData[0]['UserProfiles']['change_password_notif'] == 1 ? 'checked' : ''} type="checkbox" id="change-password-notif" style="margin-right: 10px; width: 18px; height: 18px;">
+              <label for="change-password-notif" style="font-size: 16px; color: #333;">Change Password Notifications</label>
+            </div>
+            
+            <div class="setting-item" style="text-align: center; margin-top: 20px;">
+              <button class="btn-save" onclick="saveNotifications()" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 12px; border-radius: 5px; cursor: pointer;">
+                Save Changes
+              </button>
+            </div>
+        `;
+        break;
+
     case 'ads':
       contentDisplay.innerHTML = `
         <h2>Ads Preferences</h2>
@@ -502,6 +547,47 @@ function savePrivacy() {
             confirmButtonText: 'OK',
         });
     });
+}
+
+//Case Save Notifications Setting //Case Save Notifications Setting //Case Save Notifications Setting //Case Save Notifications Setting //Case Save Notifications Setting //Case Save Notifications Setting
+
+function saveNotifications() {
+    const data = {
+        friend_req_notif: document.getElementById('friend-req-notif').checked ? 1 : 0,
+        people_u_may_know_notif: document.getElementById('people-u-may-know-notif').checked ? 1 : 0,
+        birthday_notif: document.getElementById('birthday-notif').checked ? 1 : 0,
+        events_notif: document.getElementById('events-notif').checked ? 1 : 0,
+        highlights_notif: document.getElementById('highlights-notif').checked ? 1 : 0,
+        comment_notif: document.getElementById('comment-notif').checked ? 1 : 0,
+        reaction_notif: document.getElementById('reaction-notif').checked ? 1 : 0,
+        login_notif: document.getElementById('login-notif').checked ? 1 : 0,
+        change_password_notif: document.getElementById('change-password-notif').checked ? 1 : 0,
+    };
+
+    fetch('/MessageBoard/UserProfiles/saveNotifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Notification settings updated successfully',
+                confirmButtonText: 'OK',
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed!',
+                text: 'Failed to update notification settings: ' + data.message,
+                confirmButtonText: 'OK',
+            });
+        }
+    })
+    .catch(error => console.error('Error saving notifications:', error));
 }
 
 

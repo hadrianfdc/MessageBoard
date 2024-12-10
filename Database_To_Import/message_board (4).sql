@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 10, 2024 at 08:16 AM
+-- Generation Time: Dec 10, 2024 at 09:19 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -226,7 +226,7 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 (52, 2, 20, 44, 1, 'Reacted Heart to your Post', 1, '2024-12-06 03:12:00'),
 (53, 20, 20, 17, 1, 'Reacted Heart to your Post', 0, '2024-12-06 07:31:58'),
 (54, 20, 2, 40, 1, 'Reacted Heart to your Post', 1, '2024-12-06 07:35:38'),
-(55, 2, 2, 28, 1, 'Reacted Heart to your Post', 0, '2024-12-06 08:08:43'),
+(55, 2, 2, 28, 1, 'Reacted Heart to your Post', 1, '2024-12-06 08:08:43'),
 (56, 20, 2, 28, 1, 'Reacted Wow to your Post', 0, '2024-12-06 08:26:21'),
 (57, 2, 30, 24, 1, 'Reacted Care to your Post', 0, '2024-12-09 03:53:14'),
 (58, 2, 20, 17, 1, 'Reacted Angry to your Post', 0, '2024-12-09 03:55:38'),
@@ -238,7 +238,7 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 (64, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:52'),
 (65, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:53'),
 (66, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:36:40'),
-(67, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:37:30');
+(67, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:37:30');
 
 -- --------------------------------------------------------
 
@@ -378,26 +378,35 @@ CREATE TABLE `users` (
   `who_can_see_myfriends` int(1) NOT NULL DEFAULT 3 COMMENT '1: Only me, 2:Friends, 3: Public',
   `show_birthday` int(1) NOT NULL DEFAULT 1 COMMENT '0:no 1:yes',
   `show_location_details` int(1) NOT NULL DEFAULT 1 COMMENT '0:No, 1:Yes',
-  `show_inrelationship` int(1) NOT NULL DEFAULT 1 COMMENT '0: No, 1: Yes'
+  `show_inrelationship` int(1) NOT NULL DEFAULT 1 COMMENT '0: No, 1: Yes',
+  `friend_req_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Friend Request 0: No, 1: Yes',
+  `people_u_may_know_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Suggested People 0:No, 1:Yes',
+  `birthday_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Birthday Notification 0:Disable 1:Enable',
+  `events_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Event Notification 0:Disable 1:Enable',
+  `highlights_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Suggested Highlighs 0:Disable 1:Enable',
+  `comment_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Comment Notification 0:Disable 1:Enable',
+  `reaction_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Reaction Notification 0:Disable 1:Enable',
+  `login_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Login Notification 0:Disable 1:Enable',
+  `change_password_notif` int(1) NOT NULL DEFAULT 1 COMMENT 'Change Password Notification 0:Disable 1:Enable'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-12 09:38:48', '2024-12-10 07:48:14', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. 123', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1),
-(20, 'Clint Anthony Savilla', 'Male', '2024-03-18', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(21, 'Janrae Fagaragan', 'Male', '2024-03-18', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(23, 'Dave Gwapo', 'Male', '2024-03-18', 'dave.gwapolagika@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 08:47:23', '2024-03-20 07:09:25', 'Wala ra gud hehehe', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(24, 'John Doe', 'Male', '2024-03-19', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(25, 'Joseph Savilla', 'Male', '2002-03-20', 'joseph.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:02:15', '2024-11-29 06:33:51', 'Wala ra gud', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(26, 'Andrea B', 'Female', '2004-03-20', 'andrea.b@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:10:25', '2024-11-28 07:51:03', 'Wala ra pud\r\n', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(27, 'Jan Baoc', 'Male', '2024-03-20', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-11-28 06:27:02', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(28, 'June Michael Jordan', 'Male', '2024-03-20', 'june@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:15:54', '2024-11-29 06:33:25', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(29, 'Wa Ra Gud', 'Male', '2024-03-21', 'waragud@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-21 03:52:15', '2024-11-28 06:25:55', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1),
-(30, 'FDC Tester', 'Male', '2005-03-22', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1);
+INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
+(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-12 09:38:48', '2024-12-10 07:48:14', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. 123', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+(20, 'Clint Anthony Savilla', 'Male', '2024-03-18', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(21, 'Janrae Fagaragan', 'Male', '2024-03-18', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(23, 'Dave Gwapo', 'Male', '2024-03-18', 'dave.gwapolagika@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 08:47:23', '2024-03-20 07:09:25', 'Wala ra gud hehehe', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(24, 'John Doe', 'Male', '2024-03-19', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(25, 'Joseph Savilla', 'Male', '2002-03-20', 'joseph.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:02:15', '2024-11-29 06:33:51', 'Wala ra gud', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(26, 'Andrea B', 'Female', '2004-03-20', 'andrea.b@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:10:25', '2024-11-28 07:51:03', 'Wala ra pud\r\n', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(27, 'Jan Baoc', 'Male', '2024-03-20', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-11-28 06:27:02', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(28, 'June Michael Jordan', 'Male', '2024-03-20', 'june@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:15:54', '2024-11-29 06:33:25', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(29, 'Wa Ra Gud', 'Male', '2024-03-21', 'waragud@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-21 03:52:15', '2024-11-28 06:25:55', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(30, 'FDC Tester', 'Male', '2005-03-22', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 --
 -- Indexes for dumped tables

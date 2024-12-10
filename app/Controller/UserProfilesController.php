@@ -1057,7 +1057,7 @@ class UserProfilesController extends AppController
              // Decode JSON payload
             $data = json_decode($this->request->input(), true);
 
-            $this->log(print_r($data, true), 'error'); 
+            // $this->log(print_r($data, true), 'error'); 
 
             $allowedFields = [
                 'account_type',
@@ -1090,6 +1090,58 @@ class UserProfilesController extends AppController
         
         return json_encode(['success' => false, 'message' => 'Invalid request']);
     }
+
+    public function saveNotifications() {
+        $this->autoRender = false; 
+        $this->response->type('json'); 
+        
+        if ($this->request->is('post')) {
+            $userId = $this->Session->read('Auth.User.user_id'); 
+            if (!$userId) {
+                return json_encode(['success' => false, 'message' => 'User not logged in']);
+            }
+            
+            // Decode JSON payload
+            $data = json_decode($this->request->input(), true);
+    
+            // Log received data for debugging (optional)
+            $this->log(print_r($data, true), 'error');
+    
+            // Allowed fields for saving notifications
+            $allowedFields = [
+                'friend_req_notif',
+                'people_u_may_know_notif',
+                'birthday_notif',
+                'events_notif',
+                'highlights_notif',
+                'comment_notif',
+                'reaction_notif',
+                'login_notif',
+                'change_password_notif'
+            ];
+            
+            $updateData = [];
+            foreach ($allowedFields as $field) {
+                if (isset($data[$field])) {
+                    $updateData['UserProfiles'][$field] = $data[$field];
+                }
+            }
+    
+            $this->log("Update Data : " . print_r($updateData, true), 'error');
+            
+            if (!empty($updateData)) {
+                $this->loadModel('UserProfile'); 
+                if ($this->UserProfiles->updateAll($updateData['UserProfiles'], ['user_id' => $userId])) {
+                    return json_encode(['success' => true, 'message' => 'Notification settings updated successfully']);
+                }
+            }
+    
+            return json_encode(['success' => false, 'message' => 'Failed to update notification settings']);
+        }
+        
+        return json_encode(['success' => false, 'message' => 'Invalid request']);
+    }
+    
     
 
 
