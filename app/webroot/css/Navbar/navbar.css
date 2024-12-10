@@ -1053,6 +1053,9 @@ html.is-dark #profile-d #profile-pic{
   box-shadow: 0 0 0 5px #252525;
 }
 
+/* html.is-dark #modal_shows_who_react #modal_who_react_content,
+html.is-dark #modal_shows_who_react #modal_who_react_content div,
+html.is-dark #modal_shows_who_react #modal_who_react_content #reactionsList, */
 html.is-dark .main-feed .td ,
 html.is-dark .main-feed .tb ,
 html.is-dark #m-btns,

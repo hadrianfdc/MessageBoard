@@ -89,7 +89,7 @@ class LoginsController extends AppController
                     )
                 ));
 
-                $this->log(print_r($this->request->data, true));
+                // $this->log(print_r($this->request->data, true));
                 $oldPassword = $this->request->data['Registers']['old_password'];
                 $newPassword = $this->request->data['Registers']['password'];
                 $confirmPassword = $this->request->data['Registers']['confirm_password'];
@@ -128,4 +128,71 @@ class LoginsController extends AppController
             }
         }
     }
+
+    public function changePasswordJson()
+{
+    $this->layout = null;
+    $this->autoRender = false; // Prevent default view rendering
+    
+    if ($this->request->is('post')) {
+        $this->loadModel('Registers');
+
+        if ($this->Registers->validates()) {
+            $user_id = $this->Session->read('Auth.User.user_id');
+            $user = $this->Registers->find('first', array(
+                'conditions' => array(
+                    'user_id' => $user_id
+                )
+            ));
+
+            // $this->log(print_r($this->request->data, true));
+            $oldPassword = $this->request->data['Registers']['old_password'];
+            $newPassword = $this->request->data['Registers']['password'];
+            $confirmPassword = $this->request->data['Registers']['confirm_password'];
+
+            $hashedEnteredPassword = Security::hash($oldPassword, 'blowfish', $user['Registers']['password']);
+
+            if ($hashedEnteredPassword === $user['Registers']['password']) {
+
+                if ($newPassword !== $confirmPassword) {
+                    $response = array(
+                        'success' => false,
+                        'message' => 'New Password and Confirm Password do not match'
+                    );
+                    echo json_encode($response);
+                    return;
+                }
+
+                $hashedPassword = Security::hash($newPassword, 'sha256', true);
+                $user['Registers']['password'] = $hashedPassword;
+
+                if ($this->Registers->save($user)) {
+                    $response = array(
+                        'success' => true,
+                        'message' => 'Password updated successfully'
+                    );
+                } else {
+                    $response = array(
+                        'success' => false,
+                        'message' => 'Failed to save the new password'
+                    );
+                }
+            } else {
+                $response = array(
+                    'success' => false,
+                    'message' => 'Old Password is incorrect'
+                );
+            }
+        } else {
+            $response = array(
+                'success' => false,
+                'message' => 'Validation failed. Please correct the errors below.'
+            );
+        }
+
+        echo json_encode($response);
+        return;
+    }
+}
+
 }

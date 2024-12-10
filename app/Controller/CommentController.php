@@ -98,6 +98,8 @@ class CommentController extends AppController
             if ($this->Comment->save($commentData)) {
                 $response = ['status' => 'success', 'message' => 'Comment posted successfully.'];
                 echo json_encode($response);
+                $commentorId = $user_id;
+                $this->saveToNotification($commentData, $commentorId);
             } else {
                 $response = ['status' => 'error', 'message' => 'Unable to save comment. Please try again.'];
                 echo json_encode($response);
@@ -106,6 +108,34 @@ class CommentController extends AppController
             $response = ['status' => 'error', 'message' => 'Invalid request type.'];
             echo json_encode($response);
         }
+        ob_flush();
+        flush();
+    }
+
+
+    private function saveToNotification($commentData, $commentorId){
+
+        $findOwnerOfPost = $this->ProfilePost->find('first', [
+            'fields' => ['ProfilePost.user_id'],
+            'conditions' => ['ProfilePost.id' => $commentData['profile_post_id']]
+        ]);
+
+        $notification = [
+            'Notification' => [
+                'user_id' => $commentorId,
+                'profile_post_id' => $commentData['profile_post_id'],
+                'created' => date('Y-m-d H:i:s'), 
+                'type' => 2,
+                'description' => 'commented on your post',
+                'author' => $findOwnerOfPost['ProfilePost']['user_id']
+            ]
+        ];
+
+
+     
+      if($this->Notification->save($notification)){
+        
+      }
     }
     
     

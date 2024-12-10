@@ -1518,6 +1518,7 @@ document.getElementById('postCommentButton').addEventListener('click', function 
     })
     .then(response => {
         return response.text().then(text => {
+            console.log('Raw server response:', text);
             try {
                 const data = JSON.parse(text); 
                 return data;
@@ -1534,12 +1535,13 @@ document.getElementById('postCommentButton').addEventListener('click', function 
             commentInput.value = '';
             fileInput.value = '';
         } else {
-            alert(data.message);
+            console.log(data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Something went wrong. Please try again.');
+        // alert('Something went wrong. Please try again.');
+
     });
 
 });

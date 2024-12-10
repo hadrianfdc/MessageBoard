@@ -127,23 +127,35 @@ function loadContent(page) {
       `;
       break;
 
-    case 'security':
-      contentDisplay.innerHTML = `
-        <h2>Security & Login</h2>
-        <p>Update your password or set up two-factor authentication here.</p>
-        <div class="setting-item">
-          <label for="old-password">Old Password</label>
-          <input type="password" id="old-password">
-        </div>
-        <div class="setting-item">
-          <label for="new-password">New Password</label>
-          <input type="password" id="new-password">
-        </div>
-        <div class="setting-item">
-          <button class="btn-save" onclick="saveSecurity()">Save Security Settings</button>
-        </div>
-      `;
-      break;
+      case 'security':
+        contentDisplay.innerHTML = `
+          <h2 style="color: #333; font-size: 24px; margin-bottom: 10px;">Security & Login</h2>
+          <p style="color: #555; margin-bottom: 20px; font-size: 14px;">Update your password or set up two-factor authentication here.</p>
+          <div style="background: #f0f2f5; padding: 20px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+            <div class="setting-item" style="margin-bottom: 15px;">
+              <label for="old-password" style="color: #555; font-size: 14px; display: block; margin-bottom: 5px;">Old Password</label>
+              <input type="password" id="old-password" 
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            </div>
+            <div class="setting-item" style="margin-bottom: 15px;">
+              <label for="new-password" style="color: #555; font-size: 14px; display: block; margin-bottom: 5px;">New Password</label>
+              <input type="password" id="new-password"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            </div>
+            <div class="setting-item" style="margin-bottom: 20px;">
+              <label for="confirm-password" style="color: #555; font-size: 14px; display: block; margin-bottom: 5px;">Confirm New Password</label>
+              <input type="password" id="confirm-password"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            </div>
+            <div class="setting-item" style="text-align: center;">
+              <button class="btn-save" 
+                style="background-color: #1877f2; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.2s;"
+                onclick="saveSecurity()">Save Security Settings</button>
+            </div>
+          </div>
+        `;
+        break;
+
     case 'privacy':
       contentDisplay.innerHTML = `
         <h2>Privacy Settings</h2>
@@ -298,5 +310,52 @@ function saveGeneral() {
       }
     });
   }
+
+
+  function saveSecurity() {
+      const logoutURL = "<?php echo $this->Html->url(array('controller' => 'logins', 'action' => 'logout')); ?>";
+      const oldPassword = document.getElementById('old-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      $.ajax({
+        type: "POST",
+        url: "/MessageBoard/Logins/changePasswordJson", 
+        data: {
+          'Registers[old_password]': oldPassword,
+          'Registers[password]': newPassword,
+          'Registers[confirm_password]': confirmPassword
+        },
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              title: 'Success!',
+              text: response.message,
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location= logoutURL;
+            });
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: response.message,
+              icon: 'error',
+              confirmButtonText: 'Try Again'
+            });
+          }
+        },
+        error: function() {
+          Swal.fire({
+            title: 'Unexpected Error',
+            text: 'Something went wrong!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+  }
+
 
 </script>
