@@ -149,8 +149,8 @@ function loadContent(page) {
             </div>
             <div class="setting-item" style="text-align: center;">
               <button class="btn-save" 
-                style="background-color: #1877f2; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: background-color 0.2s;"
-                onclick="saveSecurity()">Save Security Settings</button>
+                style="background-color: #4267B2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: background-color 0.2s;"
+                onclick="saveSecurity()">Save Changes</button>
             </div>
           </div>
         `;
@@ -163,8 +163,8 @@ function loadContent(page) {
             
             <!-- Who can see your profile -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="account-type" style="font-size: 14px; color: #555;">Account type?</label>
-                <select id="account-type" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="account-type" style="font-size: 14px;  width: 20vw; color: #555;">Account type?</label>
+                <select id="account-type" style="width: 140px; padding: 8px 10px;  border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['account_type'] == 1 ? 'selected' : ''}>Private</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['account_type'] == 2 ? 'selected' : ''}>Public</option>
                 </select>
@@ -172,8 +172,8 @@ function loadContent(page) {
             
             <!-- Who can find your profile -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="search-visibility" style="font-size: 14px; color: #555;">Who can find your profile?</label>
-                <select id="search-visibility" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="search-visibility" style="font-size: 14px; width: 20vw;  color: #555;">Who can find your profile?</label>
+                <select id="search-visibility" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['search_visibility'] == 1 ? 'selected' : ''}>Everyone</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['search_visibility'] == 2 ? 'selected' : ''}>Friends</option>
                 </select>
@@ -181,8 +181,8 @@ function loadContent(page) {
             
             <!-- Who can send you messages -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="who-can-send-message" style="font-size: 14px; color: #555;">Who can send you messages?</label>
-                <select id="who-can-send-message" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="who-can-send-message" style="font-size: 14px; width: 20vw; color: #555;">Who can send you messages?</label>
+                <select id="who-can-send-message" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 1 ? 'selected' : ''}>Everyone</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 2 ? 'selected' : ''}>Friends Only</option>
                     <option value="0" ${userProfileData[0]['UserProfiles']['who_can_send_message'] == 0 ? 'selected' : ''}>No One</option>
@@ -191,8 +191,8 @@ function loadContent(page) {
             
             <!-- Location sharing -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="location-sharing" style="font-size: 14px; color: #555;">Location Sharing</label>
-                <select id="location-sharing" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="location-sharing" style="font-size: 14px; width: 20vw; color: #555;">Location Sharing</label>
+                <select id="location-sharing" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="0" ${userProfileData[0]['UserProfiles']['location_sharing'] == 0 ? 'selected' : ''}>Disable</option>
                     <option value="1" ${userProfileData[0]['UserProfiles']['location_sharing'] == 1 ? 'selected' : ''}>Enable</option>
                 </select>
@@ -200,8 +200,8 @@ function loadContent(page) {
             
             <!-- Who can post on your timeline -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="timeline-permission" style="font-size: 14px; color: #555;">Who can post on your timeline?</label>
-                <select id="timeline-permission" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="timeline-permission" style="font-size: 14px; width: 20vw; color: #555;">Who can post on your timeline?</label>
+                <select id="timeline-permission" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 1 ? 'selected' : ''}>Everyone</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 2 ? 'selected' : ''}>Friends</option>
                     <option value="3" ${userProfileData[0]['UserProfiles']['timeline_permision'] == 3 ? 'selected' : ''}>Only Me</option>
@@ -210,8 +210,8 @@ function loadContent(page) {
 
             <!-- Permission for Tag -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="profile-tagging" style="font-size: 14px; color: #555;">Permission for Tag?</label>
-                <select id="profile-tagging" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="profile-tagging" style="font-size: 14px; width: 20vw; color: #555;">Permission for Tag?</label>
+                <select id="profile-tagging" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['profile_tagging'] == 1 ? 'selected' : ''}>Allow Friends</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['profile_tagging'] == 2 ? 'selected' : ''}>Approval for Tag</option>
                 </select>
@@ -219,8 +219,8 @@ function loadContent(page) {
 
             <!-- Who can see my friends list -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="who-can-see-myfriends" style="font-size: 14px; color: #555;">Who can see my friends list?</label>
-                <select id="who-can-see-myfriends" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="who-can-see-myfriends" style="font-size: 14px; width: 20vw; color: #555;">Who can see my friends list?</label>
+                <select id="who-can-see-myfriends" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 1 ? 'selected' : ''}>Only Me</option>
                     <option value="2" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 2 ? 'selected' : ''}>Friends</option>
                     <option value="3" ${userProfileData[0]['UserProfiles']['who_can_see_myfriends'] == 3 ? 'selected' : ''}>Public</option>
@@ -229,8 +229,8 @@ function loadContent(page) {
 
             <!-- Show Birthday -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="show-birthday" style="font-size: 14px; color: #555;">Show birthday?</label>
-                <select id="show-birthday" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="show-birthday" style="font-size: 14px; width: 20vw; color: #555;">Show birthday?</label>
+                <select id="show-birthday" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['show_birthday'] == 1 ? 'selected' : ''}>Yes</option>
                     <option value="0" ${userProfileData[0]['UserProfiles']['show_birthday'] == 0 ? 'selected' : ''}>No</option>
                 </select>
@@ -238,8 +238,8 @@ function loadContent(page) {
 
             <!-- Show Location Details -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="show-location-details" style="font-size: 14px; color: #555;">Show location in timeline?</label>
-                <select id="show-location-details" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="show-location-details" style="font-size: 14px; width: 20vw; color: #555;">Show location in timeline?</label>
+                <select id="show-location-details" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['show_location_details'] == 1 ? 'selected' : ''}>Yes</option>
                     <option value="0" ${userProfileData[0]['UserProfiles']['show_location_details'] == 0 ? 'selected' : ''}>No</option>
                 </select>
@@ -247,19 +247,19 @@ function loadContent(page) {
 
             <!-- Show Relationship Details -->
             <div class="setting-item" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <label for="show-inrelationship" style="font-size: 14px; color: #555;">Show in relationship in timeline?</label>
-                <select id="show-inrelationship" style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <label for="show-inrelationship" style="font-size: 14px; width: 20vw; color: #555;">Show in relationship in timeline?</label>
+                <select id="show-inrelationship" style="width: 140px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                     <option value="1" ${userProfileData[0]['UserProfiles']['show_inrelationship'] == 1 ? 'selected' : ''}>Yes</option>
                     <option value="0" ${userProfileData[0]['UserProfiles']['show_inrelationship'] == 0 ? 'selected' : ''}>No</option>
                 </select>
             </div>
             
             <!-- Save Button -->
-            <div class="setting-item" style="margin-top: 20px; display: flex; justify-content: center;">
+            <div class="setting-item" style="margin-top: 20px; display: flex;">
                 <button class="btn-save" 
                         onclick="savePrivacy()"
                         style="background-color: #4267B2; color: white; padding: 10px 20px; font-size: 12px; border: none; border-radius: 5px; cursor: pointer;">
-                    Save Privacy Settings
+                    Save Changes
                 </button>
             </div>
         `;
@@ -272,51 +272,51 @@ function loadContent(page) {
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['friend_req_notif'] == 1 ? 'checked' : ''} type="checkbox" id="friend-req-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="friend-req-notif" style="font-size: 16px; color: #333;">Friend Request Notifications</label>
+              <label for="friend-req-notif" style="font-size:14px; color: #333;">Friend Request Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['people_u_may_know_notif'] == 1 ? 'checked' : ''} type="checkbox" id="people-u-may-know-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="people-u-may-know-notif" style="font-size: 16px; color: #333;">Suggested People Notifications</label>
+              <label for="people-u-may-know-notif" style="font-size:14px; color: #333;">Suggested People Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['birthday_notif'] == 1 ? 'checked' : ''} type="checkbox" id="birthday-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="birthday-notif" style="font-size: 16px; color: #333;">Birthday Notifications</label>
+              <label for="birthday-notif" style="font-size:14px; color: #333;">Birthday Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['events_notif'] == 1 ? 'checked' : ''} type="checkbox" id="events-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="events-notif" style="font-size: 16px; color: #333;">Event Notifications</label>
+              <label for="events-notif" style="font-size:14px; color: #333;">Event Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['highlights_notif'] == 1 ? 'checked' : ''} type="checkbox" id="highlights-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="highlights-notif" style="font-size: 16px; color: #333;">Suggested Highlights Notifications</label>
+              <label for="highlights-notif" style="font-size:14px; color: #333;">Suggested Highlights Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['comment_notif'] == 1 ? 'checked' : ''} type="checkbox" id="comment-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="comment-notif" style="font-size: 16px; color: #333;">Comment Notifications</label>
+              <label for="comment-notif" style="font-size:14px; color: #333;">Comment Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['reaction_notif'] == 1 ? 'checked' : ''} type="checkbox" id="reaction-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="reaction-notif" style="font-size: 16px; color: #333;">Reaction Notifications</label>
+              <label for="reaction-notif" style="font-size:14px; color: #333;">Reaction Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['login_notif'] == 1 ? 'checked' : ''} type="checkbox" id="login-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="login-notif" style="font-size: 16px; color: #333;">Login Notifications</label>
+              <label for="login-notif" style="font-size:14px; color: #333;">Login Notifications</label>
             </div>
             
             <div class="setting-item" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
               <input ${userProfileData[0]['UserProfiles']['change_password_notif'] == 1 ? 'checked' : ''} type="checkbox" id="change-password-notif" style="margin-right: 10px; width: 18px; height: 18px;">
-              <label for="change-password-notif" style="font-size: 16px; color: #333;">Change Password Notifications</label>
+              <label for="change-password-notif" style="font-size:14px; color: #333;">Change Password Notifications</label>
             </div>
             
-            <div class="setting-item" style="text-align: center; margin-top: 20px;">
-              <button class="btn-save" onclick="saveNotifications()" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 12px; border-radius: 5px; cursor: pointer;">
+            <div class="setting-item" style=" margin-top: 20px;">
+              <button class="btn-save" onclick="saveNotifications()" style="background-color: #4267B2; color: white; border: none; padding: 10px 20px; font-size: 12px; border-radius: 5px; cursor: pointer;">
                 Save Changes
               </button>
             </div>
@@ -577,6 +577,10 @@ function saveNotifications() {
                 title: 'Success!',
                 text: 'Notification settings updated successfully',
                 confirmButtonText: 'OK',
+            }).then((result) =>{
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
             });
         } else {
             Swal.fire({

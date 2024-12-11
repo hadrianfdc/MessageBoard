@@ -303,6 +303,9 @@ class UserProfilesController extends AppController
                 'MyDayStory.path',
                 'MyDayStory.date_created'
             ],
+            'conditions' => [
+                'MyDayStory.date_created >' => date('Y-m-d H:i:s', strtotime('-24 hours'))
+            ],
             'order' => ['MyDayStory.date_created' => 'DESC'],
         ]);
     

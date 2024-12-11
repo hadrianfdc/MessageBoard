@@ -602,8 +602,77 @@
 
 <!--------------------------------------- [END] Modal for making Comments----------------------------------------->
 
+<!--------------------------------------- [START] Modal for Adding Story Modal for Adding Story----------------------------------------->
+<!-- Modal for Adding Story -->
+<form method="post" action="<?php echo $this->Html->url(array('controller' => 'MyDayStory', 'action' => 'addStory')); ?>" enctype="multipart/form-data" id="addStoryForm">
+<div id="addStoryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div id="myStoryIdForDarkmode" style="background: white; width: 400px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+        <!-- Modal Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid #ddd;">
+            <h3 style="margin: 0; font-size: 16px; font-weight: bold; color: #333;">Add Story</h3>
+            <a onclick="closeAddStoryModal()" style="background: none; border: none; font-size: 18px; color: #555; cursor: pointer;">&times;</a>
+        </div>
+
+        <!-- Modal Content -->
+        <div style="padding: 15px; text-align: center;">
+            <!-- Add Photo or Video with Preview -->
+            <label for="storyImageUpload" style="cursor: pointer; display: inline-block; background-color: #f0f2f5; border: 1px dashed #ccc; border-radius: 8px; padding: 20px; font-size: 14px; color: #555; width: 100%; max-width: 250px; margin: 0 auto;">
+                <img  src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>" alt="Add" style="width: 50px; height: 50px; margin-bottom: 10px;">
+                <span style="display: block;">Upload Photo/Video</span>
+                <input type="file" id="storyImageUpload" name="data[MyDayStory][file]" style="display: none;" accept="image/*,video/*">
+                
+                <!-- Image or Video Preview Section -->
+                <div id="storyPreview" style="margin-top: 15px; display: none;">
+                    <img id="storyPreviewImage" src="" alt="Story Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover;">
+                </div>
+            </label>
+        </div>
+
+        <!-- Modal Footer -->
+        <div style="padding: 10px 15px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end;">
+            <a onclick="closeAddStoryModal()" id="closeStoryModalForDarkmode" style="background-color: #e4e6eb; border: none; padding: 8px 15px; border-radius: 6px; font-size: 14px; margin-right: 10px; cursor: pointer;">Cancel</a>
+            <button onclick="submitStory()" style="background-color: #1877f2; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 14px; cursor: pointer;" disabled id="submitStoryButton">Share Story</button>
+        </div>
+    </div>
+</div>
+</form>
+
+
 
 <script>
+
+function openAddStoryModal() {
+    document.getElementById('addStoryModal').style.display = 'flex';
+    document.getElementById('storyPreview').style.display = 'none';
+    document.getElementById('submitStoryButton').disabled = true;
+}
+
+function closeAddStoryModal() {
+    document.getElementById('addStoryModal').style.display = 'none';
+}
+
+function submitStory() {
+    document.getElementById('addStoryForm').submit();
+}
+
+// Preview the uploaded photo or video
+document.getElementById('storyImageUpload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('storyPreview');
+    const previewImage = document.getElementById('storyPreviewImage');
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            preview.style.display = 'block';
+            document.getElementById('submitStoryButton').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
   // <!-- Dropdown Menu of Post -->
  function toggleCustomDropdown(event, postId) {
