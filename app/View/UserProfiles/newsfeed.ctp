@@ -108,7 +108,7 @@ function timeAgo($timestamp) {
             <!-- Existing Stories -->
             <?php foreach ($organizedMyDaysPost as $story): ?>
             <div class="story-item" style="position: relative; width: 130px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
-                <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;"/>
+            <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;" onclick="openModal('<?php echo $this->Html->url('/' . $story['image_story']); ?>', '<?php echo $this->Html->url('/' . $story['profile_picture']); ?>', '<?php echo $story['full_name']; ?>')" />
                 
                 <!-- User info overlay -->
                 <div class="story-overlay" style="position: absolute; top: 1px; padding: 5px; text-align: center; border-radius: 5px;">
@@ -130,6 +130,32 @@ function timeAgo($timestamp) {
         <button class="next-btn" onclick="moveCarousel('next')" style="position: absolute; top: 50%; right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 1;">&gt;</button>
     </div>
 
+    <!-- Modal for Image -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000;  justify-content: center; align-items: center; padding: 20px;">
+        <div style="position: relative; background-color: transparent; border-radius: 10px; width: 100%; max-width: 600px; padding: 0;">
+            <!-- Profile Picture and Full Name in the top left -->
+            <div style="position: absolute; top: 20px; left: 20px; display: flex; align-items: center; z-index: 2;">
+                <img id="modalProfilePicture" src="" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #1877f2; margin-right: 10px;"/>
+                <span id="modalFullName" style="font-size: 18px; font-weight: bold; color: white;"></span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div style="position: absolute; top: 10px; left: 0; width: 100%; height: 3px; background-color: rgba(255, 255, 255, 0.4); border-radius: 5px; z-index: 1;">
+                <div id="progressBar" style="height: 100%; width: 0%; background-color: #1877f2; border-radius: 5px;"></div>
+            </div>
+
+            <!-- Image and Close Button -->
+            <div style="position: relative; text-align: center; padding-top: 50px;">
+                <img id="modalImage" src="" alt="Story Image" style="max-width: 100%; max-height: 80%; border-radius: 10px;"/>
+                <button onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.6); border: none; padding: 15px; border-radius: 50%; cursor: pointer; font-size: 24px;">×</button>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div id="timerText" style="text-align: center; font-size: 14px; color: white; margin-top: 10px;">
+                <span id="countdown"></span> 
+            </div>
+        </div>
+    </div>
 
 
 

@@ -641,6 +641,63 @@
 
 <script>
 
+// Function to open the modal with the image, profile picture, full name, and start the timer
+function openModal(imageSrc, profilePic, fullName) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const progressBar = document.getElementById("progressBar");
+    const countdownText = document.getElementById("countdown");
+    const modalProfilePic = document.getElementById("modalProfilePicture");
+    const modalFullName = document.getElementById("modalFullName");
+
+    // Set the modal's image, profile picture, and full name
+    modal.style.display = "flex";
+    modalImage.src = imageSrc;
+    modalProfilePic.src = profilePic;
+    modalFullName.textContent = fullName;
+
+    // Timer variables
+    let remainingTime = 15;
+    let progress = 0;
+    const totalTime = 15000; // Total time for the progress bar
+
+    // Continuous progress bar effect
+    const interval = setInterval(function() {
+        progress += 100 / (totalTime / 100);  
+        if (progress >= 100) {
+            progress = 0; 
+        }
+        progressBar.style.width = progress + "%";  
+    }, 100);
+
+    // Countdown timer for 15 seconds
+    const countdownInterval = setInterval(function() {
+        remainingTime--;
+        countdownText.textContent = remainingTime + " seconds remaining"; 
+        if (remainingTime <= 0) {
+            clearInterval(countdownInterval); 
+            clearInterval(interval);  
+            closeModal();  
+        }
+    }, 1000);  
+
+    // Store intervals in the modal object to clear them later
+    modal.interval = interval;
+    modal.countdownInterval = countdownInterval;
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById("imageModal");
+    clearInterval(modal.interval);  
+    clearInterval(modal.countdownInterval);  
+    modal.style.display = "none";
+}
+
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
 function openAddStoryModal() {
     document.getElementById('addStoryModal').style.display = 'flex';
     document.getElementById('storyPreview').style.display = 'none';
