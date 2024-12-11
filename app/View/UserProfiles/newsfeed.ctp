@@ -131,27 +131,24 @@ function timeAgo($timestamp) {
     </div>
 
     <!-- Modal for Image -->
-    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000;  justify-content: center; align-items: center; padding: 20px;">
-        <div style="position: relative; background-color: transparent; border-radius: 10px; width: 100%; max-width: 600px; padding: 0;">
-            <!-- Profile Picture and Full Name in the top left -->
-            <div style="position: absolute; top: 20px; left: 20px; display: flex; align-items: center; z-index: 2;">
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px;">
+        <div style="position: relative; background-color: transparent; width: 100%; max-width: 700px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <!-- Progress Bar -->
+            <div style="position: absolute; top: 20px; width: 100%; height: 5px; background-color: rgba(255, 255, 255, 0.3); border-radius: 10px;">
+                <div id="progressBar" style="height: 100%; width: 0%; background-color: #1877f2; border-radius: 10px;"></div>
+            </div>
+            <div style="position: absolute; top: 35px; left: 20px; display: flex; align-items: center; z-index: 2;">
                 <img id="modalProfilePicture" src="" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #1877f2; margin-right: 10px;"/>
                 <span id="modalFullName" style="font-size: 18px; font-weight: bold; color: white;"></span>
             </div>
-
-            <!-- Progress Bar -->
-            <div style="position: absolute; top: 10px; left: 0; width: 100%; height: 3px; background-color: rgba(255, 255, 255, 0.4); border-radius: 5px; z-index: 1;">
-                <div id="progressBar" style="height: 100%; width: 0%; background-color: #1877f2; border-radius: 5px;"></div>
-            </div>
-
-            <!-- Image and Close Button -->
-            <div style="position: relative; text-align: center; padding-top: 50px;">
+            <!-- Image -->
+            <div style="position: relative; text-align: center; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
                 <img id="modalImage" src="" alt="Story Image" style="max-width: 100%; max-height: 80%; border-radius: 10px;"/>
-                <button onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.6); border: none; padding: 15px; border-radius: 50%; cursor: pointer; font-size: 24px;">×</button>
             </div>
-
+            <!-- Close Button -->
+            <button onclick="closeModal()" style="position: absolute; top: 20px; right: 10px; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; font-size: 24px;">×</button>
             <!-- Countdown Timer -->
-            <div id="timerText" style="text-align: center; font-size: 14px; color: white; margin-top: 10px;">
+            <div id="timerText" style="position: absolute; bottom: 20px; text-align: center; font-size: 14px; color: white; font-weight: bold;">
                 <span id="countdown"></span> 
             </div>
         </div>
