@@ -91,40 +91,45 @@ function timeAgo($timestamp) {
   <main class="main-feed">
     <ul class="main-feed-list">
 
-<div class="my-story-section" style="position: relative; overflow: hidden; margin-top: 20px;">
-    <div class="story-carousel" style="display: flex; transition: transform 0.5s ease; width: calc(120px * 6 + 15px * 5);">
-        <!-- Add Story Item -->
-        <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;" onclick="openAddStoryModal()">
-            <div style="position: relative; width: 60px; height: 60px; margin-bottom: 10px;">
-                <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>" alt="Add Story" style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid #1877f2; object-fit: cover; background-color: white;"/>
-                <div style="position: absolute; bottom: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background-color: #1877f2; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 16px; font-weight: bold; color: white;">+</span>
+    <div class="my-story-section" style="position: relative; overflow: hidden; margin-top: 20px;">
+        <div class="story-carousel" style="display: flex; transition: transform 0.5s ease; width: calc(130px * 6 + 15px * 5);">
+            <!-- Add Story Item -->
+            <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;" onclick="openAddStoryModal()">
+                <div style="position: relative; width: 60px; height: 60px; margin-bottom: 10px;">
+                    <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>" alt="Add Story" style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid #1877f2; object-fit: cover; background-color: white;"/>
+                    <div style="position: absolute; bottom: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background-color: #1877f2; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 16px; font-weight: bold; color: white;">+</span>
+                    </div>
+                </div>
+                <!-- Add Story Label -->
+                <span style="font-size: 12px; font-weight: bold; color: #555;">Add Story</span>
+            </div>
+
+            <!-- Existing Stories -->
+            <?php foreach ($organizedMyDaysPost as $story): ?>
+            <div class="story-item" style="position: relative; width: 130px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
+                <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;"/>
+                
+                <!-- User info overlay -->
+                <div class="story-overlay" style="position: absolute; top: 1px; padding: 5px; text-align: center; border-radius: 5px;">
+                    <div style="display: flex; ">
+                        <img src="<?php echo $this->Html->url('/' . $story['profile_picture']); ?>" alt="Profile Image" style="width: 35px; height: 35px; border-radius: 50%; border: 3px solid #1877f2;"/>
+                    </div>
+                </div>
+
+                <!-- User Full Name -->
+                <div class="story-fullname" style="position: absolute; bottom: 10px; left: 10px; color: white; font-size: 10px; font-weight: bold;">
+                    <?php echo $story['full_name']; ?>
                 </div>
             </div>
-            <!-- Add Story Label -->
-            <span style="font-size: 12px; font-weight: bold; color: #555;">Add Story</span>
+            <?php endforeach; ?>
         </div>
 
-        <!-- Existing Stories -->
-        <?php foreach ($organizedMyDaysPost as $story): ?>
-        <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
-            <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;"/>
-            
-            <!-- User info overlay -->
-            <div class="story-overlay" style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.5); color: white; padding: 5px; text-align: center; border-radius: 5px;">
-                <div style="display: flex; justify-content: center; align-items: center;">
-                    <img src="<?php echo $this->Html->url('/' . $story['profile_picture']); ?>" alt="Profile Image" style="width: 35px; height: 35px; border-radius: 50%; margin-right: 5px;"/>
-                    <span style="font-size: 10px; font-weight: bold;"><?php echo $story['full_name']; ?></span>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
+        <!-- Prev and Next buttons -->
+        <button class="prev-btn" onclick="moveCarousel('prev')" style="position: absolute; top: 50%; left: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 1;">&lt;</button>
+        <button class="next-btn" onclick="moveCarousel('next')" style="position: absolute; top: 50%; right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 1;">&gt;</button>
     </div>
 
-    <!-- Prev and Next buttons -->
-    <button class="prev-btn" onclick="moveCarousel('prev')" style="position: absolute; top: 50%; left: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 1;">&lt;</button>
-    <button class="next-btn" onclick="moveCarousel('next')" style="position: absolute; top: 50%; right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 12px; border: none; border-radius: 50%; cursor: pointer; z-index: 1;">&gt;</button>
-</div>
 
 
 

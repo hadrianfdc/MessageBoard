@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2024 at 08:15 AM
+-- Generation Time: Dec 11, 2024 at 08:39 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -120,7 +120,9 @@ INSERT INTO `friends_list_notification` (`id`, `for_who_acceptor`, `from_who_use
 (6, 30, 2, 2, 0, '2024-12-06 02:19:05'),
 (7, 27, 20, 1, 0, '2024-12-06 05:04:42'),
 (8, 2, 20, 1, 1, '2024-12-06 08:14:47'),
-(9, 20, 2, 2, 0, '2024-12-06 08:15:17');
+(9, 20, 2, 2, 0, '2024-12-06 08:15:17'),
+(10, 27, 2, 1, 1, '2024-12-11 08:27:10'),
+(11, 2, 27, 2, 1, '2024-12-11 08:27:46');
 
 -- --------------------------------------------------------
 
@@ -200,7 +202,8 @@ INSERT INTO `my_day_story` (`id`, `user_id`, `path`, `date_created`) VALUES
 (3, 29, 'images/download (1).jpeg', '2024-12-11 05:27:47'),
 (4, 30, 'images/avatar.jpeg', '2024-12-11 05:27:47'),
 (5, 2, 'images/1733900200_cutetest.webp', '2024-12-11 07:56:40'),
-(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-11 07:57:10');
+(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-11 07:57:10'),
+(7, 2, 'images/1733901685_Angpic.jpeg', '2024-12-11 08:21:25');
 
 -- --------------------------------------------------------
 
@@ -244,7 +247,9 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 (68, 2, 2, 25, 1, 'Reacted Haha to your Post', 1, '2024-12-10 09:42:15'),
 (69, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 09:59:30'),
 (70, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 10:01:51'),
-(71, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-10 10:10:26');
+(71, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-10 10:10:26'),
+(72, 27, 27, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-11 08:27:35'),
+(73, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-11 08:28:03');
 
 -- --------------------------------------------------------
 
@@ -402,7 +407,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-11 06:15:22', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1),
+(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-11 08:28:03', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
 (20, 'Clint Anthony Savilla', 'Male', '2024-03-18', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (21, 'Janrae Fagaragan', 'Male', '2024-03-18', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
@@ -410,7 +415,7 @@ INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `pa
 (24, 'John Doe', 'Male', '2024-03-19', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (25, 'Joseph Savilla', 'Male', '2002-03-20', 'joseph.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:02:15', '2024-11-29 06:33:51', 'Wala ra gud', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (26, 'Andrea B', 'Female', '2004-03-20', 'andrea.b@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:10:25', '2024-11-28 07:51:03', 'Wala ra pud\r\n', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(27, 'Jan Baoc', 'Male', '2024-03-20', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-11-28 06:27:02', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(27, 'Jan Baoc', 'Male', '2024-03-20', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-12-11 08:27:57', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (28, 'June Michael Jordan', 'Male', '2024-03-20', 'june@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:15:54', '2024-11-29 06:33:25', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (29, 'Wa Ra Gud', 'Male', '2024-03-21', 'waragud@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-21 03:52:15', '2024-11-28 06:25:55', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (30, 'FDC Tester', 'Male', '2005-03-22', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
@@ -511,13 +516,13 @@ ALTER TABLE `conversations`
 -- AUTO_INCREMENT for table `friends_list`
 --
 ALTER TABLE `friends_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `friends_list_notification`
 --
 ALTER TABLE `friends_list_notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -529,13 +534,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `my_day_story`
 --
 ALTER TABLE `my_day_story`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `posts`
