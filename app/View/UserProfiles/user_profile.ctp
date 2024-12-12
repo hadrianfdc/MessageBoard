@@ -472,6 +472,7 @@ function timeAgo($timestamp) {
                                 </span>
                             </div>
                         </div>
+
                         <!-- Dropdown Menu of Post -->
                         <button class="icon-button-2 u-margin-inline-start" aria-label="more options" aria-label="more options" onclick="toggleCustomDropdown(event, '<?php echo $post['id']; ?>')">
                             <span class="icon-menu"></span>
@@ -674,33 +675,55 @@ function timeAgo($timestamp) {
     </ul>
   </main>
   <aside class="side-b">
+
+      <section class="common-section">
+        <h2 class="section-title">Sponsored</h2>
+        <ul class="common-list" id="ads-list">
+            <!-- Ad items will be dynamically inserted here -->
+        </ul>
+        <button class="common-more">
+            <span class="text">See More</span>
+            <span class="icon">🔻</span>
+        </button>
+      </section>
+
     <section class="common-section">
-      <h2 class="section-title">Sponsored</h2>
-      <ul class="common-list">
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW"  class="common-list-button is-ads">
-            <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Export Sketch to HTML with a click</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW"  class="common-list-button is-ads">
-            <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-      </ul>
-      <button class="common-more">
-        <span class="text">See More</span>
-        <span class="icon">🔻</span>
-      </button>
-    </section>
+        <?php if (!empty($BirthdayCelebrant)): ?>
+            <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Birthdays</h2>
+            <?php 
+            $celebrantsCount = count($BirthdayCelebrant); 
+            ?>
+            <!-- Birthday Notification -->
+            <p style="font-size: 14px; color: #333; margin-bottom: 10px; display: flex; align-items: center;" onclick="showBirthdayModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 15px;">
+                    <!-- Gift box -->
+                    <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="blue" stroke="#333"></rect>
+                    <!-- Ribbon lines -->
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="orange" stroke-width="3"></line>
+                    <line x1="12" y1="6" x2="12" y2="18" stroke="orange" stroke-width="3"></line>
+                    <!-- Gift top section -->
+                    <path d="M3 8 L12 2 L21 8" stroke="orange" stroke-width="3"></path>
+                </svg>
+                <span style="font-size: 16px;">
+                    <?php
+                    $namesToShow = array_slice($BirthdayCelebrant, 0, 2); 
+                    $names = array_map(function($bc) {
+                        return $bc['full_name'];
+                    }, $namesToShow);
+                    
+                    echo '<b>' . implode(", ", $names) . '</b>'; 
+                    
+                    if ($celebrantsCount > 2) {
+                        echo " and " . ($celebrantsCount - 2) . " others are celebrating today! 🎂🎉 Wish them a happy birthday!";
+                    } else {
+                        echo " are celebrating their birthday today! 🎂🎉 Wish them a happy birthday!";
+                    }
+                    ?>
+                </span>
+            </p>
+        <?php endif; ?>
+        </section>
+
   </aside>
 </div>
 <?php echo $this->element('modal_edit_profile'); ?>

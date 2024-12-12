@@ -134,9 +134,18 @@ function timeAgo($timestamp) {
     <ul class="main-feed-list">
 
     <div class="my-story-section" style="position: relative; overflow: hidden; margin-top: 20px;">
-        <div class="story-carousel" style="display: flex; transition: transform 0.5s ease; width: calc(130px * 6 + 15px * 5);">
+        <div id="my-story-title" style="position: absolute; top: 10px; left: 10px; font-size: 18px; font-weight: bold; color: #333;">
+            Stories
+        </div>
+        
+        <!-- See All Button on Top Right -->
+        <div style="position: absolute; top: 10px; right: 10px; font-size: 14px; font-weight: bold; color: #1877f2; cursor: pointer;">
+            See All
+        </div>
+        <br> <br>
+        <div class="story-carousel" style="display: flex; transition: transform 0.5s ease; width: calc(120px * 6 + 15px * 5);">
             <!-- Add Story Item -->
-            <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;" onclick="openAddStoryModal()">
+            <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; background-color: white; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;" onclick="openAddStoryModal()">
                 <div style="position: relative; width: 60px; height: 60px; margin-bottom: 10px;">
                     <img src="<?php echo $this->Html->url('/' . $findMyPic['Posts']['path']); ?>" alt="Add Story" style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid #1877f2; object-fit: cover; background-color: white;"/>
                     <div style="position: absolute; bottom: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background-color: #1877f2; display: flex; align-items: center; justify-content: center;">
@@ -149,7 +158,7 @@ function timeAgo($timestamp) {
 
             <!-- Existing Stories -->
             <?php foreach ($organizedMyDaysPost as $story): ?>
-            <div class="story-item" style="position: relative; width: 130px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
+            <div class="story-item" style="position: relative; width: 120px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
             <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;" onclick="openModal('<?php echo $this->Html->url('/' . $story['image_story']); ?>', '<?php echo $this->Html->url('/' . $story['profile_picture']); ?>', '<?php echo $story['full_name']; ?>', '<?php echo $story['date_created']; ?>')" />
                 
                 <!-- User info overlay -->
@@ -789,42 +798,54 @@ function timeAgo($timestamp) {
   </main>
   <aside class="side-b">
     
-  <section class="common-section">
-    <?php if (!empty($BirthdayCelebrant)): ?>
-        <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Birthdays</h2>
-        <?php 
-        $celebrantsCount = count($BirthdayCelebrant); 
-        ?>
-        <!-- Birthday Notification -->
-        <p style="font-size: 14px; color: #333; margin-bottom: 10px; display: flex; align-items: center;" onclick="showBirthdayModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 15px;">
-                <!-- Gift box -->
-                <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="blue" stroke="#333"></rect>
-                <!-- Ribbon lines -->
-                <line x1="3" y1="6" x2="21" y2="6" stroke="orange" stroke-width="3"></line>
-                <line x1="12" y1="6" x2="12" y2="18" stroke="orange" stroke-width="3"></line>
-                <!-- Gift top section -->
-                <path d="M3 8 L12 2 L21 8" stroke="orange" stroke-width="3"></path>
-            </svg>
-            <span style="font-size: 16px;">
-                <?php
-                $namesToShow = array_slice($BirthdayCelebrant, 0, 2); 
-                $names = array_map(function($bc) {
-                    return $bc['full_name'];
-                }, $namesToShow);
-                
-                echo '<b>' . implode(", ", $names) . '</b>'; 
-                
-                if ($celebrantsCount > 2) {
-                    echo " and " . ($celebrantsCount - 2) . " others are celebrating today! 🎂🎉 Wish them a happy birthday!";
-                } else {
-                    echo " are celebrating their birthday today! 🎂🎉 Wish them a happy birthday!";
-                }
-                ?>
-            </span>
-        </p>
-    <?php endif; ?>
-</section>
+    <section class="common-section">
+        <h2 class="section-title">Sponsored</h2>
+        <ul class="common-list" id="ads-list">
+            <!-- Ad items will be dynamically inserted here -->
+        </ul>
+        <button class="common-more">
+            <span class="text">See More</span>
+            <span class="icon">🔻</span>
+        </button>
+    </section>
+
+
+    <section class="common-section">
+        <?php if (!empty($BirthdayCelebrant)): ?>
+            <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Birthdays</h2>
+            <?php 
+            $celebrantsCount = count($BirthdayCelebrant); 
+            ?>
+            <!-- Birthday Notification -->
+            <p style="font-size: 14px; color: #333; margin-bottom: 10px; display: flex; align-items: center;" onclick="showBirthdayModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 15px;">
+                    <!-- Gift box -->
+                    <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="blue" stroke="#333"></rect>
+                    <!-- Ribbon lines -->
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="orange" stroke-width="3"></line>
+                    <line x1="12" y1="6" x2="12" y2="18" stroke="orange" stroke-width="3"></line>
+                    <!-- Gift top section -->
+                    <path d="M3 8 L12 2 L21 8" stroke="orange" stroke-width="3"></path>
+                </svg>
+                <span style="font-size: 16px;">
+                    <?php
+                    $namesToShow = array_slice($BirthdayCelebrant, 0, 2); 
+                    $names = array_map(function($bc) {
+                        return $bc['full_name'];
+                    }, $namesToShow);
+                    
+                    echo '<b>' . implode(", ", $names) . '</b>'; 
+                    
+                    if ($celebrantsCount > 2) {
+                        echo " and " . ($celebrantsCount - 2) . " others are celebrating today! 🎂🎉 Wish them a happy birthday!";
+                    } else {
+                        echo " are celebrating their birthday today! 🎂🎉 Wish them a happy birthday!";
+                    }
+                    ?>
+                </span>
+            </p>
+        <?php endif; ?>
+        </section>
 
 
       <section class="common-section">

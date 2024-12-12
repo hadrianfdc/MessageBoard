@@ -1090,7 +1090,7 @@ html.is-dark  .l-cnt {
   color: #f0f0f0 !important;
 }
 
-
+html.is-dark  #my-story-title,
 html.is-dark  .cnt-label span{
   color: #f0f0f0 !important;
 }

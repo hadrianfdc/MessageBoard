@@ -70,6 +70,7 @@ class UserProfilesController extends AppController
 
         $myFriendsList = $this->getFriendList();
         $findBirthdays = $this->getBirthdayForToday($myFriendsList);
+
         // echo "<pre>";print_r($myFriendsList); print_r($findBirthdays); echo "</pre>"; die;
      
         $this->set('findMyPics', $findMyPics);
@@ -538,6 +539,11 @@ class UserProfilesController extends AppController
             'conditions' => ['Posts.id' => $user_id]
         ]);
         $photoList = $this->photoGrid();
+        
+        $myFriendsList = $this->getFriendList();
+        $findBirthdays = $this->getBirthdayForToday($myFriendsList);
+        $this->set('friendsData', $myFriendsList);
+        $this->set('BirthdayCelebrant', $findBirthdays);
         
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
