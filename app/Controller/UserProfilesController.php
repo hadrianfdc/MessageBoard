@@ -296,6 +296,8 @@ class UserProfilesController extends AppController
 
     private function getMyDayAndStory(){
 
+        date_default_timezone_set('Asia/Manila');
+        
         $findAll = $this->MyDayStory->find('all', [
             'fields' => [
                 'MyDayStory.id',
@@ -304,7 +306,8 @@ class UserProfilesController extends AppController
                 'MyDayStory.date_created'
             ],
             'conditions' => [
-                'MyDayStory.date_created >' => date('Y-m-d H:i:s', strtotime('-24 hours'))
+                'MyDayStory.date_created >' => date('Y-m-d H:i:s', strtotime('-24 hours')),
+                'MyDayStory.date_created <=' => date('Y-m-d H:i:s') 
             ],
             'order' => ['MyDayStory.date_created' => 'DESC'],
         ]);
@@ -333,6 +336,7 @@ class UserProfilesController extends AppController
             ];
         }
     
+        // echo "<pre>"; print(date_default_timezone_get()) . print(date('Y-m-d H:i:s', strtotime('-24 hours'))) . print_r($organizedData); echo "</pre>"; die();
         return $organizedData;
     }
     

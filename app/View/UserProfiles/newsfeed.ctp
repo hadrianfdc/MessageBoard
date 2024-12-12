@@ -108,7 +108,7 @@ function timeAgo($timestamp) {
             <!-- Existing Stories -->
             <?php foreach ($organizedMyDaysPost as $story): ?>
             <div class="story-item" style="position: relative; width: 130px; height: 180px; margin-right: 15px; border-radius: 12px; overflow: hidden; border: 2px solid #ccc; background-color: #f0f0f0; cursor: pointer; transition: transform 0.3s ease;">
-            <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;" onclick="openModal('<?php echo $this->Html->url('/' . $story['image_story']); ?>', '<?php echo $this->Html->url('/' . $story['profile_picture']); ?>', '<?php echo $story['full_name']; ?>')" />
+            <img src="<?php echo $this->Html->url('/' . $story['image_story']); ?>" alt="Story Image" style="width: 100%; height: 100%; object-fit: cover;" onclick="openModal('<?php echo $this->Html->url('/' . $story['image_story']); ?>', '<?php echo $this->Html->url('/' . $story['profile_picture']); ?>', '<?php echo $story['full_name']; ?>', '<?php echo $story['date_created']; ?>')" />
                 
                 <!-- User info overlay -->
                 <div class="story-overlay" style="position: absolute; top: 1px; padding: 5px; text-align: center; border-radius: 5px;">
@@ -140,6 +140,7 @@ function timeAgo($timestamp) {
             <div style="position: absolute; top: 35px; left: 20px; display: flex; align-items: center; z-index: 2;">
                 <img id="modalProfilePicture" src="" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #1877f2; margin-right: 10px;"/>
                 <span id="modalFullName" style="font-size: 18px; font-weight: bold; color: white;"></span>
+                <span id="dateCreated" style="font-size: 12px; margin-left: 20px; color: white;"></span>
             </div>
             <!-- Image -->
             <div style="position: relative; text-align: center; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">

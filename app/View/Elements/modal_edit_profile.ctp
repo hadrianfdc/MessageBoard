@@ -642,19 +642,21 @@
 <script>
 
 // Function to open the modal with the image, profile picture, full name, and start the timer
-function openModal(imageSrc, profilePic, fullName) {
+function openModal(imageSrc, profilePic, fullName, date) {
     const modal = document.getElementById("imageModal");
     const modalImage = document.getElementById("modalImage");
     const progressBar = document.getElementById("progressBar");
     const countdownText = document.getElementById("countdown");
     const modalProfilePic = document.getElementById("modalProfilePicture");
     const modalFullName = document.getElementById("modalFullName");
+    const dateCreated = document.getElementById("dateCreated");
 
     // Set the modal's image, profile picture, and full name
     modal.style.display = "flex";
     modalImage.src = imageSrc;
     modalProfilePic.src = profilePic;
     modalFullName.textContent = fullName;
+    dateCreated.textContent = timeAgoStory(date);
 
     // Timer variables
     let remainingTime = 15;
@@ -685,6 +687,26 @@ function openModal(imageSrc, profilePic, fullName) {
     modal.interval = interval;
     modal.countdownInterval = countdownInterval;
 }
+
+function timeAgoStory(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    if (diffInSeconds < 60) {
+        return `${diffInSeconds} seconds ago`;
+    }
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+        return `${diffInMinutes} minutes ago`;
+    }
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+        return `${diffInHours} hours ago`;
+    }
+    return "23 hours ago";
+}
+
 
 // Function to close the modal
 function closeModal() {
