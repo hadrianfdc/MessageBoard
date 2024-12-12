@@ -689,6 +689,7 @@ function openModal(imageSrc, profilePic, fullName, date) {
 }
 
 function timeAgoStory(dateString) {
+
     const now = new Date();
     const past = new Date(dateString);
     const diffInSeconds = Math.floor((now - past) / 1000);

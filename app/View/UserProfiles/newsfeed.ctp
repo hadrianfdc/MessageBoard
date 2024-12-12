@@ -46,46 +46,76 @@ function timeAgo($timestamp) {
       <h2 class="section-title u-hide">User Navigation</h2>
       <ul class="common-list">
         <div class="common-list-item">
-        <?php if (!empty($user)): ?>
-          <a href="/MessageBoard/user-profile" class="common-list-button">
-            <span class="icon">
-              <?php if (isset($findMyPic['Posts']['path'])): ?>
-                <img class="user-image" src="<?php echo $this->Html->url('/' . $findMyPics[0]['Posts']['path']); ?>" height="36" width="36" alt="">
-              <?php endif; ?>
-            </span>
-            <span class="text"><?php echo $users[0]['User']['full_name']; ?></span>
-            <?php if ($users[0]['User']['is_online'] == 1): ?>
-                <span style="width: 9px; height: 9px; background-color: #4CAF50; border-radius: 50%; display: inline-block;"></span>
-            <?php endif; ?> 
-          </a>
-        <?php endif; ?>
+            <?php if (!empty($user)): ?>
+            <a href="/MessageBoard/user-profile" class="common-list-button">
+                <span class="icon">
+                    <?php if (isset($findMyPic['Posts']['path'])): ?>
+                        <img class="user-image" src="<?php echo $this->Html->url('/' . $findMyPics[0]['Posts']['path']); ?>" height="36" width="36" alt="">
+                    <?php endif; ?>
+                </span>
+                <span class="text"><?php echo $users[0]['User']['full_name']; ?></span>
+                <?php if ($users[0]['User']['is_online'] == 1): ?>
+                    <span style="width: 9px; height: 9px; background-color: #4CAF50; border-radius: 50%; display: inline-block;"></span>
+                <?php endif; ?>
+            </a>
+            <?php endif; ?>
         </div>
         <div class="common-list-item">
-          <a class="common-list-button" href="/MessageBoard/Messages/index">
-            <span class="icon" aria-hidden="true">💬</span>
-            <span class="text">Messages</span>
-          </a>
+            <a class="common-list-button" href="/MessageBoard/Messages/index">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-envelope"></i></span>
+                <span class="text">Messages</span>
+            </a>
         </div>
         <div class="common-list-item">
-          <a class="common-list-button" href="/MessageBoard/Users/search">
-            <span class="icon">👨&zwj;👦&zwj;👦</span>
-            <span class="text">Find</span>
-          </a>
+            <a class="common-list-button" href="/MessageBoard/Users/search">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-users"></i></span>
+                <span class="text">Find</span>
+            </a>
         </div>
         <div class="common-list-item">
-          <a class="common-list-button" href="/MessageBoard/logins/change_password">
-            <span class="icon">🏪</span>
-            <span class="text">Change Password</span>
-          </a>
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-key"></i></span>
+                <span class="text">Contact</span>
+            </a>
         </div>
         <div class="common-list-item">
-          <a class="common-list-button" href="#" onclick="showLogoutModal()">
-            <span class="icon">📺</span>
-            <span class="text">Logout</span>
-          </a>
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-tv"></i></span>
+                <span class="text">Watch</span>
+            </a>
         </div>
-      </ul>
-
+        <div class="common-list-item">
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-calendar-alt"></i></span>
+                <span class="text">Events</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-bookmark"></i></span>
+                <span class="text">Saved</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-flag"></i></span>
+                <span class="text">Pages</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button" href="/MessageBoard/setting">
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-cog"></i></span>
+                <span class="text">Settings & Privacy</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button">
+                <span class="icon" style="background: linear-gradient(90deg, #1877f2, #ff00ff, #00ff00); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><i class="fas fa-th"></i></span>
+                <span class="text" style="flex-grow: 1; text-align: left;">See More</span>
+                <span class="icon" style="color: #1877f2;"><i class="fas fa-chevron-down"></i></span>
+            </a>
+        </div>
+    </ul>
     </section>
   </aside>
   <main class="main-feed">
@@ -164,13 +194,13 @@ function timeAgo($timestamp) {
                       <i class="fas fa-pencil-alt" style="font-size: 20px; margin-right: 5px;"></i><span>Make Post</span>
                   </div>
                   <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                      <i class="fas fa-camera" style="font-size: 20px; margin-right: 5px;"></i><span>Photo/Video</span>
+                      <i class="fas fa-camera" style="font-size: 20px; margin-right: 5px; color:green;"></i><span>Photo/Video</span>
                   </div>
                   <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                      <i class="fas fa-video" style="font-size: 20px; margin-right: 5px;"></i><span>Live Video</span>
+                      <i class="fas fa-video" style="font-size: 20px; margin-right: 5px; color:red;"></i><span>Live Video</span>
                   </div>
                   <div class="td" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                      <i class="fas fa-calendar-alt" style="font-size: 20px; margin-right: 5px;"></i><span>Life Event</span>
+                      <i class="fas fa-calendar-alt" style="font-size: 20px; margin-right: 5px; color:orange;"></i><span>Life Event</span>
                   </div>
               </div>
           </div>
