@@ -790,13 +790,23 @@ function timeAgo($timestamp) {
   <aside class="side-b">
     
   <section class="common-section">
-        <?php if (!empty($BirthdayCelebrant)): ?>
-            <?php 
-            $celebrantsCount = count($BirthdayCelebrant); 
-            ?>
-            
-            <!-- Birthday Notification -->
-            <p style="font-size: 14px; color: #333; margin-bottom: 10px;" onclick="showBirthdayModal()">
+    <?php if (!empty($BirthdayCelebrant)): ?>
+        <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Birthdays</h2>
+        <?php 
+        $celebrantsCount = count($BirthdayCelebrant); 
+        ?>
+        <!-- Birthday Notification -->
+        <p style="font-size: 14px; color: #333; margin-bottom: 10px; display: flex; align-items: center;" onclick="showBirthdayModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 15px;">
+                <!-- Gift box -->
+                <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="blue" stroke="#333"></rect>
+                <!-- Ribbon lines -->
+                <line x1="3" y1="6" x2="21" y2="6" stroke="orange" stroke-width="3"></line>
+                <line x1="12" y1="6" x2="12" y2="18" stroke="orange" stroke-width="3"></line>
+                <!-- Gift top section -->
+                <path d="M3 8 L12 2 L21 8" stroke="orange" stroke-width="3"></path>
+            </svg>
+            <span style="font-size: 16px;">
                 <?php
                 $namesToShow = array_slice($BirthdayCelebrant, 0, 2); 
                 $names = array_map(function($bc) {
@@ -811,11 +821,11 @@ function timeAgo($timestamp) {
                     echo " are celebrating their birthday today! 🎂🎉 Wish them a happy birthday!";
                 }
                 ?>
-            </p>
-        <?php else: ?>
-            <p>No birthdays today!</p>
-        <?php endif; ?>
-    </section>
+            </span>
+        </p>
+    <?php endif; ?>
+</section>
+
 
       <section class="common-section">
         <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Friend List</h2>
