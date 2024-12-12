@@ -57,7 +57,6 @@ class UserProfilesController extends AppController
 
         $organizedPosts = $this->getPost($findPost);
         $organizedMyDaysPost = $this->getMyDayAndStory();
-        // echo "<pre>"; print_r($organizedPosts); echo "</pre>"; 
 
         if (empty($user_id)) {
             $this->redirect(['controller' => 'logins', 'action' => 'login']);
@@ -69,13 +68,17 @@ class UserProfilesController extends AppController
             'conditions' => ['Posts.id' => $user_id]
         ]);
 
-        $this->getFriendList();
+        $myFriendsList = $this->getFriendList();
+        $findBirthdays = $this->getBirthdayForToday($myFriendsList);
+        // echo "<pre>";print_r($myFriendsList); print_r($findBirthdays); echo "</pre>"; die;
      
         $this->set('findMyPics', $findMyPics);
         $this->set('users', $findUsers);
         $this->set('findPost', $organizedPosts);
         $this->set('user_id', $user_id);
         $this->set('organizedMyDaysPost', $organizedMyDaysPost);
+        $this->set('friendsData', $myFriendsList);
+        $this->set('BirthdayCelebrant', $findBirthdays);
     }
 
     public function getFriendList() {
@@ -129,7 +132,8 @@ class UserProfilesController extends AppController
     
         // echo "<pre>"; print_r($friendsData); echo "</pre>"; 
         // Set the data to be available in the view
-        $this->set('friendsData', $friendsData);
+        return $friendsData;
+      
     }
     
 
@@ -293,6 +297,84 @@ class UserProfilesController extends AppController
         // $this->log(print_r($organizedPosts, true), 'error');
         return $organizedPosts;
     }
+
+    private function getBirthdayForToday($myFriendsList)
+    {
+        $organizedPosts = []; 
+
+        foreach ($myFriendsList as $friend_details) {
+
+            $userId = $friend_details['user_id']; 
+            
+            // Find friends whose birthdays are today.
+            $findPeople = $this->User->find('all', [
+                'conditions' => [
+                    'User.user_id' => $userId,
+                    'DATE_FORMAT(User.birthdate, "%m-%d")' => date('m-d') // Check if the birthdate matches today's date.
+                ]
+            ]);
+
+            // Process the results.
+            foreach ($findPeople as $bday_details) {
+
+                $photo = $this->Posts->find('all', [
+                    'conditions' => [
+                        'Posts.id' => $bday_details['User']['user_id']
+                    ]
+                ]);
+
+                if (isset($bday_details['User'])) {
+                    $organizedPosts[] = [
+                        'user_id' => $bday_details['User']['user_id'],
+                        'full_name' => $bday_details['User']['full_name'],
+                        'is_online' => $bday_details['User']['is_online'],
+                        'birthdate' => $bday_details['User']['birthdate'],
+                        'profile_picture' => $photo[0]['Posts']['path']
+                    ];
+                }
+            }
+        }
+        $this->saveToBirthdayNotification($organizedPosts);
+        return $organizedPosts; // Return the array of organized posts.
+    }
+    private function saveToBirthdayNotification($organizedPosts) {
+
+        foreach ($organizedPosts as $post) {
+            $notification = [
+                'Notification' => [
+                    'user_id' => $post['user_id'],
+                    'profile_post_id' => 0,
+                    'created' => date('Y-m-d H:i:s'), 
+                    'type' => 6,
+                    'description' => $post['full_name'] . ' has a birthday today!', 
+                    'author' => $this->Session->read('Auth.User.user_id')
+                ]
+            ];
+
+            $checkifExist = $this->Notification->find('all', [
+                'conditions' => [
+                    'Notification.user_id' => $post['user_id'],
+                    'Notification.type' => 6,
+                    'Notification.description' => $post['full_name'] . ' has a birthday today!',
+                    'Notification.author' => $this->Session->read('Auth.User.user_id'),
+                    'Notification.profile_post_id' => 0
+                ]
+            ]);
+    
+            if (empty($checkifExist)) {
+                if ($this->Session->read('birthday_notif') == 1) {
+                    // Save the notification.
+                    $this->Notification->create(); 
+                    if ($this->Notification->save($notification)) {
+                    }
+                }
+            }
+            
+        }
+    }
+    
+
+
 
     private function getMyDayAndStory(){
 

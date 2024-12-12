@@ -86,14 +86,20 @@ function timeAgo($timestamp) {
         </div>
         <div class="common-list-item">
             <a class="common-list-button" href="#">
-                <span class="icon" style="color: #1877f2;"><i class="fas fa-calendar-alt"></i></span>
+                <span class="icon" style="color: purple;"><i class="fas fa-calendar-alt"></i></span>
                 <span class="text">Events</span>
             </a>
         </div>
         <div class="common-list-item">
             <a class="common-list-button" href="#">
-                <span class="icon" style="color: #1877f2;"><i class="fas fa-bookmark"></i></span>
+                <span class="icon" style="color: violet;"><i class="fas fa-bookmark"></i></span>
                 <span class="text">Saved</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button" href="#">
+                <span class="icon" style="color: darkblue;"><i class="fas fa-gamepad"></i></span>
+                <span class="text">Gaming</span>
             </a>
         </div>
         <div class="common-list-item">
@@ -104,7 +110,13 @@ function timeAgo($timestamp) {
         </div>
         <div class="common-list-item">
             <a class="common-list-button" href="/MessageBoard/setting">
-                <span class="icon" style="color: #1877f2;"><i class="fas fa-cog"></i></span>
+                <span class="icon" style="color: grey;"><i class="fas fa-question-circle"></i></span>
+                <span class="text">Help & Support</span>
+            </a>
+        </div>
+        <div class="common-list-item">
+            <a class="common-list-button" href="/MessageBoard/setting">
+                <span class="icon" style="color: grey;"><i class="fas fa-cog"></i></span>
                 <span class="text">Settings & Privacy</span>
             </a>
         </div>
@@ -776,6 +788,35 @@ function timeAgo($timestamp) {
     </ul>
   </main>
   <aside class="side-b">
+    
+  <section class="common-section">
+        <?php if (!empty($BirthdayCelebrant)): ?>
+            <?php 
+            $celebrantsCount = count($BirthdayCelebrant); 
+            ?>
+            
+            <!-- Birthday Notification -->
+            <p style="font-size: 14px; color: #333; margin-bottom: 10px;" onclick="showBirthdayModal()">
+                <?php
+                $namesToShow = array_slice($BirthdayCelebrant, 0, 2); 
+                $names = array_map(function($bc) {
+                    return $bc['full_name'];
+                }, $namesToShow);
+                
+                echo '<b>' . implode(", ", $names) . '</b>'; 
+                
+                if ($celebrantsCount > 2) {
+                    echo " and " . ($celebrantsCount - 2) . " others are celebrating today! 🎂🎉 Wish them a happy birthday!";
+                } else {
+                    echo " are celebrating their birthday today! 🎂🎉 Wish them a happy birthday!";
+                }
+                ?>
+            </p>
+        <?php else: ?>
+            <p>No birthdays today!</p>
+        <?php endif; ?>
+    </section>
+
       <section class="common-section">
         <h2 class="section-title" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px;">Friend List</h2>
         

@@ -636,10 +636,57 @@
     </div>
 </div>
 </form>
+<!--------------------------------------- [END] Modal for Adding Story Modal for Adding Story----------------------------------------->
 
+<!--------------------------------------- [START] Modal for Birthday Celebrants Details ----------------------------------------->
+
+    <!-- Modal for Birthday Celebrants Details -->
+    <div id="birthdayModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); padding: 20px; z-index: 1000;">
+        <div id="birthdayModalContent" style="background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: 0 auto;">
+            <h3>Birthday Celebrants</h3>
+            <div id="birthdayCelebrantsList" style="margin-bottom: 20px;"></div>
+            <button onclick="closeBirthdayModal()" style="padding: 5px 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px;">Close</button>
+        </div>
+    </div>
+<!--------------------------------------- [END] Modal for Birthday Celebrants Details ----------------------------------------->
 
 
 <script>
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Show the modal when the notification is clicked
+function showBirthdayModal() {
+    const celebrants = <?php echo json_encode($BirthdayCelebrant); ?>;
+    let celebrantList = '';
+    
+    celebrants.forEach(function(celebrant) {
+        // Calculate age
+        const birthdate = new Date(celebrant.birthdate);
+        const age = new Date().getFullYear() - birthdate.getFullYear();
+
+        // Create celebrant's details
+        celebrantList += `
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img src="<?php echo $this->Html->url('/'); ?>${celebrant.profile_picture}" alt="${celebrant.full_name}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                <div>
+                    <strong>${celebrant.full_name}</strong><br>
+                    <span>${age} years old</span>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById('birthdayCelebrantsList').innerHTML = celebrantList;
+    document.getElementById('birthdayModal').style.display = 'block';
+}
+
+// Close the modal
+function closeBirthdayModal() {
+    document.getElementById('birthdayModal').style.display = 'none';
+}
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 // Function to open the modal with the image, profile picture, full name, and start the timer
 function openModal(imageSrc, profilePic, fullName, date) {
