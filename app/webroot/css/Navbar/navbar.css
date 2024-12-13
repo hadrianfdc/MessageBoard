@@ -1021,7 +1021,7 @@ html.is-dark .modal-footer {
 
 html.is-dark #searchInput {
   background-color: #252525 !important;
-  border: 1px solid #444 !important;
+  border: 1px solid #f0f0f0 !important;
   color: #f0f0f0 !important;
 }
 
@@ -1056,6 +1056,7 @@ html.is-dark #profile-d #profile-pic{
 /* html.is-dark #modal_shows_who_react #modal_who_react_content,
 html.is-dark #modal_shows_who_react #modal_who_react_content div,
 html.is-dark #modal_shows_who_react #modal_who_react_content #reactionsList, */
+html.is-dark #friendList,
 html.is-dark #birthdayModalContent,
 html.is-dark #myStoryIdForDarkmode div  #closeStoryModalForDarkmode,
 html.is-dark #myStoryIdForDarkmode,
@@ -1095,6 +1096,7 @@ html.is-dark  .cnt-label span{
   color: #f0f0f0 !important;
 }
 
+html.is-dark #closeModalBtnSearchFriend,
 html.is-dark #profile-pic a .fa-camera,
 html.is-dark #edit-profile a .fa-camera{
   color: #252525 !important;

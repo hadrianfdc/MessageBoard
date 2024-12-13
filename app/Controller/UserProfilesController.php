@@ -504,7 +504,7 @@ class UserProfilesController extends AppController
                 ProfilePost.created_date DESC
         ");
 
-//  echo "<pre>"; print_r($findPost); echo "</pre>"; die();
+        //  echo "<pre>"; print_r($findPost); echo "</pre>"; die();
         $organizedPosts = $this->getPost($findPost);
 
         if (empty($user_id)) {
@@ -663,7 +663,7 @@ class UserProfilesController extends AppController
     
         $findAllPhotos = $this->ProfilePost->find('all', [
             'fields' => ['ProfilePost.file_paths'], 
-            'conditions' => ['ProfilePost.user_id' => $user_id], 
+            'conditions' => ['ProfilePost.user_id' => $user_id]
         ]);
     
         $photoList = [];

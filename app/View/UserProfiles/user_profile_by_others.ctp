@@ -19,7 +19,9 @@ echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/boots
 
 <div id="profile-upper">
     <div id="profile-banner-image">
+      <?php if(!empty($myPhoto[0]['Posts']['background_img'])): ?>
         <img src="<?php echo $this->Html->url('/' . $myPhoto[0]['Posts']['background_img']); ?>" alt="Banner image">
+      <?php endif; ?>
     </div>
     <div id="profile-d">
         <div id="profile-pic">
