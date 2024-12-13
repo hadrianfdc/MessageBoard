@@ -617,10 +617,23 @@ class UserProfilesController extends AppController
     private function photoGridOthers($user_id) {
         $this->layout = null; 
     
-        $findAllPhotos = $this->ProfilePost->find('all', [
-            'fields' => ['ProfilePost.file_paths'], 
-            'conditions' => ['ProfilePost.user_id' => $user_id], 
-        ]);
+        // $findAllPhotos = $this->ProfilePost->find('all', [
+        //     'fields' => ['ProfilePost.file_paths'], 
+        //     'conditions' => ['ProfilePost.user_id' => $user_id], 
+        // ]);
+        $findAllPhotos = $this->ProfilePost->query("
+            SELECT * 
+            FROM profile_posts as ProfilePost
+            WHERE ProfilePost.is_archieve = 0
+            AND (
+                (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id IS NULL) 
+                OR (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id = {$user_id})
+            )
+            ORDER BY 
+                ProfilePost.is_pinned DESC, 
+                ProfilePost.date_shared DESC, 
+                ProfilePost.created_date DESC
+        ");
     
         $photoList = [];
         foreach ($findAllPhotos as $post) {
@@ -661,10 +674,19 @@ class UserProfilesController extends AppController
     
         $user_id = $this->Session->read('Auth.User.user_id');
     
-        $findAllPhotos = $this->ProfilePost->find('all', [
-            'fields' => ['ProfilePost.file_paths'], 
-            'conditions' => ['ProfilePost.user_id' => $user_id]
-        ]);
+        $findAllPhotos = $this->ProfilePost->query("
+            SELECT * 
+            FROM profile_posts as ProfilePost
+            WHERE ProfilePost.is_archieve = 0
+            AND (
+                (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id IS NULL) 
+                OR (ProfilePost.user_id = {$user_id} AND ProfilePost.sharer_id = {$user_id})
+            )
+            ORDER BY 
+                ProfilePost.is_pinned DESC, 
+                ProfilePost.date_shared DESC, 
+                ProfilePost.created_date DESC
+        ");
     
         $photoList = [];
         foreach ($findAllPhotos as $post) {
