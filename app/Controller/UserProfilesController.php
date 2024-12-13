@@ -194,6 +194,7 @@ class UserProfilesController extends AppController
             $events[$key]['Event']['profile_picture'] = !empty($profilePicture) ? $profilePicture['Posts']['path'] : '/path/to/default/image.jpg';
         }
 
+        // echo "<pre>";print_r($events); echo "</pre>"; die;
         $this->set(compact('events'));
         $this->render('/Elements/event_feed'); 
     }
@@ -204,6 +205,30 @@ class UserProfilesController extends AppController
         if ($this->request->is('post')) {
             
             $eventData = $this->request->data;
+
+            if (isset($eventData['Event']['event_image']['name']) && !empty($eventData['Event']['event_image']['name'])) {
+                $files = $eventData['Event']['event_image'];
+
+                $uploadPath = WWW_ROOT . 'images' . DS;
+
+
+                if($files['error'] == 0){
+                    if (in_array($files['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'])) {
+                        $filename = $files['name'];
+                        $uploadFile = $uploadPath . $filename;
+
+                        if(move_uploaded_file($files['tmp_name'], $uploadFile)){
+                            $eventData['Event']['event_image'] = 'images/' . $filename;
+                        }else {
+                            echo "<pre>"; $this->Session->setFlash('Error uploading file: ' . $files['name']); echo "</pre>"; die();
+                        }
+                    }else {
+                        echo "<pre>"; $this->Session->setFlash('Invalid file type: ' . $files['name']); echo "</pre>"; die();
+                    }
+                }else {
+                    echo "<pre>"; $this->Session->setFlash('Error with file upload!'); echo "</pre>"; die();
+                }
+            } 
             
             // Convert datetime-local format to MySQL datetime format
             if (!empty($eventData['Event']['start_time'])) {

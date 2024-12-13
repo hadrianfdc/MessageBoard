@@ -43,9 +43,9 @@
                         </div> 
 
                         <!-- Event Image (if available) -->
-                        <?php if (!empty($event['Event']['image_path'])): ?>
+                        <?php if (!empty($event['Event']['event_image'])): ?>
                             <div class="event-image">
-                                <img src="<?= h($event['Event']['image_path']); ?>" alt="Event Image" class="image">
+                                <img src="<?php echo $this->Html->url('/' . $event['Event']['event_image']); ?>"  alt="Event Image" class="image">
                             </div>
                         <?php endif; ?>
                     </div>

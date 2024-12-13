@@ -7,29 +7,6 @@
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script> <!--Facebook CDN Link -->
-  
-<?php
-function timeAgo($timestamp) {
-
-    $timeDifference = time() - $timestamp;
-
-    if ($timeDifference < 60) {
-        return $timeDifference . ' seconds ago';
-    } elseif ($timeDifference < 3600) {
-        $minutes = floor($timeDifference / 60);
-        return $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago';
-    } elseif ($timeDifference < 86400) {
-        $hours = floor($timeDifference / 3600);
-        return $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
-    } elseif ($timeDifference < 604800) { // Less than 7 days
-        $days = floor($timeDifference / 86400);
-        return $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
-    } else {
-        // Return the original date for anything older than 7 days
-        return date('F j \a\t g:i A', $timestamp); 
-    }
-}
-?>
 
 
 
@@ -134,54 +111,60 @@ function timeAgo($timestamp) {
     <ul class="main-feed-list">
 
     <form method="post" action="<?php echo $this->Html->url(array('controller' => 'UserProfiles', 'action' => 'createEvent')); ?>" enctype="multipart/form-data">
-    <div class="m-mrg" id="event-composer" style="width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-            <!-- Tabs for Different Event Options -->
-            <div id="event-tabs-cvr" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
-                <div class="tb" id="event-tabs" style="display: flex; justify-content: space-between; padding: 10px 0;">
-                    <div id="createEvent" class="td active" data-type="all" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #1c1e21; font-weight: bold; padding: 5px 15px; border-bottom: 2px solid #4267b2;">
-                        <i class="fas fa-calendar-plus" style="font-size: 20px; margin-right: 5px;"></i><span>All Events</span>
+            <div class="m-mrg" id="event-composer" style="width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                <!-- Tabs for Different Event Options -->
+                <div id="event-tabs-cvr" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
+                    <div class="tb" id="event-tabs" style="display: flex; justify-content: space-between; padding: 10px 0;">
+                        <div id="createEvent" class="td active" data-type="all" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #1c1e21; font-weight: bold; padding: 5px 15px; border-bottom: 2px solid #4267b2;">
+                            <i class="fas fa-calendar-plus" style="font-size: 20px; margin-right: 5px;"></i><span>All Events</span>
+                        </div>
+                        <div id="upcomingEvents" class="td" data-type="upcoming" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
+                            <i class="fas fa-calendar" style="font-size: 20px; margin-right: 5px; color:orange;"></i><span>Upcoming Events</span>
+                        </div>
+                        <div id="pastEvents" class="td" data-type="past" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
+                            <i class="fas fa-history" style="font-size: 20px; margin-right: 5px; color:green;"></i><span>Past Events</span>
+                        </div>
                     </div>
-                    <div id="upcomingEvents" class="td" data-type="upcoming" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                        <i class="fas fa-calendar" style="font-size: 20px; margin-right: 5px; color:orange;"></i><span>Upcoming Events</span>
+                </div>
+
+                <!-- Event Form -->
+                <div id="event-form-main" style="display: flex; flex-direction: column; gap: 15px; padding: 10px 0;">
+                    <!-- Event Title -->
+                    <input type="text" id="event-title" name="data[Event][title]" placeholder="Event Title" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+
+                    <!-- Event Description -->
+                    <textarea id="event-description" name="data[Event][description]" placeholder="Event Description" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none; height: 80px; resize: none;"></textarea>
+
+                    <!-- Event Details -->
+                    <div style="display: flex; gap: 15px;">
+                        <input type="text" id="event-location" name="data[Event][location]" placeholder="Location" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+                        <select name="data[Event][event_type]" id="event-type" style="flex: 0.5; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+                            <option value="Public">Public</option>
+                            <option value="Private">Private</option>
+                            <option value="Closed">Closed</option>
+                        </select>
                     </div>
-                    <div id="pastEvents" class="td" data-type="past" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                        <i class="fas fa-history" style="font-size: 20px; margin-right: 5px; color:green;"></i><span>Past Events</span>
+
+                    <!-- Event Time -->
+                    <div style="display: flex; gap: 15px;">
+                        <label>Event Time</label>
                     </div>
+                    <div style="display: flex; gap: 15px;">
+                        <input required type="datetime-local" name="data[Event][start_time]" id="event-start-time" placeholder="Start Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+                        <input type="datetime-local" name="data[Event][end_time]" id="event-end-time" placeholder="End Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div>
+                        <label for="event-image" style="font-size: 14px; color: #1c1e21; font-weight: bold;">Upload Event Image</label>
+                        <input type="file" id="event-image" name="data[Event][event_image]" accept="image/*" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
+                    </div>
+
+                    <button id="create-event-btn" style="width: 100%; padding: 10px 15px; background-color: #4267b2; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Create Event</button>
                 </div>
             </div>
-
-
-            <!-- Event Form -->
-            <div id="event-form-main" style="display: flex; flex-direction: column; gap: 15px; padding: 10px 0;">
-                <!-- Event Title -->
-                <input type="text" id="event-title" name="data[Event][title]" placeholder="Event Title" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-
-                <!-- Event Description -->
-                <textarea id="event-description" name="data[Event][description]" placeholder="Event Description" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none; height: 80px; resize: none;"></textarea>
-
-                <!-- Event Details -->
-                <div style="display: flex; gap: 15px;">
-                    <input type="text" id="event-location" name="data[Event][location]" placeholder="Location" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                    <select name="data[Event][event_type]" id="event-type" style="flex: 0.5; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                        <option value="Public">Public</option>
-                        <option value="Private">Private</option>
-                        <option value="Closed">Closed</option>
-                    </select>
-                </div>
-
-                <!-- Event Time -->
-                <div style="display: flex; gap: 15px;">
-                <label>Event Time</label>
-                </div>
-                <div style="display: flex; gap: 15px;">
-                    <input required type="datetime-local" name="data[Event][start_time]" id="event-start-time" placeholder="Start Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                    <input type="datetime-local" name="data[Event][end_time]" id="event-end-time" placeholder="End Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                </div>
-
-                <button id="create-event-btn" style="width: 100%; padding: 10px 15px; background-color: #4267b2; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Create Event</button>
-            </div>
-        </div>
         </form>
+
 
         <div id="event-feed-container">
             <div class="main-feed">

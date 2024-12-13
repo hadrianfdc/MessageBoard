@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 13, 2024 at 09:12 AM
+-- Generation Time: Dec 13, 2024 at 10:34 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -82,6 +82,7 @@ CREATE TABLE `events` (
   `user_id` int(11) NOT NULL COMMENT 'event creator',
   `title` varchar(1000) NOT NULL,
   `description` varchar(1000) DEFAULT NULL,
+  `event_image` varchar(100) DEFAULT NULL,
   `location` varchar(200) NOT NULL,
   `start_time` datetime NOT NULL,
   `end_time` datetime DEFAULT NULL,
@@ -94,9 +95,10 @@ CREATE TABLE `events` (
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`id`, `user_id`, `title`, `description`, `location`, `start_time`, `end_time`, `event_type`, `created_at`, `updated_at`) VALUES
-(1, 2, 'ENGLISH MONTH CELEBRATION 2024', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-15 08:42:00', '2024-12-16 15:42:00', 'Public', '2024-12-13 15:42:34', NULL),
-(2, 2, 'ENGLISH MONTH CELEBRATION PAST', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-11-15 08:42:00', '2024-12-12 15:42:00', 'Public', '2024-12-13 15:42:52', NULL);
+INSERT INTO `events` (`id`, `user_id`, `title`, `description`, `event_image`, `location`, `start_time`, `end_time`, `event_type`, `created_at`, `updated_at`) VALUES
+(1, 2, 'ENGLISH MONTH CELEBRATION 2024', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', NULL, 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-15 08:42:00', '2024-12-16 15:42:00', 'Public', '2024-12-13 15:42:34', NULL),
+(2, 2, 'ENGLISH MONTH CELEBRATION PAST', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', NULL, 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-11-15 08:42:00', '2024-12-12 15:42:00', 'Public', '2024-12-13 15:42:52', NULL),
+(3, 2, 'YEAR END THANKSGIVING PARTY', 'Just a heads up!\r\nWe have gathered all the information for you in one convenient spot, but please keep in mind that these are subject to change. We do our best to keep everything updated, but something might be out of sync. For the latest updates, always check the official event details by clicking the \"Find Tickets\" button.\r\n\r\nAfter all, we want you to have the best experience.', 'images/Eventtesting.jpeg', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-13 17:25:00', '2024-12-15 17:25:00', 'Public', '2024-12-13 17:30:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -109,19 +111,6 @@ CREATE TABLE `event_comments` (
   `event_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comment` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `event_images`
---
-
-CREATE TABLE `event_images` (
-  `image_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `file_path` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -483,7 +472,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2002-12-13', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-13 06:02:13', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
+(2, 'Hadrian Evarula', 'Male', '2002-12-13', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-13 17:05:27', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
 (20, 'Clint Anthony Savilla', 'Male', '2001-12-13', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (21, 'Janrae Fagaragan', 'Male', '2024-03-13', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
@@ -525,12 +514,6 @@ ALTER TABLE `events`
 --
 ALTER TABLE `event_comments`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `event_images`
---
-ALTER TABLE `event_images`
-  ADD PRIMARY KEY (`image_id`);
 
 --
 -- Indexes for table `friends_list`
@@ -610,19 +593,13 @@ ALTER TABLE `conversations`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `event_comments`
 --
 ALTER TABLE `event_comments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `event_images`
---
-ALTER TABLE `event_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `friends_list`
