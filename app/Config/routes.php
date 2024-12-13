@@ -44,6 +44,7 @@
 	Router::connect('/user-profiles-of/*', ['controller' => 'UserProfiles', 'action' => 'user_profile_by_others']);	
 	Router::connect('/setting', ['controller' => 'UserProfiles', 'action' => 'setting']);	
 
+	Router::connect('/events', ['controller' => 'UserProfiles', 'action' => 'event']);	
 
 
 	// Router::connect('/Registers/new_user', array('controller' => 'Registers', 'action' => 'new_user'));

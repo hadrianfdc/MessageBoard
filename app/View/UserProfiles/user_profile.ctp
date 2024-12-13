@@ -726,6 +726,7 @@ function timeAgo($timestamp) {
 
   </aside>
 </div>
+<?php echo $this->element('Actions/modal_search_friend'); ?>
 <?php echo $this->element('modal_edit_profile'); ?>
 
 <script>

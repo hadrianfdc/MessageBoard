@@ -9,7 +9,7 @@ class UserProfilesController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory', 'Event');
 
     public function beforeFilter()
     {
@@ -81,6 +81,151 @@ class UserProfilesController extends AppController
         $this->set('friendsData', $myFriendsList);
         $this->set('BirthdayCelebrant', $findBirthdays);
     }
+
+    public function event() {
+
+        $user_id = $this->Session->read('Auth.User.user_id');
+
+        $friendIdsResult = $this->FriendsList->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['FriendsList.user_id' => $user_id],
+                    ['FriendsList.acceptor' => $user_id]
+                ],
+                'FriendsList.status' => 'accepted' // Only accepted friends
+            ],
+            'fields' => ['FriendsList.user_id', 'FriendsList.acceptor']
+        ]);
+        
+        $friendIds = [];
+        foreach ($friendIdsResult as $friend) {
+            $friendIds[] = $friend['FriendsList']['user_id'];
+            $friendIds[] = $friend['FriendsList']['acceptor'];
+        }
+        $friendIds = array_unique($friendIds);
+        $friendIds[] = $user_id;
+                
+        $findPost = $this->ProfilePost->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['ProfilePost.privacy' => 1, 'ProfilePost.user_id' => $user_id],
+                    ['ProfilePost.privacy' => [2, 3]]
+                ],
+                'ProfilePost.is_archieve !=' => 1, 
+                'ProfilePost.user_id' => $friendIds, // Only posts from friends
+                'OR' => [
+                    ['ProfilePost.sharer_id' => null], 
+                    ['ProfilePost.sharer_id' => $friendIds] 
+                ]
+            ],
+            'order' => ['ProfilePost.user_id' => 'ASC', 'ProfilePost.created_date' => 'DESC', 'ProfilePost.date_shared' => 'DESC'],
+        ]);
+
+        $organizedPosts = $this->getPost($findPost);
+        $organizedMyDaysPost = $this->getMyDayAndStory();
+
+        if (empty($user_id)) {
+            $this->redirect(['controller' => 'logins', 'action' => 'login']);
+        }
+        $findUsers = $this->User->find('all', [
+            'conditions' => ['User.user_id' => $user_id]
+        ]);
+        $findMyPics = $this->Posts->find('all', [
+            'conditions' => ['Posts.id' => $user_id]
+        ]);
+
+        $myFriendsList = $this->getFriendList();
+        $findBirthdays = $this->getBirthdayForToday($myFriendsList);
+
+        // echo "<pre>";print_r($myFriendsList); print_r($findBirthdays); echo "</pre>"; die;
+     
+        $events = $this->Event->find('all', [
+            'order' => ['Event.created_at' => 'DESC']
+        ]);
+        
+        // Fetch user profile pictures for all events
+        foreach ($events as $key => $event) {
+            $userId = $event['Event']['user_id'];
+            $profilePicture = $this->Posts->find('first', [
+                'conditions' => ['Posts.id' => $userId],
+                'fields' => ['Posts.path'], 
+            ]);
+            $events[$key]['Event']['profile_picture'] = !empty($profilePicture) ? $profilePicture['Posts']['path'] : '/path/to/default/image.jpg';
+        }
+        
+        $this->set(compact('events'));
+        
+
+        $this->set('findMyPics', $findMyPics);
+        $this->set('users', $findUsers);
+        $this->set('findPost', $organizedPosts);
+        $this->set('user_id', $user_id);
+        $this->set('organizedMyDaysPost', $organizedMyDaysPost);
+        $this->set('friendsData', $myFriendsList);
+        $this->set('BirthdayCelebrant', $findBirthdays);
+        
+	}
+
+    public function fetchEvents() {
+        $this->autoRender = false;
+        $this->layout = null;
+    
+        $type = $this->request->query('type');
+        $conditions = [];
+    
+        if ($type === 'upcoming') {
+            $conditions = ['Event.start_time >=' => date('Y-m-d H:i:s')];
+        } elseif ($type === 'past') {
+            $conditions = ['Event.end_time <=' => date('Y-m-d H:i:s')];
+        }
+    
+        $events = $this->Event->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Event.start_time' => 'ASC']
+        ]);
+    
+        // Fetch user profile pictures for all events
+        foreach ($events as $key => $event) {
+            $userId = $event['Event']['user_id'];
+            $profilePicture = $this->Posts->find('first', [
+                'conditions' => ['Posts.id' => $userId],
+                'fields' => ['Posts.path'], 
+            ]);
+            $events[$key]['Event']['profile_picture'] = !empty($profilePicture) ? $profilePicture['Posts']['path'] : '/path/to/default/image.jpg';
+        }
+
+        $this->set(compact('events'));
+        $this->render('/Elements/event_feed'); 
+    }
+    
+
+    public function createEvent() {
+        date_default_timezone_set('Asia/Manila');
+        if ($this->request->is('post')) {
+            
+            $eventData = $this->request->data;
+            
+            // Convert datetime-local format to MySQL datetime format
+            if (!empty($eventData['Event']['start_time'])) {
+                $eventData['Event']['start_time'] = date('Y-m-d H:i:s', strtotime($eventData['Event']['start_time']));
+            }
+            if (!empty($eventData['Event']['end_time'])) {
+                $eventData['Event']['end_time'] = date('Y-m-d H:i:s', strtotime($eventData['Event']['end_time']));
+            }
+
+            $eventData['Event']['user_id'] = $this->Session->read('Auth.User.user_id');
+            $eventData['Event']['created_at'] = date('Y-m-d H:i:s');
+            
+            // echo "<pre>"; print_r($eventData); echo "</pre>"; die;
+            if ($this->Event->save($eventData)) {
+                $this->Session->setFlash(__('The event has been created successfully.'), 'default', array('class' => 'success'));
+                return $this->redirect('/events'); 
+            } else {
+                $this->Session->setFlash(__('There was a problem saving your event. Please try again.'), 'default', array('class' => 'error'));
+            }
+        }
+    }
+    
 
     public function getFriendList() {
 

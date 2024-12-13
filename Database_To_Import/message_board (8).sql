@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2024 at 08:39 AM
+-- Generation Time: Dec 13, 2024 at 09:12 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -74,6 +74,60 @@ CREATE TABLE `conversations` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `events`
+--
+
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'event creator',
+  `title` varchar(1000) NOT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  `location` varchar(200) NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `event_type` varchar(20) NOT NULL DEFAULT 'Public' COMMENT '''Public'', ''Private'', ''Closed''',
+  `created_at` datetime NOT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `user_id`, `title`, `description`, `location`, `start_time`, `end_time`, `event_type`, `created_at`, `updated_at`) VALUES
+(1, 2, 'ENGLISH MONTH CELEBRATION 2024', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-15 08:42:00', '2024-12-16 15:42:00', 'Public', '2024-12-13 15:42:34', NULL),
+(2, 2, 'ENGLISH MONTH CELEBRATION PAST', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-11-15 08:42:00', '2024-12-12 15:42:00', 'Public', '2024-12-13 15:42:52', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_comments`
+--
+
+CREATE TABLE `event_comments` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_images`
+--
+
+CREATE TABLE `event_images` (
+  `image_id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `friends_list`
 --
 
@@ -92,7 +146,8 @@ CREATE TABLE `friends_list` (
 INSERT INTO `friends_list` (`id`, `user_id`, `acceptor`, `status`, `created`) VALUES
 (19, 30, 2, 'accepted', '2024-12-03 09:05:48'),
 (21, 20, 27, 'pending', '2024-12-06 05:04:42'),
-(22, 20, 2, 'accepted', '2024-12-06 08:14:47');
+(22, 20, 2, 'accepted', '2024-12-06 08:14:47'),
+(24, 27, 2, 'accepted', '2024-12-12 06:49:16');
 
 -- --------------------------------------------------------
 
@@ -122,7 +177,9 @@ INSERT INTO `friends_list_notification` (`id`, `for_who_acceptor`, `from_who_use
 (8, 2, 20, 1, 1, '2024-12-06 08:14:47'),
 (9, 20, 2, 2, 0, '2024-12-06 08:15:17'),
 (10, 27, 2, 1, 1, '2024-12-11 08:27:10'),
-(11, 2, 27, 2, 1, '2024-12-11 08:27:46');
+(11, 2, 27, 2, 1, '2024-12-11 08:27:46'),
+(12, 2, 27, 1, 1, '2024-12-12 06:49:16'),
+(13, 27, 2, 2, 1, '2024-12-12 06:49:28');
 
 -- --------------------------------------------------------
 
@@ -175,7 +232,6 @@ INSERT INTO `messages` (`message_id`, `conversation_id`, `sender_id`, `receiver_
 (1198, NULL, 2, 23, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 0, '2024-03-20 09:19:25'),
 (1200, NULL, 2, 23, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n', 0, '2024-03-21 03:39:49'),
 (1201, NULL, 2, 21, 'Hello?', 0, '2024-03-21 06:57:37'),
-(1202, NULL, 2, 20, 'Nagduty pako bai ari hehehe ', 1, '2024-11-22 07:53:07'),
 (1203, NULL, 29, 2, 'Test Message', 0, '2024-03-22 01:05:44'),
 (1205, NULL, 2, 21, 'Hello where are you now ?\r\n', 0, '2024-11-22 05:49:57');
 
@@ -197,13 +253,13 @@ CREATE TABLE `my_day_story` (
 --
 
 INSERT INTO `my_day_story` (`id`, `user_id`, `path`, `date_created`) VALUES
-(1, 20, 'images/download1.jpeg', '2024-12-11 05:27:47'),
-(2, 2, 'images/download1.jpeg', '2024-12-11 00:00:00'),
-(3, 29, 'images/download (1).jpeg', '2024-12-11 05:27:47'),
-(4, 30, 'images/avatar.jpeg', '2024-12-11 05:27:47'),
-(5, 2, 'images/1733900200_cutetest.webp', '2024-12-11 07:56:40'),
-(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-11 07:57:10'),
-(7, 2, 'images/1733901685_Angpic.jpeg', '2024-12-11 08:21:25');
+(1, 20, 'images/download1.jpeg', '2024-12-12 15:27:47'),
+(2, 2, 'images/download1.jpeg', '2024-12-12 14:00:00'),
+(3, 29, 'images/download (1).jpeg', '2024-12-12 13:03:26'),
+(4, 30, 'images/avatar.jpeg', '2024-12-12 20:27:47'),
+(5, 2, 'images/1733900200_cutetest.webp', '2024-12-12 21:56:40'),
+(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-12 22:57:10'),
+(7, 2, 'images/1733901685_Angpic.jpeg', '2024-12-12 00:21:25');
 
 -- --------------------------------------------------------
 
@@ -216,7 +272,7 @@ CREATE TABLE `notification` (
   `user_id` int(11) NOT NULL,
   `author` int(11) NOT NULL COMMENT 'for whom this',
   `profile_post_id` int(11) NOT NULL,
-  `type` int(11) NOT NULL COMMENT '1: react 2: comment 3: add_friend 4: accept_friend 5:change_pass\r\n',
+  `type` int(11) NOT NULL COMMENT '1: react 2: comment 3: add_friend 4: accept_friend 5:change_pass 6:bday\r\n',
   `description` varchar(500) NOT NULL,
   `is_seen` int(1) NOT NULL DEFAULT 0 COMMENT '0: not seen, 1: seen',
   `created` datetime NOT NULL
@@ -232,24 +288,44 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 (53, 20, 20, 17, 1, 'Reacted Heart to your Post', 0, '2024-12-06 07:31:58'),
 (54, 20, 2, 40, 1, 'Reacted Heart to your Post', 1, '2024-12-06 07:35:38'),
 (55, 2, 2, 28, 1, 'Reacted Heart to your Post', 1, '2024-12-06 08:08:43'),
-(56, 20, 2, 28, 1, 'Reacted Wow to your Post', 0, '2024-12-06 08:26:21'),
+(56, 20, 2, 28, 1, 'Reacted Wow to your Post', 1, '2024-12-06 08:26:21'),
 (57, 2, 30, 24, 1, 'Reacted Care to your Post', 0, '2024-12-09 03:53:14'),
 (58, 2, 20, 17, 1, 'Reacted Angry to your Post', 0, '2024-12-09 03:55:38'),
 (59, 2, 30, 22, 1, 'Reacted Wow to your Post', 0, '2024-12-09 03:57:56'),
 (60, 2, 2, 28, 1, 'Reacted Haha to your Post', 1, '2024-12-10 05:06:40'),
-(61, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:30:09'),
-(62, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:32:58'),
-(63, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:47'),
-(64, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:52'),
-(65, 2, 2, 28, 2, 'commented on your post', 0, '2024-12-10 06:33:53'),
+(61, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:30:09'),
+(62, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:32:58'),
+(63, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:33:47'),
+(64, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:33:52'),
+(65, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:33:53'),
 (66, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:36:40'),
 (67, 2, 2, 28, 2, 'commented on your post', 1, '2024-12-10 06:37:30'),
 (68, 2, 2, 25, 1, 'Reacted Haha to your Post', 1, '2024-12-10 09:42:15'),
 (69, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 09:59:30'),
 (70, 2, 2, 0, 5, 'You have successfully changed your password. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 10:01:51'),
-(71, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-10 10:10:26'),
+(71, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 1, '2024-12-10 10:10:26'),
 (72, 27, 27, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-11 08:27:35'),
-(73, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-11 08:28:03');
+(73, 2, 2, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 1, '2024-12-11 08:28:03'),
+(74, 27, 27, 0, 6, 'You have successfully login. If you did not initiate this, please contact support immediately.', 0, '2024-12-12 06:49:06'),
+(75, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 1, '2024-12-12 14:14:13'),
+(76, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 1, '2024-12-12 14:14:13'),
+(77, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:13'),
+(78, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 1, '2024-12-12 14:14:15'),
+(79, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 1, '2024-12-12 14:14:15'),
+(80, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:15'),
+(81, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 1, '2024-12-12 14:14:16'),
+(82, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 1, '2024-12-12 14:14:16'),
+(83, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:16'),
+(84, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 1, '2024-12-12 14:14:16'),
+(85, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 1, '2024-12-12 14:14:16'),
+(86, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:16'),
+(87, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 0, '2024-12-12 14:14:18'),
+(88, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 1, '2024-12-12 14:14:18'),
+(89, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:18'),
+(90, 30, 2, 0, 6, 'FDC Tester has a birthday today!', 1, '2024-12-12 14:14:18'),
+(91, 20, 2, 0, 6, 'Clint Anthony Savilla has a birthday today!', 0, '2024-12-12 14:14:18'),
+(92, 27, 2, 0, 6, 'Jan Baoc has a birthday today!', 1, '2024-12-12 14:14:18'),
+(93, 2, 27, 0, 6, 'Hadrian Evarula has a birthday today!', 0, '2024-12-12 14:37:17');
 
 -- --------------------------------------------------------
 
@@ -317,7 +393,7 @@ CREATE TABLE `profile_posts` (
 
 INSERT INTO `profile_posts` (`id`, `user_id`, `fullname`, `captions`, `file_paths`, `privacy`, `react`, `is_pinned`, `is_saved`, `is_archieve`, `is_shared`, `shared_id`, `sharer_caption`, `sharer_id`, `sharer_full_name`, `date_shared`, `created_date`, `updated_date`) VALUES
 (15, 27, 'Jan Baoc', 'I am Nino Baoc and This is my test trial post!', '[\"images\\/test4.png\",\"images\\/test5.jpeg\",\"images\\/test5.jpg\",\"images\\/test3.jpg\",\"images\\/test2.png\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-25 08:12:22', NULL),
-(16, 2, 'Hadrian Evarula', 'My Second Tryal Attempt!', '[\"images\\/test5.jpg\",\"images\\/test5.jpeg\",\"images\\/test4.png\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 1, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-25 08:48:01', '2024-12-10 05:06:27'),
+(16, 2, 'Hadrian Evarula', 'My Second Tryal Attempt!', '[\"images\\/test5.jpg\",\"images\\/test5.jpeg\",\"images\\/test4.png\"]', 2, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-25 08:48:01', '2024-12-12 08:35:20'),
 (17, 20, 'Clint Anthony Savilla', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '[\"images\\/test6.jpeg\",\"images\\/test7.jpeg\",\"images\\/test8.jpeg\"]', 2, '{\"Like\":0,\"Love\":\"1\",\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":\"1\"}', 1, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-25 09:40:46', '2024-12-06 04:41:21'),
 (22, 30, 'FDC Tester', 'Velit vivamus facilisi sem ex bibendum est elementum tincidunt. Volutpat nulla tristique scelerisque imperdiet varius himenaeos vitae. Nostra ultrices consequat felis dignissim ultricies. Vestibulum integer dictum pretium nisi ut; efficitur orci. Parturient congue nec non sollicitudin ultricies netus. Pretium suspendisse semper pharetra sociosqu hac. Eleifend volutpat nec feugiat lectus turpis aliquet tempor porttitor? Elit hendrerit magna sem auctor erat a. Neque efficitur taciti vulputate quam quis ex nostra.', '[\"images\\/cutetest.webp\",\"images\\/cutecats.jpg\"]', 1, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":\"1\",\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 03:17:59', NULL),
 (23, 30, 'FDC Tester', 'Test phost', '[\"images\\/cutecats.jpg\",\"images\\/cutetest.webp\",\"images\\/test.png\"]', 3, '{\"Like\":0,\"Love\":0,\"Care\":0,\"Haha\":0,\"Wow\":0,\"Sad\":0,\"Angry\":0}', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2024-11-26 03:25:53', NULL),
@@ -407,18 +483,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2005-03-22', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-11 08:28:03', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
-(20, 'Clint Anthony Savilla', 'Male', '2024-03-18', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(21, 'Janrae Fagaragan', 'Male', '2024-03-18', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(2, 'Hadrian Evarula', 'Male', '2002-12-13', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-13 06:02:13', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
+(20, 'Clint Anthony Savilla', 'Male', '2001-12-13', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(21, 'Janrae Fagaragan', 'Male', '2024-03-13', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (23, 'Dave Gwapo', 'Male', '2024-03-18', 'dave.gwapolagika@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 08:47:23', '2024-03-20 07:09:25', 'Wala ra gud hehehe', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (24, 'John Doe', 'Male', '2024-03-19', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (25, 'Joseph Savilla', 'Male', '2002-03-20', 'joseph.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:02:15', '2024-11-29 06:33:51', 'Wala ra gud', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (26, 'Andrea B', 'Female', '2004-03-20', 'andrea.b@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:10:25', '2024-11-28 07:51:03', 'Wala ra pud\r\n', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(27, 'Jan Baoc', 'Male', '2024-03-20', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-12-11 08:27:57', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(27, 'Jan Baoc', 'Male', '2002-12-13', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-12-12 07:37:53', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (28, 'June Michael Jordan', 'Male', '2024-03-20', 'june@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:15:54', '2024-11-29 06:33:25', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (29, 'Wa Ra Gud', 'Male', '2024-03-21', 'waragud@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-21 03:52:15', '2024-11-28 06:25:55', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(30, 'FDC Tester', 'Male', '2005-03-22', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+(30, 'FDC Tester', 'Male', '2005-12-13', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -437,6 +513,24 @@ ALTER TABLE `conversations`
   ADD PRIMARY KEY (`conversation_id`),
   ADD KEY `user1_id` (`user1_id`),
   ADD KEY `user2_id` (`user2_id`);
+
+--
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `event_comments`
+--
+ALTER TABLE `event_comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `event_images`
+--
+ALTER TABLE `event_images`
+  ADD PRIMARY KEY (`image_id`);
 
 --
 -- Indexes for table `friends_list`
@@ -513,16 +607,34 @@ ALTER TABLE `conversations`
   MODIFY `conversation_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `event_comments`
+--
+ALTER TABLE `event_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `event_images`
+--
+ALTER TABLE `event_images`
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `friends_list`
 --
 ALTER TABLE `friends_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `friends_list_notification`
 --
 ALTER TABLE `friends_list_notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -540,7 +652,7 @@ ALTER TABLE `my_day_story`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `posts`

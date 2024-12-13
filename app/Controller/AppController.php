@@ -41,6 +41,7 @@ class AppController extends Controller
     public $uses = array('User', 'Posts','Notification', 'FriendsListNotification');
     public function beforeFilter()
     {
+        date_default_timezone_set('Asia/Manila');
         parent::beforeFilter();
 
         // Check if user_id is not set in the session

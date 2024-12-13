@@ -683,35 +683,21 @@ function timeAgo($timestamp) {
     </ul>
   </main>
   <aside class="side-b">
-    <section class="common-section">
-      <h2 class="section-title">Sponsored</h2>
-      <ul class="common-list">
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
-            <div class="image"><img src="https://bit.ly/3cY5ncE" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Export Sketch to HTML with a click</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-        <li class="common-list-item">
-          <a href="http://bit.ly/2Nd05lW" class="common-list-button is-ads">
-            <div class="image"><img src="https://cssclasscom.files.wordpress.com/2020/06/14.png?w=300" width="115" alt=""></div>
-            <div class="text">
-              <h4 class="ads-title">Front-end developers, prepare to be amazed</h4>
-              <p class="ads-url">animaapp.com</p>
-            </div>
-          </a>
-        </li>
-      </ul>
-      <button class="common-more">
-        <span class="text">See More</span>
-        <span class="icon">🔻</span>
-      </button>
-    </section>
+    
+      <section class="common-section">
+        <h2 class="section-title">Sponsored</h2>
+        <ul class="common-list" id="ads-list">
+            <!-- Ad items will be dynamically inserted here -->
+        </ul>
+        <button class="common-more">
+            <span class="text">See More</span>
+            <span class="icon">🔻</span>
+        </button>
+      </section>
+
   </aside>
 </div>
+<?php echo $this->element('Actions/modal_search_friend'); ?>
 <?php echo $this->element('modal_edit_profile'); ?>
 
 <script>

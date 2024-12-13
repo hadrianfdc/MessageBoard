@@ -179,7 +179,7 @@ class FriendsListController extends AppController
                     'fields' => ['Posts.path']
                 ]);
     
-                $profilePicPath = isset($profilePic['Posts']['path']) ? $profilePic['Posts']['path'] : 'path/to/default/profile-pic.jpg';
+                $profilePicPath = isset($profilePic['Posts']['path']) ? $profilePic['Posts']['path'] : '';
 
                 $isFriend = $this->FriendsList->find('first', [
                     'conditions' => [

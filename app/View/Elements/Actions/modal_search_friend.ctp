@@ -32,7 +32,7 @@
             <span class="close" id="closeModalBtnSearchFriend" style="font-size: 24px; cursor: pointer; color: white;">&times;</span>
         </div>
         <div style="padding: 15px;">
-            <input type="text" id="searchInput" placeholder="Search for friends..." 
+            <input type="text" id="searchInput" placeholder="Search for friends..." autofill="off"
                 style="width: 100%; padding: 12px; font-size: 14px; border-radius: 20px; border: 1px solid #ddd; background-color: #f5f6f7; outline: none; box-sizing: border-box; margin-bottom: 15px;">
                 <!-- Spinner HTML (inside friendList div) -->
                 <!-- Spinner HTML -->
@@ -41,7 +41,7 @@
                 </div>
 
             <ul id="friendList" style="list-style-type: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; background-color: #f9f9f9; border-radius: 8px;">
-                <!-- Example Friend Item -->
+               
                 <li style="padding: 12px 15px; border-bottom: 1px solid #ddd; display: flex; align-items: center; cursor: pointer; transition: background-color 0.2s ease;">
                     <img src="https://via.placeholder.com/40" alt="Friend" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 15px;">
                     <div style="flex-grow: 1;">
@@ -50,7 +50,7 @@
                     </div>
                     <button class="message-btn" style="background-color: #42b72a; color: white; padding: 6px 10px; border: none; border-radius: 20px; font-size: 12px; cursor: pointer;">Message</button>
                 </li>
-                <!-- Add more friend items dynamically here -->
+                
             </ul>
         </div>
     </div>
@@ -64,6 +64,8 @@ $(document).ready(function() {
     // Open Modal when See More button is clicked
     $("#seeMoreBtn").click(function() {
         $("#searchFriendModal").fadeIn();
+        $("#searchInput").focus();
+        $("#searchInput").trigger('input');
     });
 
     // Close Modal
@@ -77,12 +79,10 @@ $(document).ready(function() {
         if (searchQuery.length > 0) {
             var friendsList = $("#friendList");
             var spinner = $("#spinner");
-            friendsList.empty(); // Clear previous results
+            friendsList.empty(); 
 
-            // Show the spinner while searching
             spinner.show();
 
-            // Display spinner for 1 second, then send AJAX request
             setTimeout(function() {
                 $.ajax({
                     url: '/MessageBoard/FriendsList/searchFriends', 
@@ -90,8 +90,8 @@ $(document).ready(function() {
                     data: { query: searchQuery },
                     dataType: 'json',
                     success: function(response) {
-                        friendsList.empty(); // Clear the spinner text
-                        spinner.hide(); // Hide spinner
+                        friendsList.empty(); 
+                        spinner.hide();
 
                         if (response.length > 0) {
                             response.forEach(function(friend) {
@@ -126,8 +126,8 @@ $(document).ready(function() {
                         }
                     },
                     error: function(xhr, status, error) {
-                        friendsList.empty(); // Clear the loading text
-                        spinner.hide(); // Hide spinner
+                        friendsList.empty(); 
+                        spinner.hide(); 
                         friendsList.append('<li style="padding: 10px; font-size: 14px; color: #606770; text-align: center;">Error fetching data. Please try again.</li>');
                         console.error('AJAX Error: ' + error);
                     }

@@ -85,7 +85,7 @@ function timeAgo($timestamp) {
             </a>
         </div>
         <div class="common-list-item">
-            <a class="common-list-button" href="#">
+            <a class="common-list-button" href="/MessageBoard/events">
                 <span class="icon" style="color: purple;"><i class="fas fa-calendar-alt"></i></span>
                 <span class="text">Events</span>
             </a>

@@ -760,7 +760,11 @@
 //--------------------------------------------------------------------------------------------------
 // Show the modal when the notification is clicked
 function showBirthdayModal() {
-    const celebrants = <?php echo json_encode($BirthdayCelebrant); ?>;
+    let celebrants = [];
+    <?php if (isset($BirthdayCelebrant) && $BirthdayCelebrant !== null) : ?>
+        celebrants = <?php echo json_encode($BirthdayCelebrant); ?>;
+    <?php endif; ?>
+
     let celebrantList = '';
     
     celebrants.forEach(function(celebrant) {
