@@ -45,6 +45,9 @@
 	Router::connect('/setting', ['controller' => 'UserProfiles', 'action' => 'setting']);	
 
 	Router::connect('/events', ['controller' => 'UserProfiles', 'action' => 'event']);	
+	Router::connect('/page', ['controller' => 'UserProfiles', 'action' => 'create_page_index']);	
+	Router::connect('/list_of_page', ['controller' => 'UserProfiles', 'action' => 'ListOfAllPages']);	
+	Router::connect('/view_page/*', ['controller' => 'UserProfiles', 'action' => 'pageProfileView']);	
 
 
 	// Router::connect('/Registers/new_user', array('controller' => 'Registers', 'action' => 'new_user'));

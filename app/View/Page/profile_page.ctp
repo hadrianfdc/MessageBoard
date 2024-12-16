@@ -110,69 +110,105 @@
   <main class="main-feed">
     <ul class="main-feed-list">
 
-    <form method="post" action="<?php echo $this->Html->url(array('controller' => 'UserProfiles', 'action' => 'createEvent')); ?>" enctype="multipart/form-data">
-            <div class="m-mrg" id="event-composer" style="width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-                <!-- Tabs for Different Event Options -->
-                <div id="event-tabs-cvr" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
-                    <div class="tb" id="event-tabs" style="display: flex; justify-content: space-between; padding: 10px 0;">
-                        <div id="createEvent" class="td active" data-type="all" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #1c1e21; font-weight: bold; padding: 5px 15px; border-bottom: 2px solid #4267b2;">
-                            <i class="fas fa-calendar-plus" style="font-size: 20px; margin-right: 5px;"></i><span>All Events</span>
-                        </div>
-                        <div id="upcomingEvents" class="td" data-type="upcoming" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                            <i class="fas fa-calendar" style="font-size: 20px; margin-right: 5px; color:orange;"></i><span>Upcoming Events</span>
-                        </div>
-                        <div id="pastEvents" class="td" data-type="past" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                            <i class="fas fa-history" style="font-size: 20px; margin-right: 5px; color:green;"></i><span>Past Events</span>
-                        </div>
-                    </div>
+    <div id="viewPageDiv"  style="max-width: 1000px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+
+        <!-- Cover Photo -->
+        <div style="position: relative; width: 100%; height: 300px; background: #ddd;">
+            <?php if (!empty($page['Page']['cover_photo'])): ?>
+                <img src="<?php echo $this->Html->url('/' . $page['Page']['cover_photo']); ?>" alt="Cover Photo" style="width: 100%; height: 100%; object-fit: cover;">
+            <?php else: ?>
+                <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: #888;">
+                    No Cover Photo
                 </div>
-
-                <!-- Event Form -->
-                <div id="event-form-main" style="display: flex; flex-direction: column; gap: 15px; padding: 10px 0;">
-                    <!-- Event Title -->
-                    <input type="text" id="event-title" name="data[Event][title]" placeholder="Event Title" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-
-                    <!-- Event Description -->
-                    <textarea id="event-description" name="data[Event][description]" placeholder="Event Description" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none; height: 80px; resize: none;"></textarea>
-
-                    <!-- Event Details -->
-                    <div style="display: flex; gap: 15px;">
-                        <input type="text" id="event-location" name="data[Event][location]" placeholder="Location" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                        <select name="data[Event][event_type]" id="event-type" style="flex: 0.5; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                            <option value="Public">Public</option>
-                            <option value="Private">Private</option>
-                            <option value="Closed">Closed</option>
-                        </select>
-                    </div>
-
-                    <!-- Event Time -->
-                    <div style="display: flex; gap: 15px;">
-                        <label>Event Time</label>
-                    </div>
-                    <div style="display: flex; gap: 15px;">
-                        <input required type="datetime-local" name="data[Event][start_time]" id="event-start-time" placeholder="Start Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                        <input type="datetime-local" name="data[Event][end_time]" id="event-end-time" placeholder="End Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                    </div>
-
-                    <!-- Image Upload -->
-                    <div>
-                        <label for="event-image" style="font-size: 14px; color: #1c1e21; font-weight: bold;">Upload Event Image</label>
-                        <input type="file" id="event-image" name="data[Event][event_image]" accept="image/*" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
-                    </div>
-
-                    <button id="create-event-btn" style="width: 100%; padding: 10px 15px; background-color: #4267b2; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Create Event</button>
-                </div>
-            </div>
-        </form>
-
-
-        <div id="event-feed-container">
-            <div class="main-feed">
-                <?php foreach ($events as $event): ?>
-                    <!-- Existing event rendering code here -->
-                <?php endforeach; ?>
+            <?php endif; ?>
+            <!-- Profile Picture -->
+            <div style="position: absolute; bottom: -50px; left: 20px;">
+                <img src="<?php echo $this->Html->url('/' . $page['Page']['profile_picture']);?>" alt="Profile Picture" style="width: 120px; height: 120px; border: 4px solid #fff; border-radius: 50%; object-fit: cover;">
             </div>
         </div>
+
+        <!-- Page Details -->
+        <div id="viewPageDetailsDiv" style="margin-top: 60px; padding: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="margin: 0; font-size: 28px;"><?php echo h($page['Page']['name']); ?></h1>
+                    <p style="margin: 5px 0; font-size: 16px; color: #666;"><?php echo h($page['Page']['category'] ?? 'No Category'); ?></p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <?php if ($isLiked): ?>
+                        <button id="likeButton" style="padding: 10px 20px; font-size: 14px; border: none; border-radius: 5px; cursor: pointer; background: #1877f2; color: white;" onclick="unLikePage(<?php echo h($page['Page']['id']); ?>)">
+                            Unfollow
+                        </button>
+                    <?php else: ?>
+                        <button id="likeButton" style="padding: 10px 20px; font-size: 14px; border: none; border-radius: 5px; cursor: pointer; background: #1877f2; color: white;" onclick="likePage(<?php echo h($page['Page']['id']); ?>)">
+                            Like
+                        </button>
+                    <?php endif; ?>
+                    <button style="padding: 10px 20px; font-size: 14px; border: none; border-radius: 5px; cursor: pointer; background: #42b72a; color: white;">Message</button>
+                </div>
+            </div>
+            <!-- Description -->
+            <?php if (!empty($page['Page']['description'])): ?>
+                <p style="margin: 15px 0; font-size: 14px; color: #333;"><?php echo h($page['Page']['description']); ?></p>
+            <?php endif; ?>
+            <!-- Creation Info -->
+            <p style="margin: 10px 0; font-size: 12px; color: #888;">
+                 <?php echo h(date('F j, Y', strtotime($page['Page']['created_at']))); ?>
+            </p>
+        </div>
+
+        <!-- Create Post Button -->
+        <div style="margin-top: 20px; text-align: right;">
+            <button style="padding: 10px 20px; font-size: 14px; border: none; border-radius: 5px; cursor: pointer; background: #1877f2; color: white;" onclick="openCreatePostModal()">
+                + Create Post
+            </button>
+        </div>
+
+        <!-- Posts Section -->
+        <div style="margin-top: 30px;">
+            <h2 style="font-size: 22px; margin-bottom: 20px;">Posts</h2>
+            <?php if (!empty($posts)): ?>
+                <?php foreach ($posts as $post): ?>
+                    <div style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; padding: 15px; background: #fff;">
+                        <h3 style="margin: 0 0 10px; font-size: 18px;"><?php echo h($post['Posts']['title']); ?></h3>
+                        <p style="font-size: 14px; color: #333;"><?php echo h($post['Posts']['content']); ?></p>
+                        <p style="margin: 10px 0 0; font-size: 12px; color: #888;">
+                            Posted on <?php echo h(date('F j, Y', strtotime($post['Posts']['created_at']))); ?>
+                        </p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="font-size: 14px; color: #666;">No posts available for this page.</p>
+            <?php endif; ?>
+        </div>
+
+       <!-- Modal for Creating Post -->
+        <div id="createPostModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
+            <div style="background: #fff; padding: 30px 20px; border-radius: 8px; max-width: 600px; width: 100%; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+                <h3 style="margin: 0 0 20px; font-size: 18px;">Create Post</h3>
+                <form id="createPostForm" method="post" action="/path/to/createPost" enctype="multipart/form-data">
+                    <!-- Hidden Fields for Page and User -->
+                    <input type="hidden" name="page_id" value="<?php echo h($page['Page']['id']); ?>">
+
+                    <!-- Post Content -->
+                    <textarea name="content" placeholder="What's on your mind?" style="width: 100%; padding: 15px; font-size: 14px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; min-height: 150px;" required></textarea>
+
+                    <!-- Media Upload -->
+                    <div style="margin-bottom: 15px;">
+                        <label for="media" style="font-size: 14px; color: #333;">Add Photos/Videos</label>
+                        <input type="file" id="media" name="media[]" accept="image/*,video/*" style="width: 100%; padding: 10px; font-size: 14px;" multiple>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" style="padding: 10px 20px; background: #42b72a; color: white; border: none; border-radius: 5px;">Post</button>
+                </form>
+                <button onclick="closeCreatePostModal()" style="padding: 10px 20px; background: #f44336; color: white; border: none; border-radius: 5px; margin-top: 10px;">Cancel</button>
+            </div>
+        </div>
+        
+    </div>
+
+
 
     </ul>
   </main>
@@ -272,27 +308,62 @@
 
 <script>
 
-$(document).ready(function () {
-    $('#event-tabs .td').on('click', function () {
-        var eventType = $(this).data('type');
-        // Highlight the active tab
-        $('#event-tabs .td').removeClass('active').css('border-bottom', 'none');
-        $(this).addClass('active').css('border-bottom', '2px solid #4267b2');
-        
-        // AJAX request to fetch data
-        $.ajax({
-            url: '/MessageBoard/UserProfiles/fetchEvents',
-            type: 'GET',
-            data: { type: eventType },
-            success: function (response) {
-                $('#event-feed-container').html(response); // Replace the content
-            },
-            error: function () {
-                alert('Failed to load events. Please try again.');
-            }
-        });
-    });
-});
+    // Open Create Post Modal
+function openCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'flex';
+}
 
+// Close Create Post Modal
+function closeCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'none';
+}
+
+function likePage(pageId) {
+
+    $.ajax({
+        url: '/MessageBoard/PageFollowers/like', 
+        method: 'POST',
+        data: {
+            page_id: pageId
+        },
+        dataType: 'json',
+        success: function(response) { 
+            if (response.success || response.success == true) {
+              
+                $('#likeButton').prop('disabled', true); 
+                $('#likeButton').text('Liked');
+            } else {
+                alert('An error occurred.');
+            }
+        },
+        error: function() {
+            this.location.reload();
+        }
+    });
+}
+
+
+function unLikePage(pageId) {
+
+    $.ajax({
+        url: '/MessageBoard/PageFollowers/unLike',
+        method: 'POST',
+        data: {
+            page_id: pageId
+        },
+        dataType: 'json',
+        success: function(response) { 
+            if (response.success) {
+                $('#likeButton').prop('disabled', false); 
+                $('#likeButton').text('Like');
+            } else {
+                alert('An error occurred.');
+            }
+        },
+        error: function() {
+            alert('An error occurred.');
+        }
+    });
+}
 
 </script>

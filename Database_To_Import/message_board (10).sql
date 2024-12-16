@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 13, 2024 at 10:34 AM
+-- Generation Time: Dec 16, 2024 at 10:37 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -98,7 +98,7 @@ CREATE TABLE `events` (
 INSERT INTO `events` (`id`, `user_id`, `title`, `description`, `event_image`, `location`, `start_time`, `end_time`, `event_type`, `created_at`, `updated_at`) VALUES
 (1, 2, 'ENGLISH MONTH CELEBRATION 2024', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', NULL, 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-15 08:42:00', '2024-12-16 15:42:00', 'Public', '2024-12-13 15:42:34', NULL),
 (2, 2, 'ENGLISH MONTH CELEBRATION PAST', 'About the event\r\nENGLISH MONTH CELEBRATION 2024\r\nThe English Month celebrations will conclude with a grand finale on December 17, 2024, titled \"Read, Relive, Reminisce: Making Connections through Life and Literature.\"\r\n\r\nThis engaging event will showcase the appreciation for literature developed throughout the month, featuring a variety of literary works and highlighting students\' creativity and enthusiasm for storytelling. Attendees can expect a vibrant display of characters and tales brought to life by student performances.\r\n\r\n', NULL, 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-11-15 08:42:00', '2024-12-12 15:42:00', 'Public', '2024-12-13 15:42:52', NULL),
-(3, 2, 'YEAR END THANKSGIVING PARTY', 'Just a heads up!\r\nWe have gathered all the information for you in one convenient spot, but please keep in mind that these are subject to change. We do our best to keep everything updated, but something might be out of sync. For the latest updates, always check the official event details by clicking the \"Find Tickets\" button.\r\n\r\nAfter all, we want you to have the best experience.', 'images/Eventtesting.jpeg', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-13 17:25:00', '2024-12-15 17:25:00', 'Public', '2024-12-13 17:30:08', NULL);
+(3, 2, 'YEAR END THANKSGIVING PARTY', 'Just a heads up!\r\nWe have gathered all the information for you in one convenient spot, but please keep in mind that these are subject to change. We do our best to keep everything updated, but something might be out of sync. For the latest updates, always check the official event details by clicking the \"Find Tickets\" button.\r\n\r\nAfter all, we want you to have the best experience.', 'images/Eventtesting.jpeg', 'Don Gervacio Quijada St.,Guadalupe, 6000 Cebu City, Philippines, Cebu, Philippines', '2024-12-14 17:25:00', '2024-12-15 17:25:00', 'Public', '2024-12-13 17:30:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -242,13 +242,13 @@ CREATE TABLE `my_day_story` (
 --
 
 INSERT INTO `my_day_story` (`id`, `user_id`, `path`, `date_created`) VALUES
-(1, 20, 'images/download1.jpeg', '2024-12-12 15:27:47'),
-(2, 2, 'images/download1.jpeg', '2024-12-12 14:00:00'),
-(3, 29, 'images/download (1).jpeg', '2024-12-12 13:03:26'),
-(4, 30, 'images/avatar.jpeg', '2024-12-12 20:27:47'),
-(5, 2, 'images/1733900200_cutetest.webp', '2024-12-12 21:56:40'),
-(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-12 22:57:10'),
-(7, 2, 'images/1733901685_Angpic.jpeg', '2024-12-12 00:21:25');
+(1, 20, 'images/download1.jpeg', '2024-12-15 15:27:47'),
+(2, 2, 'images/download1.jpeg', '2024-12-15 14:00:00'),
+(3, 29, 'images/download (1).jpeg', '2024-12-15 13:03:26'),
+(4, 30, 'images/avatar.jpeg', '2024-12-15 20:27:47'),
+(5, 2, 'images/1733900200_cutetest.webp', '2024-12-15 21:56:40'),
+(6, 2, 'images/1733900230_cutecats.jpg', '2024-12-15 22:57:10'),
+(7, 2, 'images/1733901685_Angpic.jpeg', '2024-12-15 00:21:25');
 
 -- --------------------------------------------------------
 
@@ -319,6 +319,97 @@ INSERT INTO `notification` (`id`, `user_id`, `author`, `profile_post_id`, `type`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pages`
+--
+
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `profile_picture` varchar(255) DEFAULT NULL,
+  `cover_photo` varchar(255) DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL COMMENT 'Community, Business, Entertainment, Personal, etc.',
+  `created_by` int(11) NOT NULL COMMENT 'user_id ( who created )',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pages`
+--
+
+INSERT INTO `pages` (`id`, `name`, `description`, `profile_picture`, `cover_photo`, `category`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'Test Page', 'Test Test Test Test Test TestTest Test Test Test Test TestTest Test Test Test Test TestTest Test Test Test Test TestTest Test Test Test Test TestTest Test Test Test Test TestTest Test Test Test Test Test', 'images/test page2 .jpg', 'images/test page1.jpg', 'Community', 2, '2024-12-16 15:09:00', '2024-12-16 15:09:00'),
+(2, 'Test Page v2', 'Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only Test Only ', 'images/test page2 .jpg', 'images/test page1.jpg', 'Business', 2, '2024-12-16 15:35:26', '2024-12-16 15:35:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page_followers`
+--
+
+CREATE TABLE `page_followers` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `followed_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `page_followers`
+--
+
+INSERT INTO `page_followers` (`id`, `page_id`, `user_id`, `followed_at`) VALUES
+(15, 2, 2, '2024-12-16 17:29:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page_insights`
+--
+
+CREATE TABLE `page_insights` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `total_followers` int(11) DEFAULT 0,
+  `total_posts` int(11) DEFAULT 0,
+  `total_likes` int(11) DEFAULT 0,
+  `last_updated` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page_posts`
+--
+
+CREATE TABLE `page_posts` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL COMMENT 'what page it is posted?',
+  `user_id` int(11) NOT NULL COMMENT 'user who posted the post',
+  `content` text NOT NULL,
+  `media_paths` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`media_paths`)),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page_roles`
+--
+
+CREATE TABLE `page_roles` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `role` enum('Admin','Editor','Moderator') DEFAULT 'Editor',
+  `assigned_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `posts`
 --
 
@@ -348,6 +439,22 @@ INSERT INTO `posts` (`id`, `name`, `path`, `background_img`, `created`, `modifie
 (27, 'avatar.jpeg', 'images/avatar.jpeg', '', '2024-03-20 07:40:51', '2024-03-20 07:40:51'),
 (28, 'download1.jpeg', 'images/download1.jpeg', '', '2024-03-20 07:40:17', '2024-03-20 07:40:17'),
 (30, 'avatartest.jpeg', 'images/avatartest.jpeg', 'images/avatartest.jpeg', '2024-11-26 03:03:45', '2024-11-26 03:03:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_interactions`
+--
+
+CREATE TABLE `post_interactions` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `interaction_type` enum('Like','Comment') NOT NULL COMMENT '''Like'',''Comment''',
+  `reaction` int(1) DEFAULT NULL COMMENT ' 1 => "Like",\r\n                2 => "Love",\r\n                3 => "Care",\r\n                4 => "Haha",\r\n                5 => "Wow",\r\n                6 => "Sad",\r\n                7 => "Angry"',
+  `comment` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -472,18 +579,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `gender`, `birthdate`, `email`, `password`, `date_created`, `last_login_time`, `hobby`, `location`, `education`, `work`, `links`, `relationship`, `account_type`, `is_online`, `is_dark_setting`, `search_visibility`, `who_can_send_message`, `location_sharing`, `profile_tagging`, `timeline_permision`, `who_can_see_myfriends`, `show_birthday`, `show_location_details`, `show_inrelationship`, `friend_req_notif`, `people_u_may_know_notif`, `birthday_notif`, `events_notif`, `highlights_notif`, `comment_notif`, `reaction_notif`, `login_notif`, `change_password_notif`) VALUES
-(2, 'Hadrian Evarula', 'Male', '2002-12-13', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-13 17:05:27', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
-(20, 'Clint Anthony Savilla', 'Male', '2001-12-13', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(21, 'Janrae Fagaragan', 'Male', '2024-03-13', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(22, 'Jefritz Alberca', 'Male', '2024-03-18', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(23, 'Dave Gwapo', 'Male', '2024-03-18', 'dave.gwapolagika@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 08:47:23', '2024-03-20 07:09:25', 'Wala ra gud hehehe', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(24, 'John Doe', 'Male', '2024-03-19', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(2, 'Hadrian Evarula', 'Male', '2002-12-16', 'hadrian.fdc@gmail.com', '$2a$10$9JeEBo5UQyImi5O8UOF0FOYd06YBJCH4iyG0PSOWe/Mu.Fbe6XyUS', '2024-03-12 09:38:48', '2024-12-16 14:42:19', '<Software> Web Developer </Engineer>', 'Cebu City', 'Studied Software Engineering at University of San Carlos - Talamban Campus', 'Web Developer at Forty Degrees Celsius Inc. ', 'http://localhost/MessageBoard/UserProfiles/user_profile', 'Secret Ra Ni', 2, 1, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1),
+(20, 'Clint Anthony Savilla', 'Male', '2001-12-16', 'clint.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:52:53', '2024-12-06 08:15:44', 'Delve into the captivating world of terrarium crafting, where miniature landscapes come to life within glass containers. Cultivate your creativity as you design lush ecosystems using a variety of plants, rocks, and decorative elements. From serene woodland scenes to vibrant desert vistas, terrariums offer endless possibilities for expression. Experiment with different plant species, substrates, and arrangements to craft unique and visually stunning terrariums. Whether you\'re drawn to the tranqui', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(21, 'Janrae Fagaragan', 'Male', '1999-12-16', 'janrae.fagaragan@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:53:41', '2024-03-19 09:48:56', 'Embark on the captivating journey of web development, where lines of code transform into dynamic digital landscapes. Dive into the intricate dance of HTML, CSS, and JavaScript, weaving together the fabric of interactive websites and applications. Unleash your creativity as you design captivating user interfaces, meticulously crafting each element to engage and delight visitors. Embrace the thrill of problem-solving as you debug and optimize your code, transforming challenges into triumphs. Wheth', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(22, 'Jefritz Alberca', 'Male', '2001-12-16', 'jefritz.alberca@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 06:54:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(23, 'Dave Gwapo', 'Male', '1997-12-16', 'dave.gwapolagika@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-18 08:47:23', '2024-03-20 07:09:25', 'Wala ra gud hehehe', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(24, 'John Doe', 'Male', '1996-12-16', 'john.doe@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-19 04:22:06', '2024-03-20 03:40:50', 'Delve into the captivating world of cosplay with ANG, inspired by the character Aang from Avatar: The Last Airbender. Embrace the artistry of crafting detailed costumes, mastering intricate hairstyles, and embodying the spirit of ANG through conventions and photo shoots. Dive into the realm of prop-making, channeling ANG\'s elemental bending skills by creating stunning replicas of his iconic staff or intricate airbending glider. Explore the vibrant community of fellow enthusiasts, participating i', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (25, 'Joseph Savilla', 'Male', '2002-03-20', 'joseph.savilla@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:02:15', '2024-11-29 06:33:51', 'Wala ra gud', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (26, 'Andrea B', 'Female', '2004-03-20', 'andrea.b@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:10:25', '2024-11-28 07:51:03', 'Wala ra pud\r\n', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(27, 'Jan Baoc', 'Male', '2002-12-13', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-12-12 07:37:53', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(27, 'Jan Baoc', 'Male', '1999-12-16', 'jan.baoc@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:13:11', '2024-12-12 07:37:53', '', NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (28, 'June Michael Jordan', 'Male', '2024-03-20', 'june@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-20 04:15:54', '2024-11-29 06:33:25', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (29, 'Wa Ra Gud', 'Male', '2024-03-21', 'waragud@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-03-21 03:52:15', '2024-11-28 06:25:55', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(30, 'FDC Tester', 'Male', '2005-12-13', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+(30, 'FDC Tester', 'Male', '1989-12-16', 'fdc-tester@gmail.com', '$2a$10$6qyVUGIe4Npr9.nmKFwVs.adSzYbQksRe3rDtQUMlZz.fEvYaYuL6', '2024-11-22 06:47:51', '2024-12-03 10:00:27', NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -549,9 +656,45 @@ ALTER TABLE `notification`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pages`
+--
+ALTER TABLE `pages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page_followers`
+--
+ALTER TABLE `page_followers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page_insights`
+--
+ALTER TABLE `page_insights`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page_posts`
+--
+ALTER TABLE `page_posts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page_roles`
+--
+ALTER TABLE `page_roles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `posts`
 --
 ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `post_interactions`
+--
+ALTER TABLE `post_interactions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -593,7 +736,7 @@ ALTER TABLE `conversations`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `event_comments`
@@ -632,10 +775,46 @@ ALTER TABLE `notification`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
+-- AUTO_INCREMENT for table `pages`
+--
+ALTER TABLE `pages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `page_followers`
+--
+ALTER TABLE `page_followers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `page_insights`
+--
+ALTER TABLE `page_insights`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `page_posts`
+--
+ALTER TABLE `page_posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `page_roles`
+--
+ALTER TABLE `page_roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
   MODIFY `id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `post_interactions`
+--
+ALTER TABLE `post_interactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `profile_posts`

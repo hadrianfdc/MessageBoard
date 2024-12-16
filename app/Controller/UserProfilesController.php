@@ -9,7 +9,7 @@ class UserProfilesController extends AppController
 {
     public $components = array('Flash');
 
-    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory', 'Event');
+    public $uses = array('User', 'ProfileDetails', 'ProfilePost','Posts', 'UserProfiles', 'Reactions', 'FriendsList', 'MyDayStory', 'Event', 'Page','PageFollowers');
 
     public function beforeFilter()
     {
@@ -166,6 +166,55 @@ class UserProfilesController extends AppController
         
 	}
 
+    public function create_page_index(){
+
+        $this->sideBarMenus();
+        $this->render('/Page/create_page_index');
+
+    }
+
+    public function ListOfAllPages(){
+
+        $pages = $this->Page->find('all', [
+            'fields' => ['id', 'name', 'description', 'profile_picture', 'cover_photo', 'category', 'created_by', 'created_at'],
+            'order' => ['name' => 'ASC']
+        ]);
+
+        foreach ($pages as $key => $page) {
+            $isFollowed = $this->PageFollowers->find('first',[
+                'conditions' => ['PageFollowers.page_id' => $page['Page']['id'], 'PageFollowers.user_id' => $this->Session->read('Auth.User.user_id')]
+            ]);
+            
+            $isLiked = !empty($isFollowed) ? true : false;
+            $pages[$key]['Page']['isLiked'] = $isLiked;
+        }
+
+        $this->set('pages', $pages);
+        $this->sideBarMenus();
+        $this->render('/Page/list_of_all_pages');
+    }
+
+    public function pageProfileView($id = null) {
+        $this->loadModel('Pages');
+        $page = $this->Page->find('first', [
+            'conditions' => ['Page.id' => $id],
+            'fields' => ['id', 'name', 'description', 'profile_picture', 'cover_photo', 'category', 'created_by', 'created_at']
+        ]);
+        if (empty($page)) {
+            $this->Flash->error('Page not found.');
+            return $this->redirect('/list_of_pages');
+        }
+        $isFollowed = $this->PageFollowers->find('first',[
+            'conditions' => ['PageFollowers.page_id' => $id, 'PageFollowers.user_id' => $this->Session->read('Auth.User.user_id')]
+        ]);
+        
+        $isLiked = !empty($isFollowed) ? true : false;
+        $this->set('isLiked', $isLiked);
+        $this->set('page', $page);
+        $this->sideBarMenus();
+        $this->render('/Page/profile_page');
+    }
+
     public function fetchEvents() {
         $this->autoRender = false;
         $this->layout = null;
@@ -228,7 +277,9 @@ class UserProfilesController extends AppController
                 }else {
                     echo "<pre>"; $this->Session->setFlash('Error with file upload!'); echo "</pre>"; die();
                 }
-            } 
+            } else{
+                $eventData['Event']['event_image'] = '';
+            }
             
             // Convert datetime-local format to MySQL datetime format
             if (!empty($eventData['Event']['start_time'])) {
@@ -336,7 +387,7 @@ class UserProfilesController extends AppController
     }
     
     
-    private function getPost($findPost){
+    public function getPost($findPost){
         $organizedPosts = [];
         if (!empty($findPost)) {
             $reactor = $this->Session->read('Auth.User.user_id');
@@ -469,7 +520,7 @@ class UserProfilesController extends AppController
         return $organizedPosts;
     }
 
-    private function getBirthdayForToday($myFriendsList)
+    public function getBirthdayForToday($myFriendsList)
     {
         $organizedPosts = []; 
 
@@ -547,7 +598,7 @@ class UserProfilesController extends AppController
 
 
 
-    private function getMyDayAndStory(){
+    public function getMyDayAndStory(){
 
         date_default_timezone_set('Asia/Manila');
         
@@ -1430,6 +1481,77 @@ class UserProfilesController extends AppController
     }
     
     
+
+    public function sideBarMenus(){
+
+        $user_id = $this->Session->read('Auth.User.user_id');
+
+        $friendIdsResult = $this->FriendsList->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['FriendsList.user_id' => $user_id],
+                    ['FriendsList.acceptor' => $user_id]
+                ],
+                'FriendsList.status' => 'accepted' // Only accepted friends
+            ],
+            'fields' => ['FriendsList.user_id', 'FriendsList.acceptor']
+        ]);
+        
+        $friendIds = [];
+        foreach ($friendIdsResult as $friend) {
+            $friendIds[] = $friend['FriendsList']['user_id'];
+            $friendIds[] = $friend['FriendsList']['acceptor'];
+        }
+        $friendIds = array_unique($friendIds);
+        $friendIds[] = $user_id;
+                
+        $findPost = $this->ProfilePost->find('all', [
+            'conditions' => [
+                'OR' => [
+                    ['ProfilePost.privacy' => 1, 'ProfilePost.user_id' => $user_id],
+                    ['ProfilePost.privacy' => [2, 3]]
+                ],
+                'ProfilePost.is_archieve !=' => 1, 
+                'ProfilePost.user_id' => $friendIds, // Only posts from friends
+                'OR' => [
+                    ['ProfilePost.sharer_id' => null], 
+                    ['ProfilePost.sharer_id' => $friendIds] 
+                ]
+            ],
+            'order' => ['ProfilePost.user_id' => 'ASC', 'ProfilePost.created_date' => 'DESC', 'ProfilePost.date_shared' => 'DESC'],
+        ]);
+
+        // $organizedPosts = $userProfilesController->getPost($findPost);
+        $organizedMyDaysPost = $this->getMyDayAndStory();
+
+        if (empty($user_id)) {
+            $this->redirect(['controller' => 'logins', 'action' => 'login']);
+        }
+        $findUsers = $this->User->find('all', [
+            'conditions' => ['User.user_id' => $user_id]
+        ]);
+        $findMyPics = $this->Posts->find('all', [
+            'conditions' => ['Posts.id' => $user_id]
+        ]);
+        $this->loadModel('FriendsList'); 
+        $myFriendsList = $this->getFriendList();
+        $findBirthdays = $this->getBirthdayForToday($myFriendsList);
+
+        // echo "<pre>";print_r($myFriendsList); print_r($findBirthdays); echo "</pre>"; die;
+     
+       
+        
+
+        $this->set('findMyPics', $findMyPics);
+        $this->set('users', $findUsers);
+        // $this->set('findPost', $organizedPosts);
+        $this->set('user_id', $user_id);
+        $this->set('organizedMyDaysPost', $organizedMyDaysPost);
+        $this->set('friendsData', $myFriendsList);
+        $this->set('BirthdayCelebrant', $findBirthdays);
+        $this->render('/Page/create_page_index');
+
+    }
 
 
 }

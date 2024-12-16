@@ -110,69 +110,63 @@
   <main class="main-feed">
     <ul class="main-feed-list">
 
-    <form method="post" action="<?php echo $this->Html->url(array('controller' => 'UserProfiles', 'action' => 'createEvent')); ?>" enctype="multipart/form-data">
-            <div class="m-mrg" id="event-composer" style="width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-                <!-- Tabs for Different Event Options -->
-                <div id="event-tabs-cvr" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
-                    <div class="tb" id="event-tabs" style="display: flex; justify-content: space-between; padding: 10px 0;">
-                        <div id="createEvent" class="td active" data-type="all" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #1c1e21; font-weight: bold; padding: 5px 15px; border-bottom: 2px solid #4267b2;">
-                            <i class="fas fa-calendar-plus" style="font-size: 20px; margin-right: 5px;"></i><span>All Events</span>
-                        </div>
-                        <div id="upcomingEvents" class="td" data-type="upcoming" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                            <i class="fas fa-calendar" style="font-size: 20px; margin-right: 5px; color:orange;"></i><span>Upcoming Events</span>
-                        </div>
-                        <div id="pastEvents" class="td" data-type="past" style="display: flex; align-items: center; cursor: pointer; font-size: 14px; padding: 5px 15px;">
-                            <i class="fas fa-history" style="font-size: 20px; margin-right: 5px; color:green;"></i><span>Past Events</span>
-                        </div>
-                    </div>
+    <div class="container" style="max-width: 500px; margin: 0 auto; padding-top: 40px;">
+        <div class="page-create-container" style="background-color: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center;">
+            <h1 style="font-size: 28px; font-weight: bold; color: #1C1E21; margin-bottom: 20px;">Create Your Page</h1>
+            <p style="font-size: 16px; color: #65676B; margin-bottom: 30px;">Choose a category to get started and create your page.</p>
+
+            <!-- Form to create a page -->
+            <form action="<?php echo $this->Html->url(array('controller' => 'Page', 'action' => 'createPage')); ?>" method="POST" class="page-form" enctype="multipart/form-data">
+
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="name" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Page Name</label>
+                    <input type="text" id="name" name="data[Page][name]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" placeholder="Enter page name" required>
                 </div>
 
-                <!-- Event Form -->
-                <div id="event-form-main" style="display: flex; flex-direction: column; gap: 15px; padding: 10px 0;">
-                    <!-- Event Title -->
-                    <input type="text" id="event-title" name="data[Event][title]" placeholder="Event Title" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-
-                    <!-- Event Description -->
-                    <textarea id="event-description" name="data[Event][description]" placeholder="Event Description" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none; height: 80px; resize: none;"></textarea>
-
-                    <!-- Event Details -->
-                    <div style="display: flex; gap: 15px;">
-                        <input type="text" id="event-location" name="data[Event][location]" placeholder="Location" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                        <select name="data[Event][event_type]" id="event-type" style="flex: 0.5; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                            <option value="Public">Public</option>
-                            <option value="Private">Private</option>
-                            <option value="Closed">Closed</option>
-                        </select>
-                    </div>
-
-                    <!-- Event Time -->
-                    <div style="display: flex; gap: 15px;">
-                        <label>Event Time</label>
-                    </div>
-                    <div style="display: flex; gap: 15px;">
-                        <input required type="datetime-local" name="data[Event][start_time]" id="event-start-time" placeholder="Start Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                        <input type="datetime-local" name="data[Event][end_time]" id="event-end-time" placeholder="End Time" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; outline: none;">
-                    </div>
-
-                    <!-- Image Upload -->
-                    <div>
-                        <label for="event-image" style="font-size: 14px; color: #1c1e21; font-weight: bold;">Upload Event Image</label>
-                        <input type="file" id="event-image" name="data[Event][event_image]" accept="image/*" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
-                    </div>
-
-                    <button id="create-event-btn" style="width: 100%; padding: 10px 15px; background-color: #4267b2; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Create Event</button>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="category" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Category</label>
+                    <select id="category" name="data[Page][category]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" required>
+                        <option value="">Select category</option>
+                        <option value="Business">Business</option>
+                        <option value="Community">Community</option>
+                        <option value="Artist">Artist</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-            </div>
-        </form>
+
+                <!-- Additional category input field, initially hidden -->
+                <div class="form-group" id="otherCategoryGroup" style="display: none; margin-bottom: 20px;">
+                    <label for="other_category" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Specify Category</label>
+                    <input type="text" id="other_category" name="data[Page][other_category]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" placeholder="Enter custom category">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="description" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Description</label>
+                    <textarea id="description" name="data[Page][description]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px; height: 120px;" placeholder="Describe your page" required></textarea>
+                </div>
+
+                <!-- Profile Picture Upload -->
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="profile_picture" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Profile Picture</label>
+                    <input type="file" id="profile_picture" name="data[Page][profile_picture]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" accept="image/*">
+                </div>
+
+                <!-- Cover Photo Upload -->
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="cover_photo" style="font-size: 14px; font-weight: 600; color: #1C1E21; margin-bottom: 5px;">Cover Photo</label>
+                    <input type="file" id="cover_photo" name="data[Page][cover_photo]" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" accept="image/*">
+                </div>
 
 
-        <div id="event-feed-container">
-            <div class="main-feed">
-                <?php foreach ($events as $event): ?>
-                    <!-- Existing event rendering code here -->
-                <?php endforeach; ?>
-            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" style="width: 100%; padding: 14px; font-size: 16px; background-color: #1877F2; color: white; border-radius: 6px; border: none; cursor: pointer; transition: background-color 0.2s ease;">
+                        <strong>Create Page</strong>
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
     </ul>
   </main>
@@ -272,27 +266,18 @@
 
 <script>
 
-$(document).ready(function () {
-    $('#event-tabs .td').on('click', function () {
-        var eventType = $(this).data('type');
-        // Highlight the active tab
-        $('#event-tabs .td').removeClass('active').css('border-bottom', 'none');
-        $(this).addClass('active').css('border-bottom', '2px solid #4267b2');
-        
-        // AJAX request to fetch data
-        $.ajax({
-            url: '/MessageBoard/UserProfiles/fetchEvents',
-            type: 'GET',
-            data: { type: eventType },
-            success: function (response) {
-                $('#event-feed-container').html(response); // Replace the content
-            },
-            error: function () {
-                alert('Failed to load events. Please try again.');
-            }
-        });
-    });
+document.getElementById('category').addEventListener('change', function() {
+    var otherCategoryGroup = document.getElementById('otherCategoryGroup');
+    var otherCategoryInput = document.getElementById('other_category'); // This is the actual input for custom category
+
+    if (this.value === 'Other') {
+        otherCategoryGroup.style.display = 'block'; 
+    } else {
+        otherCategoryGroup.style.display = 'none'; 
+        otherCategoryInput.value = ''; // Clear the value of the input element
+    }
 });
+
 
 
 </script>

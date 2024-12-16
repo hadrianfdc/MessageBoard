@@ -103,7 +103,7 @@ function timeAgo($timestamp) {
             </a>
         </div>
         <div class="common-list-item">
-            <a class="common-list-button" href="#">
+            <a class="common-list-button" href="/MessageBoard/list_of_page">
                 <span class="icon" style="color: #1877f2;"><i class="fas fa-flag"></i></span>
                 <span class="text">Pages</span>
             </a>
